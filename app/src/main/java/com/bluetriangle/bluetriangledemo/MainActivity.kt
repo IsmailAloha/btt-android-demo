@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bluetriangle.bluetriangledemo.databinding.ActivityMainBinding
+import kotlinx.coroutines.flow.collect
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,6 +14,17 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this)[MainViewModel::class.java]
+    }
+
+    init {
+        lifecycleScope.launchWhenStarted {
+            viewModel.request.collect {
+                val displayRequest = DisplayRequestFragment().apply {
+                    timerFields = it
+                }
+                displayRequest.show(supportFragmentManager, null)
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

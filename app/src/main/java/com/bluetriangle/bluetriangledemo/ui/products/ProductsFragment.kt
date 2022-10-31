@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bluetriangle.bluetriangledemo.adapters.ProductAdapter
 import com.bluetriangle.bluetriangledemo.databinding.FragmentProductsBinding
 
 class ProductsFragment : Fragment() {
@@ -19,13 +21,19 @@ class ProductsFragment : Fragment() {
         val productsViewModel = ViewModelProvider(this).get(ProductsViewModel::class.java)
 
         _binding = FragmentProductsBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
-        val textView: TextView = binding.textDashboard
-        productsViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        val productAdapter = ProductAdapter(requireContext())
+
+        binding.productsList.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = productAdapter
         }
-        return root
+
+        productsViewModel.products.observe(viewLifecycleOwner) {
+            productAdapter.submitList(it)
+        }
+
+        return binding.root
     }
 
     override fun onDestroyView() {

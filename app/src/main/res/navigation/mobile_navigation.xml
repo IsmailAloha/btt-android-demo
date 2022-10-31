@@ -13,7 +13,22 @@
             android:id="@+id/navigation_products_list"
             android:name="com.bluetriangle.bluetriangledemo.ui.products.ProductsFragment"
             android:label="@string/title_products"
-            tools:layout="@layout/fragment_products" />
+            tools:layout="@layout/fragment_products">
+            <action
+                android:id="@+id/action_product_list_to_product_detail"
+                app:destination="@id/navigation_product_detail" />
+
+        </fragment>
+
+        <fragment
+            android:id="@+id/navigation_product_detail"
+            android:name="com.bluetriangle.bluetriangledemo.ui.products.ProductDetailFragment"
+            android:label="Product Detail"
+            tools:layout="@layout/fragment_product_detail">
+            <argument
+                android:name="product"
+                app:argType="com.bluetriangle.bluetriangledemo.data.Product" />
+        </fragment>
     </navigation>
 
     <fragment

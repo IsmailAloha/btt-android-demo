@@ -5,10 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.adapters.ProductAdapter
+import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.databinding.FragmentProductsBinding
 
 class ProductsFragment : Fragment() {
@@ -22,7 +26,10 @@ class ProductsFragment : Fragment() {
 
         _binding = FragmentProductsBinding.inflate(inflater, container, false)
 
-        val productAdapter = ProductAdapter(requireContext())
+        val productAdapter = ProductAdapter(requireContext()) { product: Product ->
+            val action = ProductsFragmentDirections.actionProductListToProductDetail(product)
+            findNavController().navigate(action)
+        }
 
         binding.productsList.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

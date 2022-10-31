@@ -10,7 +10,8 @@ import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.databinding.ListItemProductBinding
 import com.bumptech.glide.Glide
 
-class ProductAdapter(context: Context) : ListAdapter<Product, RecyclerView.ViewHolder>(ProductDiffCallback()) {
+class ProductAdapter(context: Context, private val productClickListener: (product: Product) -> Unit) :
+    ListAdapter<Product, RecyclerView.ViewHolder>(ProductDiffCallback()) {
 
     private val layoutInflater = LayoutInflater.from(context)
 
@@ -22,6 +23,9 @@ class ProductAdapter(context: Context) : ListAdapter<Product, RecyclerView.ViewH
         val product = getItem(position)
         val productViewHolder = holder as? ProductViewHolder
         productViewHolder?.bind(product)
+        productViewHolder?.itemView?.setOnClickListener { _ ->
+            productClickListener(product)
+        }
     }
 
     class ProductViewHolder(private val binding: ListItemProductBinding) : RecyclerView.ViewHolder(binding.root) {

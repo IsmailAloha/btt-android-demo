@@ -51,6 +51,8 @@ dependencies {
 
     implementation 'com.github.blue-triangle-tech.btt-android-sdk:btt-android-sdk:2.7.0'
     implementation 'com.github.blue-triangle-tech.btt-android-sdk:btt-android-sdk-okhttp:2.7.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

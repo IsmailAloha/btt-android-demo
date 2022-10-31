@@ -9,6 +9,6 @@ class DemoApplication : Application() {
         super.onCreate()
 
         Tracker.init(applicationContext, SITE_ID)
-        Tracker.getInstance().trackCrashes()
+        Tracker.instance?.trackCrashes()
     }
 }

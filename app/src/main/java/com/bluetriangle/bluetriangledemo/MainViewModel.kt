@@ -22,9 +22,9 @@ class MainViewModel : ViewModel() {
     private var timer: Timer? = null
 
     init {
-        val tracker = Tracker.getInstance()
-        globalUserId.value = tracker.getGlobalField(Timer.FIELD_GLOBAL_USER_ID) ?: ""
-        sessionId.value = tracker.getGlobalField(Timer.FIELD_SESSION_ID) ?: ""
+
+        globalUserId.value = Tracker.instance?.getGlobalField(Timer.FIELD_GLOBAL_USER_ID) ?: ""
+        sessionId.value = Tracker.instance?.getGlobalField(Timer.FIELD_SESSION_ID) ?: ""
     }
 
     fun submit() {
@@ -47,12 +47,12 @@ class MainViewModel : ViewModel() {
             timer = _timer
             _timer.start()
 
-            val allFields = _timer.fields
+            val allFields = _timer.getFields()
             allFields.forEach { (key, value) ->
-                Tracker.getInstance().setGlobalField(key, value)
+                Tracker.instance?.setGlobalField(key, value)
             }
-            Tracker.getInstance().submitTimer(_timer)
-            return HashMap(_timer.fields)
+            Tracker.instance?.submitTimer(_timer)
+            return HashMap(_timer.getFields())
         } finally {
             timer = null
         }

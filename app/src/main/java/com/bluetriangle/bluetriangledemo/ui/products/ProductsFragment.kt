@@ -14,7 +14,9 @@ import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.adapters.ProductAdapter
 import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.databinding.FragmentProductsBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProductsFragment : Fragment() {
 
     private var _binding: FragmentProductsBinding? = null

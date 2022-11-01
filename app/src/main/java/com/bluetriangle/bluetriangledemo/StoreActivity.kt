@@ -8,7 +8,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bluetriangle.bluetriangledemo.databinding.ActivityStoreBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class StoreActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityStoreBinding

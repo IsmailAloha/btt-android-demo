@@ -21,7 +21,7 @@ class CartRepository @Inject constructor(
             val products = productRepository.listProducts()
             val productMap = products.associateBy { it.id }
             val cart = storeService.getCart(cartId)
-            val productCartItems = cart.items.map { it.copy(productReference = productMap[it.product]) }
+            val productCartItems = cart.items?.map { it.copy(productReference = productMap[it.product]) } ?: emptyList()
             return cart.copy(items = productCartItems)
         }
         return null
@@ -35,11 +35,18 @@ class CartRepository @Inject constructor(
                 putLong(KEY_CART_ID, cart.id)
             }
         }
-        val existing = cart.items.find { it.product == product.id }
+        val existing = cart.items?.find { it.product == product.id }
         if (existing != null) {
             storeService.updateQuantity(existing.id, existing.quantity + 1)
         } else {
             storeService.addToCart(product.id, 1, product.price, cart.id)
+        }
+    }
+
+    suspend fun checkout(cart: Cart) {
+        storeService.checkout(cart.id)
+        sharedPreferences.edit(commit = true) {
+            remove(KEY_CART_ID)
         }
     }
 

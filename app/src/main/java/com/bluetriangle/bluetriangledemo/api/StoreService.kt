@@ -48,6 +48,9 @@ interface StoreService {
     @DELETE("api/item/{cart_item_id}/")
     suspend fun deleteCartItem(@Path("cart_item_id") cartItemId: Long)
 
+    @DELETE("api/cart/{cart_item_id}/checkout/")
+    suspend fun checkout(@Path("cart_item_id") cartItemId: Long)
+
     companion object {
         private const val BASE_URL = "https://development.mms.mobelux.com/btriangle/"
 

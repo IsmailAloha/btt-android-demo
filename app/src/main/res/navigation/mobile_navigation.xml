@@ -31,11 +31,26 @@
         </fragment>
     </navigation>
 
-    <fragment
+    <navigation
         android:id="@+id/navigation_cart"
-        android:name="com.bluetriangle.bluetriangledemo.ui.cart.CartFragment"
-        android:label="@string/title_cart"
-        tools:layout="@layout/fragment_cart" />
+        app:startDestination="@id/navigation_cart_list">
+        <fragment
+            android:id="@+id/navigation_cart_list"
+            android:name="com.bluetriangle.bluetriangledemo.ui.cart.CartFragment"
+            android:label="@string/title_cart"
+            tools:layout="@layout/fragment_cart">
+            <action
+                android:id="@+id/action_cart_to_checkout"
+                app:destination="@+id/navigation_checkout" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/navigation_checkout"
+            android:name="com.bluetriangle.bluetriangledemo.ui.cart.CheckoutFragment"
+            android:label="Checkout"
+            tools:layout="@layout/fragment_checkout" />
+
+    </navigation>
 
     <fragment
         android:id="@+id/navigation_settings"

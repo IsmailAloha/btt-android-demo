@@ -41,7 +41,7 @@ class CartFragment : Fragment() {
         }
 
         cartViewModel.cart.observe(viewLifecycleOwner) { cart ->
-            if (cart == null || cart.items.isEmpty()) {
+            if (cart == null || cart.items.isNullOrEmpty()) {
                 binding.checkoutButton.apply {
                     setText(R.string.empty_cart)
                     isEnabled = false
@@ -54,6 +54,10 @@ class CartFragment : Fragment() {
                 }
                 cartItemAdapter.submitList(cart.items)
             }
+        }
+
+        binding.checkoutButton.setOnClickListener {
+            findNavController().navigate(R.id.action_cart_to_checkout)
         }
 
         return root

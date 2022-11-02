@@ -50,6 +50,11 @@ class CartRepository @Inject constructor(
         }
     }
 
+    suspend fun removeCartItem(cartItem: CartItem): Cart? {
+        storeService.deleteCartItem(cartItem.id)
+        return getCart()
+    }
+
     companion object {
         const val SHARED_PREFERENCES_NAME = "BTDA_CART"
         const val KEY_CART_ID = "cart_id"

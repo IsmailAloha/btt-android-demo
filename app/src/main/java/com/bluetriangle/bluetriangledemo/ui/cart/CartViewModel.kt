@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bluetriangle.bluetriangledemo.api.StoreService
 import com.bluetriangle.bluetriangledemo.data.Cart
+import com.bluetriangle.bluetriangledemo.data.CartItem
 import com.bluetriangle.bluetriangledemo.data.CartRepository
 import com.bluetriangle.bluetriangledemo.data.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +25,15 @@ class CartViewModel @Inject constructor(private val cartRepository: CartReposito
     fun refreshCart() {
         viewModelScope.launch(Dispatchers.IO) {
             val cart = cartRepository.getCart()
+            withContext(Dispatchers.Main) {
+                _cart.value = cart
+            }
+        }
+    }
+
+    fun removeCartItem(cartItem: CartItem) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val cart = cartRepository.removeCartItem(cartItem)
             withContext(Dispatchers.Main) {
                 _cart.value = cart
             }

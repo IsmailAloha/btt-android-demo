@@ -33,7 +33,9 @@ class CartFragment : Fragment() {
         _binding = FragmentCartBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val cartItemAdapter = CartItemAdapter(requireContext())
+        val cartItemAdapter = CartItemAdapter(requireContext()) {
+            cartViewModel.removeCartItem(it)
+        }
 
         binding.productsList.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

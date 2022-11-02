@@ -12,6 +12,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
@@ -46,10 +47,10 @@ interface StoreService {
     )
 
     @DELETE("api/item/{cart_item_id}/")
-    suspend fun deleteCartItem(@Path("cart_item_id") cartItemId: Long)
+    suspend fun deleteCartItem(@Path("cart_item_id") cartItemId: Long): Response<Unit>
 
     @DELETE("api/cart/{cart_item_id}/checkout/")
-    suspend fun checkout(@Path("cart_item_id") cartItemId: Long)
+    suspend fun checkout(@Path("cart_item_id") cartItemId: Long): Response<Unit>
 
     companion object {
         private const val BASE_URL = "https://development.mms.mobelux.com/btriangle/"

@@ -12,11 +12,12 @@ import com.bluetriangle.bluetriangledemo.databinding.ListItemCartItemBinding
 import com.bluetriangle.bluetriangledemo.databinding.ListItemProductBinding
 import com.bumptech.glide.Glide
 
-class CartItemAdapter(context: Context): ListAdapter<CartItem, RecyclerView.ViewHolder>(CartItemDiffCallback()) {
+class CartItemAdapter(context: Context, private val cartItemRemoveCallback: (cartItem: CartItem) -> Unit) :
+    ListAdapter<CartItem, RecyclerView.ViewHolder>(CartItemDiffCallback()) {
     private val layoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return CartItemViewHolder(ListItemCartItemBinding.inflate(layoutInflater, parent, false))
+        return CartItemViewHolder(ListItemCartItemBinding.inflate(layoutInflater, parent, false), cartItemRemoveCallback)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -25,7 +26,10 @@ class CartItemAdapter(context: Context): ListAdapter<CartItem, RecyclerView.View
         cartItemViewHolder?.bind(cartItem)
     }
 
-    class CartItemViewHolder(private val binding: ListItemCartItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class CartItemViewHolder(
+        private val binding: ListItemCartItemBinding,
+        private val cartItemRemoveCallback: (cartItem: CartItem) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(cartItem: CartItem) {
             binding.apply {
                 productQuantity.text = "Qty: ${cartItem.quantity}"
@@ -35,6 +39,9 @@ class CartItemAdapter(context: Context): ListAdapter<CartItem, RecyclerView.View
                     Glide.with(productImage).load(product.image).into(productImage)
                 } ?: run {
                     Glide.with(productImage).clear(productImage)
+                }
+                removeButton.setOnClickListener { _ ->
+                    cartItemRemoveCallback(cartItem)
                 }
             }
         }

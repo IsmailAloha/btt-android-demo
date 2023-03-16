@@ -7,6 +7,7 @@ import com.bluetriangle.analytics.Tracker
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlin.collections.HashMap
 
 class MainViewModel : ViewModel() {
 
@@ -21,9 +22,9 @@ class MainViewModel : ViewModel() {
     private var timer: Timer? = null
 
     init {
-        val fields = Tracker.getInstance().globalFields
-        globalUserId.value = fields["gID"] ?: ""
-        sessionId.value = fields["sID"] ?: ""
+        val tracker = Tracker.getInstance()
+        globalUserId.value = tracker.getGlobalField(Timer.FIELD_GLOBAL_USER_ID) ?: ""
+        sessionId.value = tracker.getGlobalField(Timer.FIELD_SESSION_ID) ?: ""
     }
 
     fun submit() {
@@ -47,13 +48,11 @@ class MainViewModel : ViewModel() {
             _timer.start()
 
             val allFields = _timer.fields
-            val requestRepresentation = Tracker.getInstance().globalFields.apply {
-                allFields.forEach { (key, value) ->
-                    this[key] = value
-                }
+            allFields.forEach { (key, value) ->
+                Tracker.getInstance().setGlobalField(key, value)
             }
             Tracker.getInstance().submitTimer(_timer)
-            return HashMap(requestRepresentation)
+            return HashMap(_timer.fields)
         } finally {
             timer = null
         }

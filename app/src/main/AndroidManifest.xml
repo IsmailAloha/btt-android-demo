@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".DemoApplication"
@@ -12,15 +13,34 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BlueTriangleDemo">
         <activity
-            android:name=".MainActivity"
+            android:name=".StoreActivity"
             android:exported="true"
-            android:label="Timer">
+            android:label="@string/title_activity_store">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="Timer">
+
+        </activity>
+
+        <meta-data
+            android:name="com.blue-triangle.site-id"
+            android:value="mobelux3271241z" />
+        <meta-data
+            android:name="com.blue-triangle.debug"
+            android:value="true" />
+        <meta-data
+            android:name="com.blue-triangle.track-crashes.enable"
+            android:value="true" />
+        <meta-data
+            android:name="com.blue-triangle.sample-rate.network"
+            android:value="1.0" />
     </application>
 
 </manifest>

@@ -1,0 +1,9 @@
+<resources>
+    <string name="title_activity_store">Blue Triangle Demo Store</string>
+    <string name="title_products">Products</string>
+    <string name="title_cart">Cart</string>
+    <string name="title_settings">Settings</string>
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="checkout">Checkout</string>
+    <string name="empty_cart">Cart is empty</string>
+</resources>

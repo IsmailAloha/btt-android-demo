@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:name=".DemoApplication"
+        android:allowBackup="true"
+        android:icon="${appIcon}"
+        android:label="@string/app_name"
+        android:roundIcon="${appIconRound}"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.BlueTriangleDemo">
+        <activity
+            android:name=".StoreActivity"
+            android:exported="true"
+            android:label="@string/title_activity_store">
+
+        </activity>
+
+        <activity
+            android:name=".ConfigActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="Timer">
+
+        </activity>
+        <activity android:name="com.bluetriangle.bluetriangledemo.compose.screens.ComposeStoreActivity" />
+
+        <meta-data
+            android:name="com.blue-triangle.debug"
+            android:value="true" />
+        <meta-data
+            android:name="com.blue-triangle.track-crashes.enable"
+            android:value="true" />
+        <meta-data
+            android:name="com.blue-triangle.sample-rate.network"
+            android:value="1.0" />
+    </application>
+
+</manifest>

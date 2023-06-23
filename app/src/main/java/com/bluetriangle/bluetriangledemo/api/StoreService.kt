@@ -20,7 +20,7 @@ import javax.inject.Singleton
 
 interface StoreService {
 
-    @GET("4369c622495e9244fc4f") //api/product/
+    @GET("api/product/")
     suspend fun listProducts(): List<Product>
 
     @GET("api/cart/{id}/")
@@ -53,7 +53,7 @@ interface StoreService {
     suspend fun checkout(@Path("cart_item_id") cartItemId: Long): Response<Unit>
 
     companion object {
-        private const val BASE_URL = "https://api.npoint.io/"
+        private const val BASE_URL = "http://34.31.235.63:8000/btriangle/"
 
         fun create(): StoreService {
             val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }

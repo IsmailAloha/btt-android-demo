@@ -6,4 +6,8 @@
     <string name="add_to_cart">Add to Cart</string>
     <string name="checkout">Checkout</string>
     <string name="empty_cart">Cart is empty</string>
+    <string name="android_version">Android Version</string>
+    <string name="sdk_version">SDK Version</string>
+    <string name="app_version">App Version</string>
+    <string name="app_flavor">App Flavor</string>
 </resources>

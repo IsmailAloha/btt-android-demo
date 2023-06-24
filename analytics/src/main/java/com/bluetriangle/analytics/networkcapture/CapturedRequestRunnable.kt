@@ -22,8 +22,7 @@ class CapturedRequestRunnable(
 
     private fun submitCapturedRequestCollection(capturedRequestCollection: CapturedRequestCollection) {
         var connection: HttpsURLConnection? = null
-        val payloadData =
-            capturedRequestCollection.buildCapturedRequestData(if (configuration.isDebug) 2 else 0)
+        val payloadData = capturedRequestCollection.buildCapturedRequestData(if (configuration.isDebug) 2 else 0)
         try {
             val url = capturedRequestCollection.buildUrl(configuration.networkCaptureUrl)
             configuration.logger?.debug("Submitting $capturedRequestCollection to $url")
@@ -31,17 +30,13 @@ class CapturedRequestRunnable(
             val requestUrl = URL(url)
             connection = requestUrl.openConnection() as HttpsURLConnection
             connection.requestMethod = Constants.METHOD_POST
-            connection.setRequestProperty(
-                Constants.HEADER_CONTENT_TYPE,
-                Constants.CONTENT_TYPE_JSON
-            )
+            connection.setRequestProperty(Constants.HEADER_CONTENT_TYPE, Constants.CONTENT_TYPE_JSON)
             connection.setRequestProperty(Constants.HEADER_USER_AGENT, configuration.userAgent)
             connection.doOutput = true
             DataOutputStream(connection.outputStream).use { it.write(Utils.b64encode(payloadData)) }
             val statusCode = connection.responseCode
             if (statusCode >= 300) {
-                val responseBody =
-                    BufferedReader(InputStreamReader(connection.errorStream)).use { it.readText() }
+                val responseBody = BufferedReader(InputStreamReader(connection.errorStream)).use { it.readText() }
                 configuration.logger?.error("Server Error submitting $capturedRequestCollection: $statusCode - $responseBody")
 
                 // If server error, cache the payload and try again later
@@ -53,10 +48,7 @@ class CapturedRequestRunnable(
             }
             connection.getHeaderField(0)
         } catch (e: Exception) {
-            configuration.logger?.error(
-                e,
-                "Android Error submitting $capturedRequestCollection: ${e.message}"
-            )
+            configuration.logger?.error(e, "Android Error submitting $capturedRequestCollection: ${e.message}")
             cachePayload(configuration.trackerUrl, payloadData)
         } finally {
             connection?.disconnect()

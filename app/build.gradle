@@ -32,7 +32,6 @@ android {
         create("compose") {
             dimension = "version"
             applicationIdSuffix = ".compose"
-            versionNameSuffix = "-compose"
             resValue "string", "app_name", "Ecommerce Demo Compose"
             manifestPlaceholders = [
                     appIcon: "@mipmap/ic_launcher_compose",
@@ -42,7 +41,6 @@ android {
         create("layout") {
             dimension = "version"
             applicationIdSuffix = ".layout"
-            versionNameSuffix = "-layout"
             resValue "string", "app_name", "Ecommerce Demo Layout"
             manifestPlaceholders = [
                     appIcon: "@mipmap/ic_launcher_layout",

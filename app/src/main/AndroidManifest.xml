@@ -38,7 +38,6 @@
         </activity>
         <activity android:name="com.bluetriangle.bluetriangledemo.compose.screens.ComposeStoreActivity" />
         <activity android:name="com.bluetriangle.bluetriangledemo.compose.screens.ProductDetailsActivity" />
-        <activity android:name="com.bluetriangle.bluetriangledemo.compose.screens.MainActivity" />
 
         <meta-data
             android:name="com.blue-triangle.debug"

@@ -1,5 +1,6 @@
 package com.bluetriangle.bluetriangledemo.ui.settings
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.bluetriangle.bluetriangledemo.BuildConfig
 import com.bluetriangle.bluetriangledemo.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
@@ -21,10 +23,11 @@ class SettingsFragment : Fragment() {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textNotifications
-        settingsViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+        _binding?.androidVersionNameValue?.text = settingsViewModel.androidVersionName
+        _binding?.appVersionValue?.text = settingsViewModel.appVersion
+        _binding?.flavorValue?.text = settingsViewModel.flavor
+        _binding?.sdkVersionValue?.text = settingsViewModel.sdkVersion
+
         return root
     }
 

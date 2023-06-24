@@ -16,6 +16,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.compose.components.AppBottomNavigationBar
@@ -28,43 +29,20 @@ import dagger.hilt.android.AndroidEntryPoint
 class ComposeStoreActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val navItems = listOf(
-            NavItem(
-                "Products",
-                icon = {
-                    Icon(
-                        painterResource(id = R.drawable.baseline_apps_24),
-                        contentDescription = "Products",
-                        tint = it
-                    )
-                },
-                "products"
-            ) { ProductsScreen() },
-            NavItem("Cart", icon = {
-                Icon(
-                    Icons.Filled.ShoppingCart,
-                    contentDescription = "Cart",
-                    tint = it
-                )
-            }, "cart") { CartScreen() },
-            NavItem("Settings", icon = {
-                Icon(
-                    Icons.Filled.Settings,
-                    contentDescription = "Settings",
-                    tint = it
-                )
-            }, "settings") { SettingsScreen() }
-        )
         setContent {
             val title = rememberSaveable {
                 mutableStateOf("")
             }
             BlueTriangleComposeDemoTheme {
                 val navController = rememberNavController()
-                Scaffold(topBar = { TopAppBar(title = { Text(text = title.value) }) }, bottomBar = {
-                    AppBottomNavigationBar(title, navController = navController, navItems = navItems)
+                val navItems = getNavItemsList(navController)
+                Scaffold(topBar = {
+                    TopAppBar(title = { Text(text = title.value) })
+                }, bottomBar = {
+                    AppBottomNavigationBar(navController = navController, navItems = navItems)
                 }) {
                     NavHostContainer(
+                        title,
                         navController = navController,
                         padding = it,
                         navItems = navItems
@@ -73,7 +51,49 @@ class ComposeStoreActivity : ComponentActivity() {
             }
         }
     }
+}
 
+fun getNavItemsList(navController: NavHostController): List<NavItem> {
+    return listOf(
+        NavItem(
+            "Products",
+            icon = {
+                Icon(
+                    painterResource(id = R.drawable.baseline_apps_24),
+                    contentDescription = "Products",
+                    tint = it
+                )
+            },
+            "product",
+            destinations = listOf(
+                NavItem.Destination("Product", "product/home") { ProductsScreen() }
+            )
+        ),
+        NavItem("Cart", icon = {
+            Icon(
+                Icons.Filled.ShoppingCart,
+                contentDescription = "Cart",
+                tint = it
+            )
+        }, "cart",
+            destinations = listOf(
+                NavItem.Destination("Cart", "cart/home") { CartScreen(navController) },
+                NavItem.Destination(
+                    "Checkout",
+                    "cart/checkout/{checkoutId}"
+                ) { CheckoutScreen(it.arguments?.getString("checkoutId") ?: "") }
+            )),
+        NavItem("Settings", icon = {
+            Icon(
+                Icons.Filled.Settings,
+                contentDescription = "Settings",
+                tint = it
+            )
+        }, "settings",
+            destinations = listOf(
+                NavItem.Destination("Settings", "settings/home") { SettingsScreen() }
+            ))
+    )
 }
 
 @Composable

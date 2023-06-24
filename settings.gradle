@@ -1,4 +1,4 @@
 rootProject.name = "Blue Triangle Demo"
 include ':app'
-include ':analytics'
 include ':analytics-okhttp'
+include ':analytics'

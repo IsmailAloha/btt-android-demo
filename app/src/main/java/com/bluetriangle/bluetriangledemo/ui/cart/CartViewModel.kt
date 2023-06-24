@@ -16,11 +16,15 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class CartViewModel @Inject constructor(private val cartRepository: CartRepository) : ViewModel() {
+class CartViewModel @Inject constructor(val cartRepository: CartRepository) : ViewModel() {
 
     private val _cart = MutableLiveData<Cart?>()
 
     val cart: LiveData<Cart?> = _cart
+
+    init {
+        refreshCart()
+    }
 
     fun refreshCart() {
         viewModelScope.launch(Dispatchers.IO) {

@@ -4,7 +4,6 @@ import android.app.ActivityManager
 import android.app.Application
 import android.content.Context
 import android.text.TextUtils
-import android.util.Log
 import com.bluetriangle.analytics.anrwatchdog.AnrManager
 import com.bluetriangle.analytics.networkcapture.CapturedRequest
 import com.bluetriangle.analytics.networkcapture.CapturedRequestCollection
@@ -84,7 +83,7 @@ class Tracker private constructor(
         configuration.sessionId = sessionId
 
         trackerExecutor = TrackerExecutor(configuration)
-        screenTrackMonitor = BTTScreenLifecyleTracker()
+        screenTrackMonitor = BTTScreenLifecyleTracker(configuration.isScreenTrackingEnabled)
 
         val fragmentLifecycleTracker = FragmentLifecycleTracker(screenTrackMonitor)
         activityLifecycleTracker = ActivityLifecycleTracker(screenTrackMonitor, fragmentLifecycleTracker)

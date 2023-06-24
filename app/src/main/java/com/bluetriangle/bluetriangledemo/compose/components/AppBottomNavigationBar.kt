@@ -1,5 +1,6 @@
 package com.bluetriangle.bluetriangledemo.compose.components
 
+import android.util.Log
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.MaterialTheme
@@ -16,14 +17,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
 fun AppBottomNavigationBar(
-    title: MutableState<String>,
     navController: NavHostController,
     navItems: List<NavItem>
 ) {
     val lastSelected = rememberSaveable {
         mutableStateOf(navItems[0].route)
     }
-    title.value = navItems[0].label
 
     BottomNavigation(
         // set background color
@@ -40,17 +39,18 @@ fun AppBottomNavigationBar(
         // Bottom nav items we declared
         navItems.forEach { navItem ->
             BottomNavigationItem(
-                selected = currentRoute == navItem.route,
+                selected = currentRoute?.contains(navItem.route) == true,
                 onClick = {
-                    title.value = navItem.label
                     navController.navigate(navItem.route) {
+
                         popUpTo(lastSelected.value) { inclusive = true }
                         lastSelected.value = navItem.route
                     }
                 },
                 icon = {
+                    Log.d("AppBottomNavigationBar", "Route: $currentRoute")
                     navItem.icon(
-                        if (currentRoute == navItem.route) {
+                        if (currentRoute?.contains(navItem.route) == true) {
                             MaterialTheme.colors.primary
                         } else {
                             Color(0xFF999999)

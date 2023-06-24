@@ -1,6 +1,7 @@
 package com.bluetriangle.bluetriangledemo
 
 import android.app.Application
+import com.bluetriangle.analytics.BlueTriangleConfiguration
 import com.bluetriangle.analytics.Tracker
 import dagger.hilt.android.HiltAndroidApp
 
@@ -19,10 +20,14 @@ class DemoApplication : Application() {
 //            intTracker(siteId) //bluetriangledemo500z
     }
 
-    fun intTracker(siteId: String?) {
+    fun intTracker(siteId: String?, anrDetection: Boolean, screenTracking: Boolean) {
         if (siteId.isNullOrBlank()) return
 
-        Tracker.init(this, siteId)
+        val configuration = BlueTriangleConfiguration()
+        configuration.siteId = siteId
+        configuration.isTrackAnrEnabled = anrDetection
+        configuration.isScreenTrackingEnabled = screenTracking
+        Tracker.init(this, configuration)
         Tracker.instance?.trackCrashes()
     }
 }

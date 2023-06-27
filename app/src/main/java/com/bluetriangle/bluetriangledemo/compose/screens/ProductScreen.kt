@@ -33,6 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.asFlow
 import coil.compose.AsyncImage
 import com.bluetriangle.analytics.compose.BttTimerEffect
+import com.bluetriangle.bluetriangledemo.compose.components.ErrorAlertDialog
 import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.ui.products.ProductsViewModel
 
@@ -50,6 +51,7 @@ fun ProductsScreen(productsViewModel: ProductsViewModel = hiltViewModel()) {
             ProductItem(product)
         }
     }
+    ErrorAlertDialog(errorHandler = productsViewModel.errorHandler)
 }
 
 @OptIn(ExperimentalMaterialApi::class)

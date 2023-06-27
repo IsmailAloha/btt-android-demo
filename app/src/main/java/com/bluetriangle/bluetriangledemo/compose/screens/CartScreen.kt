@@ -41,6 +41,7 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.bluetriangle.analytics.compose.BttTimerEffect
 import com.bluetriangle.bluetriangledemo.R
+import com.bluetriangle.bluetriangledemo.compose.components.ErrorAlertDialog
 import com.bluetriangle.bluetriangledemo.data.CartItem
 import com.bluetriangle.bluetriangledemo.ui.cart.CartViewModel
 import kotlinx.coroutines.Dispatchers.Main
@@ -74,10 +75,14 @@ fun CartScreen(navController:NavHostController, viewModel:CartViewModel = hiltVi
                 scope.launch {
                     val cartValue = cart.value
                     if(cartValue != null) {
-                        viewModel.cartRepository.checkout(cartValue)
-                        viewModel.refreshCart()
-                        withContext(Main) {
-                            navController.navigate("cart/checkout/${randomUUID()}")
+                        try {
+                            viewModel.cartRepository.checkout(cartValue)
+                            viewModel.refreshCart()
+                            withContext(Main) {
+                                navController.navigate("cart/checkout/${randomUUID()}")
+                            }
+                        } catch (e: Exception) {
+                            viewModel.errorHandler.showError(e)
                         }
                     }
                 }
@@ -90,6 +95,7 @@ fun CartScreen(navController:NavHostController, viewModel:CartViewModel = hiltVi
             Text(text = "No Items in Cart", modifier = Modifier.align(Alignment.Center))
         }
     }
+    ErrorAlertDialog(errorHandler = viewModel.errorHandler)
 }
 
 @Composable

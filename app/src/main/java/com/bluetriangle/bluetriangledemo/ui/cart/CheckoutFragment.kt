@@ -7,11 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bluetriangle.bluetriangledemo.databinding.FragmentCheckoutBinding
+import com.bluetriangle.bluetriangledemo.utils.AlertDialogState
+import com.bluetriangle.bluetriangledemo.utils.AlertView
+import com.bluetriangle.bluetriangledemo.utils.showAlert
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class CheckoutFragment : Fragment() {
+class CheckoutFragment : Fragment(), AlertView {
 
     private var _binding: FragmentCheckoutBinding? = null
 
@@ -19,6 +22,7 @@ class CheckoutFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val checkoutViewModel = ViewModelProvider(this).get(CheckoutViewModel::class.java)
+        checkoutViewModel.errorHandler.alertView = this
 
         _binding = FragmentCheckoutBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -35,6 +39,10 @@ class CheckoutFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun showAlert(alertDialogState: AlertDialogState) {
+        requireContext().showAlert(alertDialogState)
     }
 
 }

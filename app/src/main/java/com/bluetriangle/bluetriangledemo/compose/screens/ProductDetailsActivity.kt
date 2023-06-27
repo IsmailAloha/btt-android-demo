@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.IntentCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.bluetriangle.bluetriangledemo.compose.components.ErrorAlertDialog
 import com.bluetriangle.bluetriangledemo.compose.theme.BlueTriangleComposeDemoTheme
 import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.ui.products.ProductDetailViewModel
@@ -121,6 +122,7 @@ class ProductDetailsActivity : ComponentActivity() {
                                             addingToCart.value = true
                                             viewModel.cartRepository.addToCart(product)
                                         } catch (e: Exception) {
+                                            viewModel.errorHandler.showError(e)
                                             withContext(Dispatchers.Main) {
                                                 addingToCart.value = false
                                             }
@@ -138,6 +140,7 @@ class ProductDetailsActivity : ComponentActivity() {
                     }
                 })
         }
+        ErrorAlertDialog(errorHandler = viewModel.errorHandler)
     }
 }
 

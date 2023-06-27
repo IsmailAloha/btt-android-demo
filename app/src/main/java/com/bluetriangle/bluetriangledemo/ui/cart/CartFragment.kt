@@ -16,10 +16,13 @@ import com.bluetriangle.bluetriangledemo.data.CartItem
 import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.databinding.FragmentCartBinding
 import com.bluetriangle.bluetriangledemo.ui.products.ProductsFragmentDirections
+import com.bluetriangle.bluetriangledemo.utils.AlertDialogState
+import com.bluetriangle.bluetriangledemo.utils.AlertView
+import com.bluetriangle.bluetriangledemo.utils.showAlert
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CartFragment : Fragment() {
+class CartFragment : Fragment(), AlertView {
 
     private var _binding: FragmentCartBinding? = null
 
@@ -32,6 +35,8 @@ class CartFragment : Fragment() {
 
         _binding = FragmentCartBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        cartViewModel.errorHandler.alertView = this
 
         val cartItemAdapter = CartItemAdapter(requireContext()) {
             cartViewModel.removeCartItem(it)
@@ -73,5 +78,9 @@ class CartFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun showAlert(alertDialogState: AlertDialogState) {
+        requireContext().showAlert(alertDialogState)
     }
 }

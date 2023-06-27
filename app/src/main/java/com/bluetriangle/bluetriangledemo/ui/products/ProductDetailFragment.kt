@@ -8,11 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
 import com.bluetriangle.bluetriangledemo.databinding.FragmentProductDetailBinding
+import com.bluetriangle.bluetriangledemo.utils.AlertDialogState
+import com.bluetriangle.bluetriangledemo.utils.AlertView
+import com.bluetriangle.bluetriangledemo.utils.showAlert
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ProductDetailFragment : Fragment() {
+class ProductDetailFragment : Fragment(), AlertView {
 
     private var _binding: FragmentProductDetailBinding? = null
 
@@ -22,7 +25,7 @@ class ProductDetailFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val productDetailViewModel = ViewModelProvider(this).get(ProductDetailViewModel::class.java)
-
+        productDetailViewModel.errorHandler.alertView = this
         _binding = FragmentProductDetailBinding.inflate(inflater, container, false)
 
         binding.apply {
@@ -45,6 +48,10 @@ class ProductDetailFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun showAlert(alertDialogState: AlertDialogState) {
+        requireContext().showAlert(alertDialogState)
     }
 
 }

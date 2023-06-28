@@ -8,9 +8,16 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.databinding.ListItemProductBinding
+import com.bluetriangle.bluetriangledemo.utils.dp
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
-class ProductAdapter(context: Context, private val productClickListener: (product: Product) -> Unit) :
+class ProductAdapter(
+    context: Context,
+    private val productClickListener: (product: Product) -> Unit
+) :
     ListAdapter<Product, RecyclerView.ViewHolder>(ProductDiffCallback()) {
 
     private val layoutInflater = LayoutInflater.from(context)
@@ -28,12 +35,21 @@ class ProductAdapter(context: Context, private val productClickListener: (produc
         }
     }
 
-    class ProductViewHolder(private val binding: ListItemProductBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ProductViewHolder(private val binding: ListItemProductBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(product: Product) {
             binding.apply {
                 productName.text = product.name
                 productPrice.text = "$${product.price}"
-                Glide.with(productImage).load(product.image).into(productImage)
+                Glide.with(productImage)
+                    .load(product.image)
+                    .transform(
+                        MultiTransformation(
+                            CenterCrop(),
+                            RoundedCorners(itemView.context.dp(8))
+                        )
+                    )
+                    .into(productImage)
             }
         }
     }

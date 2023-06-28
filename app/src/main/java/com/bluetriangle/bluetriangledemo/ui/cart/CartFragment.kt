@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.adapters.CartItemAdapter
@@ -38,12 +39,16 @@ class CartFragment : Fragment(), AlertView {
 
         cartViewModel.errorHandler.alertView = this
 
-        val cartItemAdapter = CartItemAdapter(requireContext()) {
+        val cartItemAdapter = CartItemAdapter(requireContext(), {
             cartViewModel.removeCartItem(it)
+        }, {
+            cartViewModel.reduceQuantity(it)
+        }) {
+            cartViewModel.increaseQuantity(it)
         }
 
         binding.productsList.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            layoutManager = GridLayoutManager(context, 2)
             adapter = cartItemAdapter
         }
 

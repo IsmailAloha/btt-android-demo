@@ -2,6 +2,7 @@ package com.bluetriangle.bluetriangledemo.compose.screens
 
 import android.content.Intent
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -34,6 +36,7 @@ import androidx.lifecycle.asFlow
 import coil.compose.AsyncImage
 import com.bluetriangle.analytics.compose.BttTimerEffect
 import com.bluetriangle.bluetriangledemo.compose.components.ErrorAlertDialog
+import com.bluetriangle.bluetriangledemo.compose.theme.outline
 import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.ui.products.ProductsViewModel
 
@@ -60,7 +63,7 @@ fun ProductItem(item: Product) {
     val context = LocalContext.current
     Card(
         elevation = 0.dp,
-        border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+        border = BorderStroke(1.dp, MaterialTheme.colors.outline),
         modifier = Modifier
             .padding(4.dp)
             .fillMaxWidth(),

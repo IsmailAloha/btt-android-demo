@@ -34,15 +34,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.asFlow
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.bluetriangle.analytics.compose.BttTimerEffect
 import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.compose.components.ErrorAlertDialog
+import com.bluetriangle.bluetriangledemo.compose.theme.outline
 import com.bluetriangle.bluetriangledemo.data.CartItem
+import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.ui.cart.CartViewModel
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
@@ -50,49 +54,44 @@ import kotlinx.coroutines.withContext
 import java.util.UUID.randomUUID
 
 @Composable
-fun CartScreen(navController:NavHostController, viewModel:CartViewModel = hiltViewModel()) {
+fun CartScreen(navController: NavHostController, viewModel: CartViewModel = hiltViewModel()) {
     BttTimerEffect(screenName = "Cart_Screen")
     val scope = rememberCoroutineScope()
     val cart = viewModel.cart.asFlow().collectAsState(null)
     val cartItems = cart.value?.items ?: listOf()
-    if (cartItems.isNotEmpty()) {
-        Column(
-            Modifier
-                .padding(8.dp)
-                .fillMaxSize()
+    Column(
+        Modifier
+            .padding(8.dp)
+            .fillMaxSize()
     ) {
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = 150.dp),
-                Modifier.weight(1f),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(cartItems.size) { item ->
-                    CartListItem(viewModel = viewModel, cartItem = cartItems[item])
-                }
-            }
-            Button(modifier = Modifier.fillMaxWidth(), onClick = {
-                scope.launch {
-                    val cartValue = cart.value
-                    if(cartValue != null) {
-                        try {
-                            viewModel.cartRepository.checkout(cartValue)
-                            viewModel.refreshCart()
-                            withContext(Main) {
-                                navController.navigate("cart/checkout/${randomUUID()}")
-                            }
-                        } catch (e: Exception) {
-                            viewModel.errorHandler.showError(e)
-                        }
-                    }
-                }
-            }) {
-                Text(text = "Checkout")
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(minSize = 150.dp),
+            Modifier.weight(1f),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(cartItems.size) { item ->
+                CartListItem(viewModel = viewModel, cartItem = cartItems[item])
             }
         }
-    } else {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Text(text = "No Items in Cart", modifier = Modifier.align(Alignment.Center))
+        Button(modifier = Modifier.fillMaxWidth(), onClick = {
+            scope.launch {
+                val cartValue = cart.value
+                if (cartValue?.items?.isEmpty() != false) {
+                    throw UnsupportedOperationException("No items are added in cart to checkout")
+                }
+                try {
+                    viewModel.cartRepository.checkout(cartValue)
+                    viewModel.refreshCart()
+                    withContext(Main) {
+                        navController.navigate("cart/checkout/${randomUUID()}")
+                    }
+                } catch (e: Exception) {
+                    viewModel.errorHandler.showError(e)
+                }
+            }
+        }) {
+            Text(text = "Checkout")
         }
     }
     ErrorAlertDialog(errorHandler = viewModel.errorHandler)
@@ -101,9 +100,12 @@ fun CartScreen(navController:NavHostController, viewModel:CartViewModel = hiltVi
 @Composable
 fun CartListItem(viewModel: CartViewModel, cartItem: CartItem) {
     Card(
-        Modifier.fillMaxWidth(),
-        border = BorderStroke(1.dp, Color(0xFFEFEFEF)),
-        shape = RoundedCornerShape(8.dp)
+        Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colors.surface),
+        border = BorderStroke(1.dp, MaterialTheme.colors.outline),
+        shape = RoundedCornerShape(8.dp),
+        backgroundColor = MaterialTheme.colors.background
     ) {
         Column(Modifier.padding(8.dp)) {
             AsyncImage(
@@ -113,7 +115,7 @@ fun CartListItem(viewModel: CartViewModel, cartItem: CartItem) {
                     .clip(RoundedCornerShape(8.dp))
                     .border(
                         1.dp,
-                        Color(0xFFE1E1E1),
+                        MaterialTheme.colors.outline,
                         RoundedCornerShape(8.dp)
                     ),
                 model = cartItem.productReference?.image,
@@ -121,28 +123,25 @@ fun CartListItem(viewModel: CartViewModel, cartItem: CartItem) {
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = cartItem.productReference?.name ?: "")
+            Text(text = cartItem.productReference?.name ?: "", maxLines = 1)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = String.format("$%.2f", cartItem.price))
+            Text(text = String.format("$%.2f", cartItem.total), maxLines = 1)
             CartActionButton(Modifier.align(Alignment.CenterHorizontally), cartItem, viewModel)
+            Button(modifier = Modifier.fillMaxWidth(), onClick = {
+                viewModel.removeCartItem(cartItem)
+            }) {
+                Text(text = "Remove")
+            }
         }
     }
 }
 
 @Composable
 fun CartActionButton(modifier: Modifier, cartItem: CartItem, viewModel: CartViewModel) {
-    val scope = rememberCoroutineScope()
     Row(modifier) {
         IconButton(onClick = {
-            scope.launch {
-                if(cartItem.quantity <= 1) {
-                    viewModel.cartRepository.removeCartItem(cartItem)
-                } else {
-                    viewModel.cartRepository.reduceQuantity(cartItem)
-                }
-            }
-            viewModel.refreshCart()
-        }, modifier = Modifier.background(Color.White, shape = CircleShape)) {
+            viewModel.reduceQuantity(cartItem)
+        }, modifier = Modifier.background(MaterialTheme.colors.background, shape = CircleShape)) {
             Icon(
                 painterResource(id = R.drawable.baseline_remove_24),
                 contentDescription = "Remove",
@@ -150,14 +149,16 @@ fun CartActionButton(modifier: Modifier, cartItem: CartItem, viewModel: CartView
             )
         }
         Spacer(modifier = Modifier.width(16.dp))
-        Text(text = cartItem.quantity.toString(), modifier = Modifier.align(Alignment.CenterVertically))
+        Text(
+            text = cartItem.quantity.toString(),
+            modifier = Modifier.align(Alignment.CenterVertically)
+        )
         Spacer(modifier = Modifier.width(16.dp))
-        IconButton(onClick = {
-            scope.launch {
-                viewModel.cartRepository.increaseQuantity(cartItem)
-            }
-            viewModel.refreshCart()
-        }, modifier = Modifier.background(Color.White, shape = CircleShape)) {
+        IconButton(
+            onClick = {
+                viewModel.increaseQuantity(cartItem)
+            }, modifier = Modifier.background(MaterialTheme.colors.surface, shape = CircleShape)
+        ) {
             Icon(Icons.Filled.Add, contentDescription = "Add", tint = MaterialTheme.colors.primary)
         }
     }

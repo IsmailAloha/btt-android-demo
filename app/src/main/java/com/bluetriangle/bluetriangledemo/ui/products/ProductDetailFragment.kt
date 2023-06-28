@@ -10,8 +10,12 @@ import androidx.navigation.fragment.navArgs
 import com.bluetriangle.bluetriangledemo.databinding.FragmentProductDetailBinding
 import com.bluetriangle.bluetriangledemo.utils.AlertDialogState
 import com.bluetriangle.bluetriangledemo.utils.AlertView
+import com.bluetriangle.bluetriangledemo.utils.dp
 import com.bluetriangle.bluetriangledemo.utils.showAlert
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,9 +34,17 @@ class ProductDetailFragment : Fragment(), AlertView {
 
         binding.apply {
             productName.text = args.product.name
-            productPrice.text = "$${args.product.price}"
+            productPrice.text = String.format("%.2f", args.product.price)
             productDescription.text = args.product.description
-            Glide.with(requireContext()).load(args.product.image).into(productImage)
+            Glide.with(requireContext())
+                .load(args.product.image)
+                .transform(
+                    MultiTransformation(
+                        CenterCrop(),
+                        RoundedCorners(productImage.context.dp(8))
+                    )
+                )
+                .into(productImage)
             addToCartButton.setOnClickListener { v ->
                 productDetailViewModel.addToCart(v, args.product)
             }

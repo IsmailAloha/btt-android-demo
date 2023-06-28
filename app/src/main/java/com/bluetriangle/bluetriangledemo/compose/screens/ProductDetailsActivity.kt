@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -40,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.bluetriangle.bluetriangledemo.compose.components.ErrorAlertDialog
 import com.bluetriangle.bluetriangledemo.compose.theme.BlueTriangleComposeDemoTheme
+import com.bluetriangle.bluetriangledemo.compose.theme.outline
 import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.ui.products.ProductDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -75,7 +77,7 @@ class ProductDetailsActivity : ComponentActivity() {
         Box(modifier = Modifier.padding(paddingValues)) {
             Card(
                 elevation = 0.dp,
-                border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                border = BorderStroke(1.dp, MaterialTheme.colors.outline),
                 modifier = Modifier
                     .padding(4.dp)
                     .fillMaxWidth(),

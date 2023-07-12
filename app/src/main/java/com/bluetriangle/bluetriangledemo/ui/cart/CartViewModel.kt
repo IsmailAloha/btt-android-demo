@@ -14,6 +14,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 @HiltViewModel
 class CartViewModel @Inject constructor(val cartRepository: CartRepository) : ViewModel() {
@@ -40,12 +42,26 @@ class CartViewModel @Inject constructor(val cartRepository: CartRepository) : Vi
         }
     }
 
+    fun handleCheckoutCrash() {
+        val cartValue = cart.value
+        cartValue?.items?.isNullOrEmpty()
+        if(cartValue?.items?.isEmpty() != false) {
+            throw EmptyCartException()
+        } else if(cartValue.items.size > 5) {
+            throw CartOverflowException(cartValue.items.size)
+        }
+    }
+
     fun removeCartItem(cartItem: CartItem, startTime: Long = System.currentTimeMillis()) {
         val diff = System.currentTimeMillis() - startTime
-        Log.d("CartViewModelTag", "removeCartItem: $diff")
         if(diff <= 10_000) {
             Thread.sleep(200)
             removeCartItem(cartItem, startTime)
+        } else {
+            viewModelScope.launch(Dispatchers.IO) {
+                cartRepository.removeCartItem(cartItem)
+                refreshCart()
+            }
         }
     }
 

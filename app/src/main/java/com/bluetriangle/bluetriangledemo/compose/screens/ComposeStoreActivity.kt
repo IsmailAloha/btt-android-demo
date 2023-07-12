@@ -10,6 +10,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -71,7 +72,7 @@ fun getNavItemsList(navController: NavHostController): List<NavItem> {
         ),
         NavItem("Cart", icon = {
             Icon(
-                Icons.Filled.ShoppingCart,
+                Icons.Outlined.ShoppingCart,
                 contentDescription = "Cart",
                 tint = it
             )

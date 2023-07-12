@@ -53,22 +53,11 @@ class CartFragment : Fragment(), AlertView {
         }
 
         cartViewModel.cart.observe(viewLifecycleOwner) { cart ->
-            if (cart == null || cart.items.isNullOrEmpty()) {
-                binding.checkoutButton.apply {
-                    setText(R.string.empty_cart)
-                    isEnabled = false
-                }
-                cartItemAdapter.submitList(emptyList())
-            } else {
-                binding.checkoutButton.apply {
-                    setText(R.string.checkout)
-                    isEnabled = true
-                }
-                cartItemAdapter.submitList(cart.items)
-            }
+            cartItemAdapter.submitList(cart?.items?: emptyList())
         }
 
         binding.checkoutButton.setOnClickListener {
+            cartViewModel.handleCheckoutCrash()
             findNavController().navigate(R.id.action_cart_to_checkout)
         }
 

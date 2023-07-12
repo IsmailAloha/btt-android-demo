@@ -77,11 +77,9 @@ fun CartScreen(navController: NavHostController, viewModel: CartViewModel = hilt
         Button(modifier = Modifier.fillMaxWidth(), onClick = {
             scope.launch {
                 val cartValue = cart.value
-                if (cartValue?.items?.isEmpty() != false) {
-                    throw UnsupportedOperationException("No items are added in cart to checkout")
-                }
+                viewModel.handleCheckoutCrash()
                 try {
-                    viewModel.cartRepository.checkout(cartValue)
+                    viewModel.cartRepository.checkout(cartValue!!)
                     viewModel.refreshCart()
                     withContext(Main) {
                         navController.navigate("cart/checkout/${randomUUID()}")

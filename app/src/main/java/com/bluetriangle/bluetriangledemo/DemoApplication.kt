@@ -20,7 +20,7 @@ class DemoApplication : Application() {
 //            intTracker(siteId) //bluetriangledemo500z
     }
 
-    fun intTracker(siteId: String?, anrDetection: Boolean, screenTracking: Boolean) {
+    fun initTracker(siteId: String?, anrDetection: Boolean, screenTracking: Boolean) {
         if (siteId.isNullOrBlank()) return
 
         val configuration = BlueTriangleConfiguration()

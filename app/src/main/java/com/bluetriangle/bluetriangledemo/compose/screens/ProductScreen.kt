@@ -1,6 +1,8 @@
 package com.bluetriangle.bluetriangledemo.compose.screens
 
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_DOCUMENT
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -70,6 +72,7 @@ fun ProductItem(item: Product) {
         shape = RoundedCornerShape(8.dp),
         onClick = {
             context.startActivity(Intent(context, ProductDetailsActivity::class.java).apply {
+                flags = FLAG_ACTIVITY_NEW_DOCUMENT
                 putExtra("product", item)
             })
         },

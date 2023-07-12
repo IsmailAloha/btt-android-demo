@@ -2,6 +2,7 @@ package com.bluetriangle.bluetriangledemo.ui.settings
 
 import android.os.Build
 import androidx.lifecycle.ViewModel
+import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.bluetriangledemo.BuildConfig
 import java.lang.reflect.Field
 
@@ -11,6 +12,9 @@ class SettingsViewModel : ViewModel() {
     val appVersion = String.format("%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
     val sdkVersion = com.bluetriangle.analytics.BuildConfig.SDK_VERSION
     val flavor = BuildConfig.FLAVOR.uppercase()
+    val siteId = Tracker.instance!!.configuration.siteId
+    val anrEnabled = if(Tracker.instance!!.configuration.isTrackAnrEnabled) "Enabled" else "Disabled"
+    val screenTrackingEnabled = if(Tracker.instance!!.configuration.isScreenTrackingEnabled) "Enabled" else "Disabled"
 
     fun getAndroidVersion():String {
         val builder = StringBuilder()

@@ -24,6 +24,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -39,10 +40,12 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.IntentCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.bluetriangle.bluetriangledemo.ADD_TO_CART_LIMIT
 import com.bluetriangle.bluetriangledemo.compose.components.ErrorAlertDialog
 import com.bluetriangle.bluetriangledemo.compose.theme.BlueTriangleComposeDemoTheme
 import com.bluetriangle.bluetriangledemo.compose.theme.outline
 import com.bluetriangle.bluetriangledemo.data.Product
+import com.bluetriangle.bluetriangledemo.ui.products.AddToCartLimitExceededException
 import com.bluetriangle.bluetriangledemo.ui.products.ProductDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -73,6 +76,9 @@ class ProductDetailsActivity : ComponentActivity() {
         val scope = rememberCoroutineScope()
         val addingToCart = rememberSaveable {
             mutableStateOf(false)
+        }
+        val addToCartCount = rememberSaveable {
+            mutableIntStateOf(0)
         }
         Box(modifier = Modifier.padding(paddingValues)) {
             Card(
@@ -119,6 +125,10 @@ class ProductDetailsActivity : ComponentActivity() {
                             Button(
                                 enabled = !addingToCart.value,
                                 onClick = {
+                                    addToCartCount.intValue = addToCartCount.intValue + 1
+                                    if(addToCartCount.intValue > ADD_TO_CART_LIMIT) {
+                                        throw AddToCartLimitExceededException(ADD_TO_CART_LIMIT)
+                                    }
                                     scope.launch {
                                         try {
                                             addingToCart.value = true

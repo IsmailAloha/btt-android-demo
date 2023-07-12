@@ -2,7 +2,6 @@ package com.bluetriangle.bluetriangledemo
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import com.bluetriangle.bluetriangledemo.compose.screens.ComposeStoreActivity
 import com.bluetriangle.bluetriangledemo.databinding.ActivityConfigBinding
@@ -22,10 +21,7 @@ class ConfigActivity : AppCompatActivity() {
         binding.anrDetectionCheckbox.isChecked = savedANRDetection
         binding.screenTrackingCheckbox.isChecked = savedScreenTracking
 
-        if (!savedId.isNullOrBlank())
-            binding.siteIdEditText.setText(savedId)
-        else
-            binding.siteIdEditText.setText(SITE_ID)
+        binding.siteIdEditText.setText(savedId)
 
         binding.btnSave.setOnClickListener {
             val siteId = binding.siteIdEditText.text.toString()
@@ -38,7 +34,7 @@ class ConfigActivity : AppCompatActivity() {
                 DemoApplication.tinyDB.setBoolean("BttAnrDetection", anrDetection)
                 DemoApplication.tinyDB.setBoolean("BttScreenTracking", screenTracking)
 
-                (application as DemoApplication).intTracker(
+                (application as DemoApplication).initTracker(
                     siteId,
                     anrDetection,
                     screenTracking

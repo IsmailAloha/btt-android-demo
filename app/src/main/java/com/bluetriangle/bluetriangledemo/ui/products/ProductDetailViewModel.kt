@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bluetriangle.bluetriangledemo.ADD_TO_CART_LIMIT
 import com.bluetriangle.bluetriangledemo.data.CartRepository
 import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.utils.ErrorHandler
@@ -22,12 +23,18 @@ class ProductDetailViewModel @Inject constructor(val cartRepository: CartReposit
         value = false
     }
 
+    var addToCartClickCount: Int = 0
 
     val errorHandler = ErrorHandler()
 
     val isAddingToCart: LiveData<Boolean> = _isAddingToCart
 
     fun addToCart(v: View, product: Product) {
+        addToCartClickCount++
+
+        if(addToCartClickCount > ADD_TO_CART_LIMIT) {
+            throw AddToCartLimitExceededException(ADD_TO_CART_LIMIT)
+        }
         _isAddingToCart.value = true
         viewModelScope.launch(Dispatchers.IO) {
             try {

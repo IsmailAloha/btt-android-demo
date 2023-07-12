@@ -7,7 +7,10 @@
     <string name="checkout">Checkout</string>
     <string name="empty_cart">Cart is empty</string>
     <string name="android_version">Android Version</string>
-    <string name="sdk_version">SDK Version</string>
+    <string name="sdk_version">BTT SDK Version</string>
     <string name="app_version">App Version</string>
     <string name="app_flavor">App Flavor</string>
+    <string name="site_id">Site ID</string>
+    <string name="anr_enabled">ANR Detection</string>
+    <string name="screen_tracking_enabled">Screen Tracking</string>
 </resources>

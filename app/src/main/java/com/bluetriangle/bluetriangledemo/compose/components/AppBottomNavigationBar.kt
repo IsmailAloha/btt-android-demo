@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
@@ -60,7 +61,8 @@ fun AppBottomNavigationBar(
                 label = {
                     Text(
                         text = navItem.label, style = TextStyle(
-                            color = if (currentRoute == navItem.route) {
+                            fontSize = 12.sp,
+                            color = if (currentRoute?.contains(navItem.route) == true) {
                                 MaterialTheme.colors.primary
                             } else {
                                 Color(0xFF999999)

@@ -11,6 +11,7 @@ import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.databinding.ListItemCartItemBinding
 import com.bluetriangle.bluetriangledemo.databinding.ListItemProductBinding
 import com.bluetriangle.bluetriangledemo.utils.dp
+import com.bluetriangle.bluetriangledemo.utils.loadImage
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -53,15 +54,7 @@ class CartItemAdapter(
                 lineItemTotal.text = String.format("$%.2f", cartItem.total)
                 cartItem.productReference?.let { product ->
                     productName.text = product.name
-                    Glide.with(productImage)
-                        .load(product.image)
-                        .transform(
-                            MultiTransformation(
-                                CenterCrop(),
-                                RoundedCorners(productImage.context.dp(8))
-                            )
-                        )
-                        .into(productImage)
+                    productImage.loadImage(product.image)
                 } ?: run {
                     Glide.with(productImage).clear(productImage)
                 }

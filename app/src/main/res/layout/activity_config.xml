@@ -32,7 +32,7 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Site Configuration"
+                android:text="BTT Configuration"
                 android:textColor="?colorOnSurface"
                 android:textStyle="bold"
                 android:textSize="18sp"/>

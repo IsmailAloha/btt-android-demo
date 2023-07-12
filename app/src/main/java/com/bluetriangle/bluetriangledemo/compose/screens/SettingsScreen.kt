@@ -29,7 +29,10 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
         context.getString(R.string.android_version) to viewModel.androidVersionName,
         context.getString(R.string.sdk_version) to viewModel.sdkVersion,
         context.getString(R.string.app_version) to viewModel.appVersion,
-        context.getString(R.string.app_flavor) to viewModel.flavor
+        context.getString(R.string.app_flavor) to viewModel.flavor,
+        context.getString(R.string.site_id) to viewModel.siteId.toString(),
+        context.getString(R.string.anr_enabled) to viewModel.anrEnabled,
+        context.getString(R.string.screen_tracking_enabled) to viewModel.screenTrackingEnabled,
     )
     BttTimerEffect(screenName = "Settings Tab")
     Column(

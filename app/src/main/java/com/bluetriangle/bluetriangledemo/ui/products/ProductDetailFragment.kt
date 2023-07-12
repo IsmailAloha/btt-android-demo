@@ -11,6 +11,7 @@ import com.bluetriangle.bluetriangledemo.databinding.FragmentProductDetailBindin
 import com.bluetriangle.bluetriangledemo.utils.AlertDialogState
 import com.bluetriangle.bluetriangledemo.utils.AlertView
 import com.bluetriangle.bluetriangledemo.utils.dp
+import com.bluetriangle.bluetriangledemo.utils.loadImage
 import com.bluetriangle.bluetriangledemo.utils.showAlert
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
@@ -36,15 +37,7 @@ class ProductDetailFragment : Fragment(), AlertView {
             productName.text = args.product.name
             productPrice.text = String.format("%.2f", args.product.price)
             productDescription.text = args.product.description
-            Glide.with(requireContext())
-                .load(args.product.image)
-                .transform(
-                    MultiTransformation(
-                        CenterCrop(),
-                        RoundedCorners(productImage.context.dp(8))
-                    )
-                )
-                .into(productImage)
+            productImage.loadImage(args.product.image)
             addToCartButton.setOnClickListener { v ->
                 productDetailViewModel.addToCart(v, args.product)
             }

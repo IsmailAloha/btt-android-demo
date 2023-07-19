@@ -15,7 +15,7 @@ class ConfigActivity : AppCompatActivity() {
         binding = ActivityConfigBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val savedId = DemoApplication.tinyDB.getString("BttSiteId")
+        val savedId = DemoApplication.tinyDB.getString("BttSiteId", "sdkdemo26621z")
         val savedANRDetection = DemoApplication.tinyDB.getBoolean("BttAnrDetection", true)
         val savedScreenTracking = DemoApplication.tinyDB.getBoolean("BttScreenTracking", true)
         binding.anrDetectionCheckbox.isChecked = savedANRDetection

@@ -33,5 +33,16 @@ class StoreActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        DemoApplication.checkAndRunLaunchScenario(SCENARIO_ACTIVITY_CREATE)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        DemoApplication.checkAndRunLaunchScenario(SCENARIO_ACTIVITY_START)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        DemoApplication.checkAndRunLaunchScenario(SCENARIO_ACTIVITY_RESUME)
     }
 }

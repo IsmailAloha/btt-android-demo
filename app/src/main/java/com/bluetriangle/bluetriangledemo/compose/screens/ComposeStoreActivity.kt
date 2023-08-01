@@ -19,7 +19,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.R
+import com.bluetriangle.bluetriangledemo.SCENARIO_ACTIVITY_CREATE
+import com.bluetriangle.bluetriangledemo.SCENARIO_ACTIVITY_RESUME
+import com.bluetriangle.bluetriangledemo.SCENARIO_ACTIVITY_START
 import com.bluetriangle.bluetriangledemo.compose.components.AppBottomNavigationBar
 import com.bluetriangle.bluetriangledemo.compose.components.NavHostContainer
 import com.bluetriangle.bluetriangledemo.compose.components.NavItem
@@ -51,6 +55,17 @@ class ComposeStoreActivity : ComponentActivity() {
                 }
             }
         }
+        DemoApplication.checkAndRunLaunchScenario(SCENARIO_ACTIVITY_CREATE)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        DemoApplication.checkAndRunLaunchScenario(SCENARIO_ACTIVITY_START)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        DemoApplication.checkAndRunLaunchScenario(SCENARIO_ACTIVITY_RESUME)
     }
 }
 

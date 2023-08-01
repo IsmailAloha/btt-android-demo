@@ -58,6 +58,7 @@ class CartFragment : Fragment(), AlertView {
 
         binding.checkoutButton.setOnClickListener {
             cartViewModel.handleCheckoutCrash()
+            cartViewModel.handleLaunchScenario()
             findNavController().navigate(R.id.action_cart_to_checkout)
         }
 

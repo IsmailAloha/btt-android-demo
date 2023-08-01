@@ -33,15 +33,16 @@ class DemoApplication : Application() {
             val siteId = tinyDB.getString(KEY_SITE_ID)
             val anrDetection = tinyDB.getBoolean(KEY_ANR_ENABLED)
             val screenTracking = tinyDB.getBoolean(KEY_SCREEN_TRACKING_ENABLED)
+            val sessionId = tinyDB.getString(KEY_SESSION_ID)
 
-            initTracker(siteId, anrDetection, screenTracking)
+            initTracker(siteId, anrDetection, screenTracking, sessionId)
 
             checkAndRunLaunchScenario(SCENARIO_APP_CREATE)
         }
 
     }
 
-    fun initTracker(siteId: String?, anrDetection: Boolean, screenTracking: Boolean) {
+    fun initTracker(siteId: String?, anrDetection: Boolean, screenTracking: Boolean, sessionId: String?) {
         if (siteId.isNullOrBlank()) return
 
         val configuration = BlueTriangleConfiguration()
@@ -51,6 +52,9 @@ class DemoApplication : Application() {
         configuration.isLaunchTimeEnabled = true
         configuration.isPerformanceMonitorEnabled = true
         Tracker.init(this, configuration)
+        if(sessionId != null) {
+            Tracker.instance?.setSessionId(sessionId)
+        }
         Tracker.instance?.trackCrashes()
     }
 }

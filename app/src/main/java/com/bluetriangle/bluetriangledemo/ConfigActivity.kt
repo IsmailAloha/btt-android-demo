@@ -48,7 +48,8 @@ class ConfigActivity : AppCompatActivity() {
                 (application as DemoApplication).initTracker(
                     siteId,
                     anrDetection,
-                    screenTracking
+                    screenTracking,
+                    sessionId
                 )
 
                 if(BuildConfig.FLAVOR == "compose") {

@@ -14,6 +14,8 @@ class DemoApplication : Application() {
         fun checkAndRunLaunchScenario(scenario:Int) {
             val launchTestScenario = tinyDB.getInt(KEY_LAUNCH_SCENARIO, 1)
             if(launchTestScenario == scenario) {
+                tinyDB.remove(KEY_LAUNCH_TEST)
+                tinyDB.remove(KEY_LAUNCH_SCENARIO)
                 HeavyLoopTest(3L).run()
             }
         }

@@ -14,6 +14,7 @@ class LauncherActivity : AppCompatActivity() {
         val launchTest = DemoApplication.tinyDB.getBoolean(KEY_LAUNCH_TEST)
         val shouldNotShowConfiguration = DemoApplication.tinyDB.getBoolean(KEY_SHOULD_NOT_SHOW_CONFIGURATION)
         if(launchTest || shouldNotShowConfiguration) {
+            DemoApplication.tinyDB.remove(KEY_SHOULD_NOT_SHOW_CONFIGURATION)
             if(BuildConfig.FLAVOR == "compose") {
                 startActivity(Intent(this, ComposeStoreActivity::class.java))
             } else {

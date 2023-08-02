@@ -19,6 +19,9 @@ class DemoApplication : Application() {
             if(launchTest && launchTestScenario == scenario) {
                 tinyDB.remove(KEY_LAUNCH_TEST)
                 tinyDB.remove(KEY_LAUNCH_SCENARIO)
+                if(scenario == SCENARIO_APP_CREATE) {
+                    tinyDB.setBoolean(KEY_SHOULD_NOT_SHOW_CONFIGURATION, true)
+                }
                 HeavyLoopTest(3L).run()
             }
         }

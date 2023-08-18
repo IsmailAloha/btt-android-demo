@@ -28,6 +28,7 @@ class SettingsFragment : Fragment() {
         _binding?.flavorValue?.text = settingsViewModel.flavor
         _binding?.sdkVersionValue?.text = settingsViewModel.sdkVersion
         _binding?.siteIdValue?.text = settingsViewModel.siteId
+        _binding?.sessionIDValueText?.text = settingsViewModel.sessionId
         _binding?.anrEnabledValue?.text = settingsViewModel.anrEnabled
         _binding?.screenTrackingEnabledValue?.text = settingsViewModel.screenTrackingEnabled
 

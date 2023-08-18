@@ -6,6 +6,9 @@ import com.bluetriangle.analytics.BlueTriangleConfiguration
 import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.android.demo.tests.HeavyLoopTest
 import dagger.hilt.android.HiltAndroidApp
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 @HiltAndroidApp
 class DemoApplication : Application() {
@@ -36,20 +39,20 @@ class DemoApplication : Application() {
 //            intTracker(siteId) //bluetriangledemo500z
         val launchTest = tinyDB.getBoolean(KEY_LAUNCH_TEST)
         Log.d("DemoApplication", "Application.onCreate: Launch Test: $launchTest")
-        if(launchTest) {
-            val siteId = tinyDB.getString(KEY_SITE_ID)
-            val anrDetection = tinyDB.getBoolean(KEY_ANR_ENABLED)
-            val screenTracking = tinyDB.getBoolean(KEY_SCREEN_TRACKING_ENABLED)
-            val sessionId = tinyDB.getString(KEY_SESSION_ID)
+        val siteId = tinyDB.getString(KEY_SITE_ID, DEFAULT_SITE_ID)
+        val anrDetection = tinyDB.getBoolean(KEY_ANR_ENABLED, true)
+        val screenTracking = tinyDB.getBoolean(KEY_SCREEN_TRACKING_ENABLED, true)
+        val formatter = SimpleDateFormat("ddMMyyyykkmm", Locale.getDefault())
+        val sessionId = formatter.format(Calendar.getInstance().time)
+        Log.d("BlueTriangle", "Session ID: ${sessionId}")
 
-            initTracker(siteId, anrDetection, screenTracking, sessionId)
+        initTracker(siteId, anrDetection, screenTracking, sessionId)
 
-            checkAndRunLaunchScenario(SCENARIO_APP_CREATE)
-        }
+        checkAndRunLaunchScenario(SCENARIO_APP_CREATE)
 
     }
 
-    fun initTracker(siteId: String?, anrDetection: Boolean, screenTracking: Boolean, sessionId: String?) {
+    fun initTracker(siteId: String?, anrDetection: Boolean, screenTracking: Boolean, sessionId: String) {
         if (siteId.isNullOrBlank()) return
 
         val configuration = BlueTriangleConfiguration()
@@ -58,10 +61,9 @@ class DemoApplication : Application() {
         configuration.isScreenTrackingEnabled = screenTracking
         configuration.isLaunchTimeEnabled = true
         configuration.isPerformanceMonitorEnabled = true
+        configuration.networkSampleRate = 1.0
+        configuration.sessionId = sessionId
         Tracker.init(this, configuration)
-        if(sessionId != null) {
-            Tracker.instance?.setSessionId(sessionId)
-        }
         Tracker.instance?.trackCrashes()
     }
 }

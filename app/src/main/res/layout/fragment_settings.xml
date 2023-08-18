@@ -126,7 +126,7 @@
         android:textColor="#222"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/siteIdValue" />
+        app:layout_constraintTop_toBottomOf="@+id/sessionIDValueText" />
 
     <TextView
         android:id="@+id/anrEnabledValue"
@@ -161,4 +161,26 @@
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/session_id"
+        android:textColor="#222"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/siteIdValue" />
+
+    <TextView
+        android:id="@+id/sessionIDValueText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="TextView"
+        android:textColor="#222"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
 </androidx.constraintlayout.widget.ConstraintLayout>

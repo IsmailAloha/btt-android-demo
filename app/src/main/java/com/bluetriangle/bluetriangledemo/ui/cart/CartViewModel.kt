@@ -47,8 +47,7 @@ class CartViewModel @Inject constructor(val cartRepository: CartRepository) : Vi
 
     fun handleCheckoutCrash() {
         val cartValue = cart.value
-        if(cartValue?.items.isNullOrEmpty()) return
-        if(cartValue?.items?.isEmpty() != false) {
+        if(cartValue == null || cartValue.items.isNullOrEmpty()) {
             throw EmptyCartException()
         } else if(cartValue.items.size > 5) {
             throw CartOverflowException(cartValue.items.size)

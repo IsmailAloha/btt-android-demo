@@ -13,4 +13,5 @@
     <string name="site_id">Site ID</string>
     <string name="anr_enabled">ANR Detection</string>
     <string name="screen_tracking_enabled">Screen Tracking</string>
+    <string name="session_id">Session ID</string>
 </resources>

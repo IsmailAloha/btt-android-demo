@@ -34,9 +34,6 @@ class DemoApplication : Application() {
         super.onCreate()
         tinyDB = TinyDB(applicationContext)
 
-//        val siteId = tinyDB.getString("BttSiteId")
-//        if (!siteId.isNullOrBlank())
-//            intTracker(siteId) //bluetriangledemo500z
         val launchTest = tinyDB.getBoolean(KEY_LAUNCH_TEST)
         Log.d("DemoApplication", "Application.onCreate: Launch Test: $launchTest")
         val siteId = tinyDB.getString(KEY_SITE_ID, DEFAULT_SITE_ID)
@@ -44,7 +41,7 @@ class DemoApplication : Application() {
         val screenTracking = tinyDB.getBoolean(KEY_SCREEN_TRACKING_ENABLED, true)
         val formatter = SimpleDateFormat("ddMMyyyykkmm", Locale.getDefault())
         val sessionId = formatter.format(Calendar.getInstance().time)
-        Log.d("BlueTriangle", "Session ID: ${sessionId}")
+        Log.d("BlueTriangle", "Session ID: $sessionId")
 
         initTracker(siteId, anrDetection, screenTracking, sessionId)
 

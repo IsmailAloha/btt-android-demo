@@ -72,7 +72,6 @@ fun ProductItem(item: Product) {
         shape = RoundedCornerShape(8.dp),
         onClick = {
             context.startActivity(Intent(context, ProductDetailsActivity::class.java).apply {
-                flags = FLAG_ACTIVITY_NEW_DOCUMENT
                 putExtra("product", item)
             })
         },

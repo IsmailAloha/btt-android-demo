@@ -1,6 +1,7 @@
 package com.bluetriangle.bluetriangledemo.compose.components
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -23,9 +24,6 @@ fun NavHostContainer(
 
         // set the start destination as home
         startDestination = navItems[0].route,
-
-        // Set the padding provided by scaffold
-        modifier = Modifier.padding(paddingValues = padding),
 
         builder = {
             navItems.map { navItem ->

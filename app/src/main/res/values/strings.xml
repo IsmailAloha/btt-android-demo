@@ -14,4 +14,5 @@
     <string name="anr_enabled">ANR Detection</string>
     <string name="screen_tracking_enabled">Screen Tracking</string>
     <string name="session_id">Session ID</string>
+    <string name="sessionid_accessibility">sessionid</string>
 </resources>

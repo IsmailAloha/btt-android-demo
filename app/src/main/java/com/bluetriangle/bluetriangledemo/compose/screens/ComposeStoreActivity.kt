@@ -1,27 +1,42 @@
 package com.bluetriangle.bluetriangledemo.compose.screens
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.R
-import com.bluetriangle.bluetriangledemo.SCENARIO_ACTIVITY_CREATE
 import com.bluetriangle.bluetriangledemo.SCENARIO_ACTIVITY_RESUME
 import com.bluetriangle.bluetriangledemo.SCENARIO_ACTIVITY_START
 import com.bluetriangle.bluetriangledemo.compose.components.AppBottomNavigationBar
@@ -46,16 +61,51 @@ class ComposeStoreActivity : ComponentActivity() {
                 }, bottomBar = {
                     AppBottomNavigationBar(navController = navController, navItems = navItems)
                 }) {
-                    NavHostContainer(
-                        title,
-                        navController = navController,
-                        padding = it,
-                        navItems = navItems
-                    )
+                    Column(modifier = Modifier
+                        .padding(it)
+                        .fillMaxHeight()) {
+                        SiteIDBar()
+                        NavHostContainer(
+                            title,
+                            navController = navController,
+                            padding = it,
+                            navItems = navItems
+                        )
+                    }
                 }
             }
         }
-        DemoApplication.checkAndRunLaunchScenario(SCENARIO_ACTIVITY_CREATE)
+    }
+
+    @Composable
+    fun SiteIDBar() {
+        val sessionIdAccessibility = stringResource(id = R.string.sessionid_accessibility)
+        Column(modifier = Modifier.background(MaterialTheme.colors.primary)) {
+            Row(
+                modifier = Modifier
+                    .padding(16.dp, 8.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = "Session ID: ",
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colors.onPrimary
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = Tracker.instance!!.configuration.sessionId ?: "",
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier
+                        .semantics {
+                            contentDescription = sessionIdAccessibility
+                        }
+                        .clickable {
+                            Log.d("BlueTriangleDemo", "Session ID Clicked")
+                        }
+                )
+            }
+        }
     }
 
     override fun onStart() {

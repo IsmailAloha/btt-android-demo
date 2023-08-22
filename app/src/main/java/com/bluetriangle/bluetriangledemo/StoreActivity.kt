@@ -7,6 +7,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.bluetriangledemo.databinding.ActivityStoreBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,6 +24,8 @@ class StoreActivity : AppCompatActivity() {
 
         val navView: BottomNavigationView = binding.navView
 
+        binding.sessionid.text = Tracker.instance!!.configuration.sessionId
+
         val navController = findNavController(R.id.nav_host_fragment_activity_store)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -33,7 +36,6 @@ class StoreActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        DemoApplication.checkAndRunLaunchScenario(SCENARIO_ACTIVITY_CREATE)
     }
 
     override fun onStart() {

@@ -11,6 +11,16 @@ class LauncherActivity : AppCompatActivity() {
         setContentView(R.layout.activity_launcher)
         supportActionBar?.hide()
         DemoApplication.checkAndRunLaunchScenario(SCENARIO_ACTIVITY_CREATE)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        DemoApplication.checkAndRunLaunchScenario(SCENARIO_ACTIVITY_START)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        DemoApplication.checkAndRunLaunchScenario(SCENARIO_ACTIVITY_RESUME)
 
         if(BuildConfig.FLAVOR == "compose") {
             startActivity(Intent(this, ComposeStoreActivity::class.java))

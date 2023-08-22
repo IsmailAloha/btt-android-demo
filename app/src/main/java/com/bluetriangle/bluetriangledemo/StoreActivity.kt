@@ -38,13 +38,4 @@ class StoreActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
 
-    override fun onStart() {
-        super.onStart()
-        DemoApplication.checkAndRunLaunchScenario(SCENARIO_ACTIVITY_START)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        DemoApplication.checkAndRunLaunchScenario(SCENARIO_ACTIVITY_RESUME)
-    }
 }

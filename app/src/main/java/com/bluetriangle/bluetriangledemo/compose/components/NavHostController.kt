@@ -15,8 +15,8 @@ import androidx.navigation.navigation
 fun NavHostContainer(
     title: MutableState<String>,
     navController: NavHostController,
-    padding: PaddingValues,
-    navItems: List<NavItem>
+    navItems: List<NavItem>,
+    modifier:Modifier = Modifier
 ) {
 
     NavHost(
@@ -24,6 +24,8 @@ fun NavHostContainer(
 
         // set the start destination as home
         startDestination = navItems[0].route,
+
+        modifier = modifier,
 
         builder = {
             navItems.map { navItem ->

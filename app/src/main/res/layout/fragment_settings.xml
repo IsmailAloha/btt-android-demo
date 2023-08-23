@@ -183,4 +183,13 @@
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+    <Button
+        android:id="@+id/testManualTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/test_manual_timer"
+        app:layout_constraintStart_toStartOf="@+id/screenTrackingEnabledValue"
+        app:layout_constraintTop_toBottomOf="@+id/screenTrackingEnabledValue" />
 </androidx.constraintlayout.widget.ConstraintLayout>

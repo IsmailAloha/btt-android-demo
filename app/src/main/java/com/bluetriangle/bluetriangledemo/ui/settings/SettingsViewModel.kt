@@ -2,6 +2,7 @@ package com.bluetriangle.bluetriangledemo.ui.settings
 
 import android.os.Build
 import androidx.lifecycle.ViewModel
+import com.bluetriangle.analytics.Timer
 import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.bluetriangledemo.BuildConfig
 import java.lang.reflect.Field
@@ -40,5 +41,9 @@ class SettingsViewModel : ViewModel() {
             }
         }
         return builder.toString()
+    }
+
+    fun testManualTimer() {
+        Timer("Manual Timer", "DemoApplicationTraffic").start().end().submit()
     }
 }

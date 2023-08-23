@@ -31,7 +31,9 @@ class SettingsFragment : Fragment() {
         _binding?.sessionIDValueText?.text = settingsViewModel.sessionId
         _binding?.anrEnabledValue?.text = settingsViewModel.anrEnabled
         _binding?.screenTrackingEnabledValue?.text = settingsViewModel.screenTrackingEnabled
-
+        _binding?.testManualTimer?.setOnClickListener {
+            settingsViewModel.testManualTimer()
+        }
         return root
     }
 

@@ -46,6 +46,7 @@ import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.compose.components.ErrorAlertDialog
 import com.bluetriangle.bluetriangledemo.compose.theme.outline
 import com.bluetriangle.bluetriangledemo.data.CartItem
+import com.bluetriangle.bluetriangledemo.data.CartItemViewModel
 import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.ui.cart.CartViewModel
 import kotlinx.coroutines.Dispatchers.Main
@@ -71,7 +72,7 @@ fun CartScreen(navController: NavHostController, viewModel: CartViewModel = hilt
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(cartItems.size) { item ->
-                CartListItem(viewModel = viewModel, cartItem = cartItems[item])
+                CartListItem(viewModel = viewModel, cartItem = CartItemViewModel(cartItems[item]))
             }
         }
         Button(modifier = Modifier.fillMaxWidth(), onClick = {
@@ -97,7 +98,7 @@ fun CartScreen(navController: NavHostController, viewModel: CartViewModel = hilt
 }
 
 @Composable
-fun CartListItem(viewModel: CartViewModel, cartItem: CartItem) {
+fun CartListItem(viewModel: CartViewModel, cartItem: CartItemViewModel) {
     Card(
         Modifier
             .fillMaxWidth()
@@ -117,17 +118,17 @@ fun CartListItem(viewModel: CartViewModel, cartItem: CartItem) {
                         MaterialTheme.colors.outline,
                         RoundedCornerShape(8.dp)
                     ),
-                model = cartItem.productReference?.image,
-                contentDescription = cartItem.productReference?.description,
+                model = cartItem.cartItem.productReference?.image,
+                contentDescription = cartItem.cartItem.productReference?.description,
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = cartItem.productReference?.name ?: "", maxLines = 1)
+            Text(text = cartItem.cartItem.productReference?.name ?: "", maxLines = 1)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = String.format("$%.2f", cartItem.total), maxLines = 1)
-            CartActionButton(Modifier.align(Alignment.CenterHorizontally), cartItem, viewModel)
+            Text(text = String.format("$%.2f", cartItem.cartItem.total), maxLines = 1)
+            CartActionButton(Modifier.align(Alignment.CenterHorizontally), cartItem.cartItem, viewModel)
             Button(modifier = Modifier.fillMaxWidth(), onClick = {
-                viewModel.removeCartItem(cartItem)
+                viewModel.removeCartItem(cartItem.cartItem)
             }) {
                 Text(text = "Remove")
             }

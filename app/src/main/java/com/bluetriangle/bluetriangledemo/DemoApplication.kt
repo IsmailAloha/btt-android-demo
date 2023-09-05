@@ -5,7 +5,11 @@ import android.util.Log
 import com.bluetriangle.analytics.BlueTriangleConfiguration
 import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.android.demo.tests.HeavyLoopTest
+import com.bluetriangle.bluetriangledemo.api.StoreService
 import dagger.hilt.android.HiltAndroidApp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -45,8 +49,21 @@ class DemoApplication : Application() {
 
         initTracker(siteId, anrDetection, screenTracking, sessionId)
 
+        Thread.setDefaultUncaughtExceptionHandler(ClearCartHandler())
+
         checkAndRunLaunchScenario(SCENARIO_APP_CREATE)
 
+    }
+
+    class ClearCartHandler : Thread.UncaughtExceptionHandler {
+        private val defaultThreadHandler = Thread.getDefaultUncaughtExceptionHandler()
+
+        override fun uncaughtException(thread: Thread, exception: Throwable) {
+            CoroutineScope(Dispatchers.IO).launch {
+                StoreService.create().createCart(listOf())
+                defaultThreadHandler?.uncaughtException(thread, exception)
+            }
+        }
     }
 
     fun initTracker(siteId: String?, anrDetection: Boolean, screenTracking: Boolean, sessionId: String) {

@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,19 +25,20 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.asFlow
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.bluetriangle.analytics.compose.BttTimerEffect
@@ -46,8 +46,6 @@ import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.compose.components.ErrorAlertDialog
 import com.bluetriangle.bluetriangledemo.compose.theme.outline
 import com.bluetriangle.bluetriangledemo.data.CartItem
-import com.bluetriangle.bluetriangledemo.data.CartItemViewModel
-import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.ui.cart.CartViewModel
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
@@ -60,6 +58,20 @@ fun CartScreen(navController: NavHostController, viewModel: CartViewModel = hilt
     val scope = rememberCoroutineScope()
     val cart = viewModel.cart.asFlow().collectAsState(null)
     val cartItems = cart.value?.items ?: listOf()
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(Unit) {
+        val observer = LifecycleEventObserver { _, event ->
+            if(event == Lifecycle.Event.ON_DESTROY) {
+                viewModel.cartRepository.deallocateMemory()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
     Column(
         Modifier
             .padding(8.dp)
@@ -72,7 +84,7 @@ fun CartScreen(navController: NavHostController, viewModel: CartViewModel = hilt
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(cartItems.size) { item ->
-                CartListItem(viewModel = viewModel, cartItem = CartItemViewModel(cartItems[item]))
+                CartListItem(viewModel = viewModel, cartItem = cartItems[item])
             }
         }
         Button(modifier = Modifier.fillMaxWidth(), onClick = {
@@ -98,7 +110,7 @@ fun CartScreen(navController: NavHostController, viewModel: CartViewModel = hilt
 }
 
 @Composable
-fun CartListItem(viewModel: CartViewModel, cartItem: CartItemViewModel) {
+fun CartListItem(viewModel: CartViewModel, cartItem: CartItem) {
     Card(
         Modifier
             .fillMaxWidth()
@@ -118,17 +130,17 @@ fun CartListItem(viewModel: CartViewModel, cartItem: CartItemViewModel) {
                         MaterialTheme.colors.outline,
                         RoundedCornerShape(8.dp)
                     ),
-                model = cartItem.cartItem.productReference?.image,
-                contentDescription = cartItem.cartItem.productReference?.description,
+                model = cartItem.productReference?.image,
+                contentDescription = cartItem.productReference?.description,
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = cartItem.cartItem.productReference?.name ?: "", maxLines = 1)
+            Text(text = cartItem.productReference?.name ?: "", maxLines = 1)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = String.format("$%.2f", cartItem.cartItem.total), maxLines = 1)
-            CartActionButton(Modifier.align(Alignment.CenterHorizontally), cartItem.cartItem, viewModel)
+            Text(text = String.format("$%.2f", cartItem.total), maxLines = 1)
+            CartActionButton(Modifier.align(Alignment.CenterHorizontally), cartItem, viewModel)
             Button(modifier = Modifier.fillMaxWidth(), onClick = {
-                viewModel.removeCartItem(cartItem.cartItem)
+                viewModel.removeCartItem(cartItem)
             }) {
                 Text(text = "Remove")
             }

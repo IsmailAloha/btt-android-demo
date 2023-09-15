@@ -49,7 +49,7 @@ class CartViewModel @Inject constructor(val cartRepository: CartRepository) : Vi
         val cartValue = cart.value
         if(cartValue == null || cartValue.items.isNullOrEmpty()) {
             throw EmptyCartException()
-        } else if(cartValue.items.size > 5) {
+        } else if(cartValue.items.size >= 5) {
             throw CartOverflowException(cartValue.items.size)
         }
     }

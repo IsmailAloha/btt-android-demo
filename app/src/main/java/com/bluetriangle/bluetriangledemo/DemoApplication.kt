@@ -5,11 +5,7 @@ import android.util.Log
 import com.bluetriangle.analytics.BlueTriangleConfiguration
 import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.android.demo.tests.HeavyLoopTest
-import com.bluetriangle.bluetriangledemo.api.StoreService
 import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -44,29 +40,13 @@ class DemoApplication : Application() {
         val anrDetection = tinyDB.getBoolean(KEY_ANR_ENABLED, true)
         val screenTracking = tinyDB.getBoolean(KEY_SCREEN_TRACKING_ENABLED, true)
         val formatter = SimpleDateFormat("ddMMyyyykkmm", Locale.getDefault())
-        val sessionId = formatter.format(Calendar.getInstance().time)
-        Log.d("BlueTriangle", "Session ID: $sessionId")
-
-        initTracker(siteId, anrDetection, screenTracking, sessionId)
-
-        Thread.setDefaultUncaughtExceptionHandler(ClearCartHandler())
+        initTracker(siteId, anrDetection, screenTracking)
 
         checkAndRunLaunchScenario(SCENARIO_APP_CREATE)
 
     }
 
-    class ClearCartHandler : Thread.UncaughtExceptionHandler {
-        private val defaultThreadHandler = Thread.getDefaultUncaughtExceptionHandler()
-
-        override fun uncaughtException(thread: Thread, exception: Throwable) {
-            CoroutineScope(Dispatchers.IO).launch {
-                StoreService.create().createCart(listOf())
-                defaultThreadHandler?.uncaughtException(thread, exception)
-            }
-        }
-    }
-
-    fun initTracker(siteId: String?, anrDetection: Boolean, screenTracking: Boolean, sessionId: String) {
+    fun initTracker(siteId: String?, anrDetection: Boolean, screenTracking: Boolean) {
         if (siteId.isNullOrBlank()) return
 
         val configuration = BlueTriangleConfiguration()
@@ -76,7 +56,6 @@ class DemoApplication : Application() {
         configuration.isLaunchTimeEnabled = true
         configuration.isPerformanceMonitorEnabled = true
         configuration.networkSampleRate = 1.0
-        configuration.sessionId = sessionId
         Tracker.init(this, configuration)
         Tracker.instance?.trackCrashes()
     }

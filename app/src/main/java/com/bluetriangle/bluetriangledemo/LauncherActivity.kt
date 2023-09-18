@@ -22,7 +22,7 @@ class LauncherActivity : AppCompatActivity() {
         super.onResume()
         DemoApplication.checkAndRunLaunchScenario(SCENARIO_ACTIVITY_RESUME)
 
-        if(BuildConfig.FLAVOR == "compose") {
+        if(BuildConfig.FLAVOR.contains("compose")) {
             startActivity(Intent(this, ComposeStoreActivity::class.java))
         } else {
             startActivity(Intent(this, StoreActivity::class.java))

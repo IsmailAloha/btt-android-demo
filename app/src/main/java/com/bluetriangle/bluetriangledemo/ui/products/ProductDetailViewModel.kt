@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bluetriangle.android.demo.tests.HeavyLoopTest
 import com.bluetriangle.bluetriangledemo.ADD_TO_CART_LIMIT
 import com.bluetriangle.bluetriangledemo.data.CartRepository
 import com.bluetriangle.bluetriangledemo.data.Product
@@ -32,7 +33,13 @@ class ProductDetailViewModel @Inject constructor(val cartRepository: CartReposit
     fun addToCart(v: View, product: Product) {
         addToCartClickCount++
 
-        if(addToCartClickCount > ADD_TO_CART_LIMIT) {
+        if(product.isPerfume) {
+            cartRepository.allocateMemory()
+        } else if(product.isKeyHolder) {
+            hundredPercentCPU()
+        } else if(product.isOppo) {
+            twoHundredPercentCPU()
+        } else if(addToCartClickCount > ADD_TO_CART_LIMIT) {
             throw AddToCartLimitExceededException(ADD_TO_CART_LIMIT)
         }
         _isAddingToCart.value = true
@@ -47,6 +54,17 @@ class ProductDetailViewModel @Inject constructor(val cartRepository: CartReposit
             withContext(Main) {
                 _isAddingToCart.value = false
             }
+        }
+    }
+
+    fun twoHundredPercentCPU() {
+        hundredPercentCPU()
+        hundredPercentCPU()
+    }
+
+    fun hundredPercentCPU() {
+        viewModelScope.launch {
+            HeavyLoopTest(20L).run()
         }
     }
 }

@@ -74,9 +74,6 @@ class CartViewModel @Inject constructor(val cartRepository: CartRepository) : Vi
             } else {
                 cartRepository.reduceQuantity(cartItem)
             }
-            if(cartItem.isPerfume) {
-                cartRepository.deallocateMemory()
-            }
             refreshCart()
         }
     }
@@ -84,9 +81,6 @@ class CartViewModel @Inject constructor(val cartRepository: CartRepository) : Vi
     fun increaseQuantity(cartItem: CartItem) {
         viewModelScope.launch(Dispatchers.IO) {
             cartRepository.increaseQuantity(cartItem)
-            if(cartItem.isPerfume) {
-                cartRepository.allocateMemory()
-            }
             refreshCart()
         }
     }

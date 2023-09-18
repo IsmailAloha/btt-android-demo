@@ -18,7 +18,7 @@ class ErrorHandler {
 
     suspend fun showError(e: Exception) {
         val errorState = AlertDialogState("Error", e.message ?: "Unknown")
-        if(BuildConfig.FLAVOR == "compose") {
+        if(BuildConfig.FLAVOR.contains("compose")) {
             _alertDialogState.value = errorState
         } else {
             withContext(Main) {

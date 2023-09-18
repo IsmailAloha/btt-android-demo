@@ -17,7 +17,7 @@ class ConfigActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
 
-        if(BuildConfig.FLAVOR == "compose") {
+        if(BuildConfig.FLAVOR.contains("compose")) {
             startActivity(Intent(this, ComposeStoreActivity::class.java))
         } else {
             startActivity(Intent(this, StoreActivity::class.java))

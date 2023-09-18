@@ -16,4 +16,7 @@
     <string name="session_id">Session ID</string>
     <string name="sessionid_accessibility">sessionid</string>
     <string name="test_manual_timer">Test Manual Timer</string>
+    <string name="memory_warning_title">Memory Warning</string>
+    <string name="memory_warning_message">Memory warning received. Your app is using too much memory than expected.</string>
+    <string name="memory_warning_ok">OK</string>
 </resources>

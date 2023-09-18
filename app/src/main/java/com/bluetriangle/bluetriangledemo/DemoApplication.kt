@@ -5,13 +5,14 @@ import android.util.Log
 import com.bluetriangle.analytics.BlueTriangleConfiguration
 import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.android.demo.tests.HeavyLoopTest
+import com.bluetriangle.bluetriangledemo.tests.MemoryMonitor
 import dagger.hilt.android.HiltAndroidApp
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 @HiltAndroidApp
 class DemoApplication : Application() {
+
+    var memoryMonitor = MemoryMonitor()
+
     companion object {
         lateinit var tinyDB: TinyDB
 
@@ -39,11 +40,11 @@ class DemoApplication : Application() {
         val siteId = tinyDB.getString(KEY_SITE_ID, DEFAULT_SITE_ID)
         val anrDetection = tinyDB.getBoolean(KEY_ANR_ENABLED, true)
         val screenTracking = tinyDB.getBoolean(KEY_SCREEN_TRACKING_ENABLED, true)
-        val formatter = SimpleDateFormat("ddMMyyyykkmm", Locale.getDefault())
         initTracker(siteId, anrDetection, screenTracking)
 
         checkAndRunLaunchScenario(SCENARIO_APP_CREATE)
 
+        Thread(memoryMonitor).start()
     }
 
     fun initTracker(siteId: String?, anrDetection: Boolean, screenTracking: Boolean) {

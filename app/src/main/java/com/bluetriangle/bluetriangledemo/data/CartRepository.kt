@@ -1,6 +1,7 @@
 package com.bluetriangle.bluetriangledemo.data
 
 import android.content.Context
+import android.util.Log
 import androidx.core.content.edit
 import com.bluetriangle.bluetriangledemo.api.StoreService
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -18,9 +19,9 @@ class CartRepository @Inject constructor(
     private val memoryBank = arrayListOf<MemoryBlock>()
 
     class MemoryBlock {
-        val memory = IntArray(100 * 1024 * 1024)
+        private val memory = ByteArray(25 * 1024 * 1024)
         init {
-            memory.fill(0)
+            Log.d("MemoryBlock","Allocated Memory Block of Size: ${memory.size} * 4 bytes")
         }
     }
 
@@ -69,7 +70,9 @@ class CartRepository @Inject constructor(
     }
 
     fun deallocateMemory() {
-        memoryBank.removeFirstOrNull()
+        if(memoryBank.isNotEmpty()) {
+            memoryBank.removeFirst()
+        }
     }
 
     fun clearMemory() {

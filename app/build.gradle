@@ -47,6 +47,24 @@ android {
                     appIconRound: "@mipmap/ic_launcher_layout_round"
             ]
         }
+        create("compose-dev") {
+            dimension = "version"
+            applicationIdSuffix = ".compose.dev"
+            resValue "string", "app_name", "Developer Ecommerce Compose"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher_compose_dev",
+                    appIconRound: "@mipmap/ic_launcher_compose_dev_round"
+            ]
+        }
+        create("layout-dev") {
+            dimension = "version"
+            applicationIdSuffix = ".layout.dev"
+            resValue "string", "app_name", "Developer Ecommerce Layout"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher_layout_dev",
+                    appIconRound: "@mipmap/ic_launcher_layout_dev_round"
+            ]
+        }
     }
     buildFeatures {
         buildConfig true

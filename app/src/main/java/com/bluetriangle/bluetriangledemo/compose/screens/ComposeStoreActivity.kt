@@ -37,22 +37,34 @@ import androidx.navigation.compose.rememberNavController
 import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.R
-import com.bluetriangle.bluetriangledemo.SCENARIO_ACTIVITY_RESUME
-import com.bluetriangle.bluetriangledemo.SCENARIO_ACTIVITY_START
 import com.bluetriangle.bluetriangledemo.compose.components.AppBottomNavigationBar
+import com.bluetriangle.bluetriangledemo.compose.components.MemoryWarningDialog
 import com.bluetriangle.bluetriangledemo.compose.components.NavHostContainer
 import com.bluetriangle.bluetriangledemo.compose.components.NavItem
 import com.bluetriangle.bluetriangledemo.compose.theme.BlueTriangleComposeDemoTheme
+import com.bluetriangle.bluetriangledemo.tests.MemoryMonitor
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ComposeStoreActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val title = rememberSaveable {
                 mutableStateOf("")
             }
+            val memoryWarningDialog = rememberSaveable {
+                mutableStateOf<MemoryMonitor.MemoryWarning?>(null)
+            }
+            (application as DemoApplication).memoryMonitor.memoryWarningListener =
+                object : MemoryMonitor.MemoryWarningListener {
+                    override fun onMemoryWarning(memoryWarning: MemoryMonitor.MemoryWarning) {
+                        runOnUiThread {
+                            memoryWarningDialog.value = memoryWarning
+                        }
+                    }
+                }
             BlueTriangleComposeDemoTheme {
                 val navController = rememberNavController()
                 val navItems = getNavItemsList(navController)
@@ -61,9 +73,11 @@ class ComposeStoreActivity : ComponentActivity() {
                 }, bottomBar = {
                     AppBottomNavigationBar(navController = navController, navItems = navItems)
                 }) {
-                    Column(modifier = Modifier
-                        .padding(it)
-                        .fillMaxHeight()) {
+                    Column(
+                        modifier = Modifier
+                            .padding(it)
+                            .fillMaxHeight()
+                    ) {
                         SiteIDBar()
                         NavHostContainer(
                             title,
@@ -72,8 +86,14 @@ class ComposeStoreActivity : ComponentActivity() {
                         )
                     }
                 }
+                memoryWarningDialog.value?.let {
+                    MemoryWarningDialog {
+                        memoryWarningDialog.value = null
+                    }
+                }
             }
         }
+
     }
 
     @Composable

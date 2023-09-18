@@ -25,19 +25,15 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.asFlow
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
@@ -58,19 +54,6 @@ fun CartScreen(navController: NavHostController, viewModel: CartViewModel = hilt
     val scope = rememberCoroutineScope()
     val cart = viewModel.cart.asFlow().collectAsState(null)
     val cartItems = cart.value?.items ?: listOf()
-
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(Unit) {
-        val observer = LifecycleEventObserver { _, event ->
-            if(event == Lifecycle.Event.ON_DESTROY) {
-                viewModel.cartRepository.deallocateMemory()
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
 
     Column(
         Modifier

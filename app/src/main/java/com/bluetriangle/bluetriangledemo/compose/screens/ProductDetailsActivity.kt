@@ -148,15 +148,7 @@ class ProductDetailsActivity : ComponentActivity() {
                                 enabled = !addingToCart.value,
                                 onClick = {
                                     addToCartCount.intValue = addToCartCount.intValue + 1
-                                    if(product.isPerfume) {
-                                        viewModel.cartRepository.allocateMemory()
-                                    } else if(product.isKeyHolder) {
-                                        viewModel.hundredPercentCPU()
-                                    } else if(product.isOppo) {
-                                        viewModel.twoHundredPercentCPU()
-                                    } else if(addToCartCount.intValue > ADD_TO_CART_LIMIT) {
-                                        throw AddToCartLimitExceededException(ADD_TO_CART_LIMIT)
-                                    }
+                                    viewModel.handleProductDetailsTestCases(product, addToCartCount.intValue)
                                     scope.launch {
                                         try {
                                             addingToCart.value = true

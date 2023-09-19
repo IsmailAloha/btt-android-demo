@@ -17,6 +17,10 @@ data class Product(
         get() = name == "Key Holder"
 
     @IgnoredOnParcel
+    val isInfinixInBook: Boolean
+        get() = name == "Infinix INBOOK"
+
+    @IgnoredOnParcel
     val isOppo: Boolean
         get() = name == "OPPOF19"
 

@@ -9,6 +9,7 @@ import com.bluetriangle.android.demo.tests.HeavyLoopTest
 import com.bluetriangle.bluetriangledemo.ADD_TO_CART_LIMIT
 import com.bluetriangle.bluetriangledemo.data.CartRepository
 import com.bluetriangle.bluetriangledemo.data.Product
+import com.bluetriangle.bluetriangledemo.tests.MidCPUUsageTest
 import com.bluetriangle.bluetriangledemo.utils.ErrorHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -33,15 +34,7 @@ class ProductDetailViewModel @Inject constructor(val cartRepository: CartReposit
     fun addToCart(v: View, product: Product) {
         addToCartClickCount++
 
-        if(product.isPerfume) {
-            cartRepository.allocateMemory()
-        } else if(product.isKeyHolder) {
-            hundredPercentCPU()
-        } else if(product.isOppo) {
-            twoHundredPercentCPU()
-        } else if(addToCartClickCount > ADD_TO_CART_LIMIT) {
-            throw AddToCartLimitExceededException(ADD_TO_CART_LIMIT)
-        }
+        handleProductDetailsTestCases(product, addToCartClickCount)
         _isAddingToCart.value = true
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -54,6 +47,26 @@ class ProductDetailViewModel @Inject constructor(val cartRepository: CartReposit
             withContext(Main) {
                 _isAddingToCart.value = false
             }
+        }
+    }
+
+    fun handleProductDetailsTestCases(product: Product, addToCartClickCount: Int) {
+        if(product.isPerfume) {
+            cartRepository.allocateMemory()
+        } else if(product.isInfinixInBook) {
+            fiftyToEightPercentCPU()
+        } else if(product.isKeyHolder) {
+            hundredPercentCPU()
+        } else if(product.isOppo) {
+            twoHundredPercentCPU()
+        } else if(addToCartClickCount > ADD_TO_CART_LIMIT) {
+            throw AddToCartLimitExceededException(ADD_TO_CART_LIMIT)
+        }
+    }
+
+    private fun fiftyToEightPercentCPU() {
+        viewModelScope.launch {
+            MidCPUUsageTest(20L).run()
         }
     }
 

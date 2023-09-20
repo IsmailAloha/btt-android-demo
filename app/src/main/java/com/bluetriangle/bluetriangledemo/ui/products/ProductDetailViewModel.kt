@@ -13,6 +13,7 @@ import com.bluetriangle.bluetriangledemo.tests.MidCPUUsageTest
 import com.bluetriangle.bluetriangledemo.utils.ErrorHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -65,18 +66,18 @@ class ProductDetailViewModel @Inject constructor(val cartRepository: CartReposit
     }
 
     private fun fiftyToEightPercentCPU() {
-        viewModelScope.launch {
+        viewModelScope.launch(Default) {
             MidCPUUsageTest(20L).run()
         }
     }
 
-    fun twoHundredPercentCPU() {
+    private fun twoHundredPercentCPU() {
         hundredPercentCPU()
         hundredPercentCPU()
     }
 
-    fun hundredPercentCPU() {
-        viewModelScope.launch {
+    private fun hundredPercentCPU() {
+        viewModelScope.launch(Default) {
             HeavyLoopTest(20L).run()
         }
     }

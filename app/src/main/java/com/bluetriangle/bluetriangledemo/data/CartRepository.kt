@@ -19,7 +19,7 @@ class CartRepository @Inject constructor(
     private val memoryBank = arrayListOf<MemoryBlock>()
 
     class MemoryBlock {
-        private val memory = ByteArray((Runtime.getRuntime().totalMemory() * 0.20).toInt())
+        private val memory = ByteArray((Runtime.getRuntime().maxMemory() * 0.20).toInt())
         init {
             Log.d("MemoryBlock","Allocated Memory Block of Size: ${memory.size} * 4 bytes")
         }

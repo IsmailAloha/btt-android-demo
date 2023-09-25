@@ -16,15 +16,6 @@ class CartRepository @Inject constructor(
 ) {
     private val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
-    private val memoryBank = arrayListOf<MemoryBlock>()
-
-    class MemoryBlock {
-        private val memory = ByteArray((Runtime.getRuntime().maxMemory() * 0.20).toInt())
-        init {
-            Log.d("MemoryBlock","Allocated Memory Block of Size: ${memory.size} * 4 bytes")
-        }
-    }
-
     suspend fun getCart(): Cart? {
         val cartId = sharedPreferences.getLong(KEY_CART_ID, 0)
         if (cartId > 0) {
@@ -63,20 +54,6 @@ class CartRepository @Inject constructor(
     suspend fun removeCartItem(cartItem: CartItem): Cart? {
         storeService.deleteCartItem(cartItem.id)
         return getCart()
-    }
-
-    fun allocateMemory() {
-        memoryBank.add(MemoryBlock())
-    }
-
-    fun deallocateMemory() {
-        if(memoryBank.isNotEmpty()) {
-            memoryBank.removeFirst()
-        }
-    }
-
-    fun clearMemory() {
-        memoryBank.clear()
     }
 
     suspend fun reduceQuantity(cartItem:CartItem) {

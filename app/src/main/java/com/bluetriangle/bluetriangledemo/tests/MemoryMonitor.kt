@@ -37,7 +37,7 @@ class MemoryMonitor:Runnable  {
 
     override fun run() {
         while(true) {
-            val usedMemory = Runtime.getRuntime().totalMemory()
+            val usedMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()
             if (usedMemory / totalMemory.toFloat() >= 0.8) {
                 if (!isMemoryThresholdReached) {
                     isMemoryThresholdReached = true
@@ -48,7 +48,7 @@ class MemoryMonitor:Runnable  {
                 isMemoryThresholdReached = false
             }
             updateMemory(usedMemory)
-            Thread.sleep(1000)
+            Thread.sleep(300)
         }
     }
 }

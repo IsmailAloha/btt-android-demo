@@ -31,7 +31,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -40,9 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.IntentCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModelProvider
 import coil.compose.AsyncImage
-import com.bluetriangle.bluetriangledemo.ADD_TO_CART_LIMIT
 import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.compose.components.ErrorAlertDialog
 import com.bluetriangle.bluetriangledemo.compose.components.MemoryWarningDialog
@@ -50,8 +47,8 @@ import com.bluetriangle.bluetriangledemo.compose.theme.BlueTriangleComposeDemoTh
 import com.bluetriangle.bluetriangledemo.compose.theme.outline
 import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.tests.MemoryMonitor
-import com.bluetriangle.bluetriangledemo.ui.products.AddToCartLimitExceededException
 import com.bluetriangle.bluetriangledemo.ui.products.ProductDetailViewModel
+import com.bluetriangle.bluetriangledemo.utils.MemoryHolder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -177,8 +174,7 @@ class ProductDetailsActivity : ComponentActivity() {
 
     override fun onStop() {
         super.onStop()
-        val productDetailViewModel = ViewModelProvider(this).get(ProductDetailViewModel::class.java)
-        productDetailViewModel.cartRepository.clearMemory()
+        MemoryHolder.clearMemory()
     }
 }
 

@@ -11,6 +11,7 @@ import com.bluetriangle.bluetriangledemo.data.CartRepository
 import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.tests.MidCPUUsageTest
 import com.bluetriangle.bluetriangledemo.utils.ErrorHandler
+import com.bluetriangle.bluetriangledemo.utils.MemoryHolder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.Default
@@ -53,7 +54,7 @@ class ProductDetailViewModel @Inject constructor(val cartRepository: CartReposit
 
     fun handleProductDetailsTestCases(product: Product, addToCartClickCount: Int) {
         if(product.isPerfume) {
-            cartRepository.allocateMemory()
+            MemoryHolder.allocateMemory()
         } else if(product.isInfinixInBook) {
             fiftyToEightPercentCPU()
         } else if(product.isKeyHolder) {

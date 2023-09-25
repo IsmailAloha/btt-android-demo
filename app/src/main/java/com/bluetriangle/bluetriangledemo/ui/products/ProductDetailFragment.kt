@@ -1,22 +1,18 @@
 package com.bluetriangle.bluetriangledemo.ui.products
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.bluetriangle.bluetriangledemo.databinding.FragmentProductDetailBinding
 import com.bluetriangle.bluetriangledemo.utils.AlertDialogState
 import com.bluetriangle.bluetriangledemo.utils.AlertView
-import com.bluetriangle.bluetriangledemo.utils.dp
+import com.bluetriangle.bluetriangledemo.utils.MemoryHolder
 import com.bluetriangle.bluetriangledemo.utils.loadImage
 import com.bluetriangle.bluetriangledemo.utils.showAlert
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.MultiTransformation
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -48,6 +44,11 @@ class ProductDetailFragment : Fragment(), AlertView {
         }
 
         return binding.root
+    }
+
+    override fun onStop() {
+        super.onStop()
+        MemoryHolder.clearMemory()
     }
 
     override fun onDestroyView() {

@@ -55,6 +55,14 @@ class CartRepository @Inject constructor(
         return getCart()
     }
 
+    suspend fun reduceQuantity(cartItem:CartItem) {
+        storeService.updateQuantity(cartItem.id, cartItem.quantity - 1)
+    }
+
+    suspend fun increaseQuantity(cartItem:CartItem) {
+        storeService.updateQuantity(cartItem.id, cartItem.quantity + 1)
+    }
+
     companion object {
         const val SHARED_PREFERENCES_NAME = "BTDA_CART"
         const val KEY_CART_ID = "cart_id"

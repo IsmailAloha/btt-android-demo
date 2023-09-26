@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.adapters.CartItemAdapter
@@ -16,10 +17,13 @@ import com.bluetriangle.bluetriangledemo.data.CartItem
 import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.databinding.FragmentCartBinding
 import com.bluetriangle.bluetriangledemo.ui.products.ProductsFragmentDirections
+import com.bluetriangle.bluetriangledemo.utils.AlertDialogState
+import com.bluetriangle.bluetriangledemo.utils.AlertView
+import com.bluetriangle.bluetriangledemo.utils.showAlert
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CartFragment : Fragment() {
+class CartFragment : Fragment(), AlertView {
 
     private var _binding: FragmentCartBinding? = null
 
@@ -33,32 +37,28 @@ class CartFragment : Fragment() {
         _binding = FragmentCartBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val cartItemAdapter = CartItemAdapter(requireContext()) {
+        cartViewModel.errorHandler.alertView = this
+
+        val cartItemAdapter = CartItemAdapter(requireContext(), {
             cartViewModel.removeCartItem(it)
+        }, {
+            cartViewModel.reduceQuantity(it)
+        }) {
+            cartViewModel.increaseQuantity(it)
         }
 
         binding.productsList.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            layoutManager = GridLayoutManager(context, 2)
             adapter = cartItemAdapter
         }
 
         cartViewModel.cart.observe(viewLifecycleOwner) { cart ->
-            if (cart == null || cart.items.isNullOrEmpty()) {
-                binding.checkoutButton.apply {
-                    setText(R.string.empty_cart)
-                    isEnabled = false
-                }
-                cartItemAdapter.submitList(emptyList())
-            } else {
-                binding.checkoutButton.apply {
-                    setText(R.string.checkout)
-                    isEnabled = true
-                }
-                cartItemAdapter.submitList(cart.items)
-            }
+            cartItemAdapter.submitList(cart?.items?: emptyList())
         }
 
         binding.checkoutButton.setOnClickListener {
+            cartViewModel.handleCheckoutCrash()
+            cartViewModel.handleLaunchScenario()
             findNavController().navigate(R.id.action_cart_to_checkout)
         }
 
@@ -73,5 +73,9 @@ class CartFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun showAlert(alertDialogState: AlertDialogState) {
+        requireContext().showAlert(alertDialogState)
     }
 }

@@ -14,10 +14,13 @@ import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.adapters.ProductAdapter
 import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.databinding.FragmentProductsBinding
+import com.bluetriangle.bluetriangledemo.utils.AlertDialogState
+import com.bluetriangle.bluetriangledemo.utils.AlertView
+import com.bluetriangle.bluetriangledemo.utils.showAlert
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ProductsFragment : Fragment() {
+class ProductsFragment : Fragment(), AlertView {
 
     private var _binding: FragmentProductsBinding? = null
 
@@ -25,7 +28,7 @@ class ProductsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val productsViewModel = ViewModelProvider(this).get(ProductsViewModel::class.java)
-
+        productsViewModel.errorHandler.alertView = this
         _binding = FragmentProductsBinding.inflate(inflater, container, false)
 
         val productAdapter = ProductAdapter(requireContext()) { product: Product ->
@@ -48,5 +51,9 @@ class ProductsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun showAlert(alertDialogState: AlertDialogState) {
+        requireContext().showAlert(alertDialogState)
     }
 }

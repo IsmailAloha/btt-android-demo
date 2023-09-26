@@ -1,0 +1,42 @@
+{
+  "id": 1,
+  "confirmation": "HXrFXB",
+  "shipping": "9.99",
+  "items": [
+    {
+      "id": 59,
+      "product": "iPhone 9",
+      "price": 20,
+      "quantity": 3,
+      "total": 60
+    },
+    {
+      "id": 88,
+      "product": "MacBook Pro",
+      "price": 29,
+      "quantity": 2,
+      "total": 58
+    },
+    {
+      "id": 18,
+      "product": "Oil Free Moisturizer 100ml",
+      "price": 40,
+      "quantity": 2,
+      "total": 80
+    },
+    {
+      "id": 95,
+      "product": "Wholesale cargo lashing Belt",
+      "price": 930,
+      "quantity": 1,
+      "total": 930
+    },
+    {
+      "id": 39,
+      "product": "Women Sweaters Wool",
+      "price": 600,
+      "quantity": 2,
+      "total": 1200
+    }
+  ]
+}

@@ -172,8 +172,8 @@ class ProductDetailsActivity : ComponentActivity() {
         ErrorAlertDialog(errorHandler = viewModel.errorHandler)
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         MemoryHolder.clearMemory()
     }
 }

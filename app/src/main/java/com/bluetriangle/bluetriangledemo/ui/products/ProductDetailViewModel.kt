@@ -10,6 +10,7 @@ import com.bluetriangle.bluetriangledemo.ADD_TO_CART_LIMIT
 import com.bluetriangle.bluetriangledemo.data.CartRepository
 import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.tests.MidCPUUsageTest
+import com.bluetriangle.bluetriangledemo.utils.CPURunner
 import com.bluetriangle.bluetriangledemo.utils.ErrorHandler
 import com.bluetriangle.bluetriangledemo.utils.MemoryHolder
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -56,30 +57,13 @@ class ProductDetailViewModel @Inject constructor(val cartRepository: CartReposit
         if(product.isPerfume) {
             MemoryHolder.allocateMemory()
         } else if(product.isInfinixInBook) {
-            fiftyToEightPercentCPU()
+            CPURunner.fiftyToEightPercentCPU()
         } else if(product.isKeyHolder) {
-            hundredPercentCPU()
+            CPURunner.hundredPercentCPU()
         } else if(product.isOppo) {
-            twoHundredPercentCPU()
+            CPURunner.twoHundredPercentCPU()
         } else if(addToCartClickCount > ADD_TO_CART_LIMIT) {
             throw AddToCartLimitExceededException(ADD_TO_CART_LIMIT)
-        }
-    }
-
-    private fun fiftyToEightPercentCPU() {
-        viewModelScope.launch(Default) {
-            MidCPUUsageTest(20L).run()
-        }
-    }
-
-    private fun twoHundredPercentCPU() {
-        hundredPercentCPU()
-        hundredPercentCPU()
-    }
-
-    private fun hundredPercentCPU() {
-        viewModelScope.launch(Default) {
-            HeavyLoopTest(20L).run()
         }
     }
 }

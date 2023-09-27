@@ -35,14 +35,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bluetriangle.analytics.Tracker
-import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.compose.components.AppBottomNavigationBar
-import com.bluetriangle.bluetriangledemo.compose.components.MemoryWarningDialog
 import com.bluetriangle.bluetriangledemo.compose.components.NavHostContainer
 import com.bluetriangle.bluetriangledemo.compose.components.NavItem
 import com.bluetriangle.bluetriangledemo.compose.theme.BlueTriangleComposeDemoTheme
-import com.bluetriangle.bluetriangledemo.tests.MemoryMonitor
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -51,21 +48,10 @@ class ComposeStoreActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val title = rememberSaveable {
-                mutableStateOf("")
-            }
-            val memoryWarningDialog = rememberSaveable {
-                mutableStateOf<MemoryMonitor.MemoryWarning?>(null)
-            }
-            (application as DemoApplication).memoryMonitor.memoryWarningListener =
-                object : MemoryMonitor.MemoryWarningListener {
-                    override fun onMemoryWarning(memoryWarning: MemoryMonitor.MemoryWarning) {
-                        runOnUiThread {
-                            memoryWarningDialog.value = memoryWarning
-                        }
-                    }
-                }
             BlueTriangleComposeDemoTheme {
+                val title = rememberSaveable {
+                    mutableStateOf("")
+                }
                 val navController = rememberNavController()
                 val navItems = getNavItemsList(navController)
                 Scaffold(topBar = {
@@ -84,11 +70,6 @@ class ComposeStoreActivity : ComponentActivity() {
                             navController = navController,
                             navItems = navItems
                         )
-                    }
-                }
-                memoryWarningDialog.value?.let {
-                    MemoryWarningDialog {
-                        memoryWarningDialog.value = null
                     }
                 }
             }

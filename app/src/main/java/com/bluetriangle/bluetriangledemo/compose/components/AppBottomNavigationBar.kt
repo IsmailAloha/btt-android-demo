@@ -49,7 +49,6 @@ fun AppBottomNavigationBar(
                     }
                 },
                 icon = {
-                    Log.d("AppBottomNavigationBar", "Route: $currentRoute")
                     navItem.icon(
                         if (currentRoute?.contains(navItem.route) == true) {
                             MaterialTheme.colors.primary

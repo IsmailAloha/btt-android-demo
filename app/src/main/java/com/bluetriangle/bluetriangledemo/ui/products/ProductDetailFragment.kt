@@ -46,8 +46,8 @@ class ProductDetailFragment : Fragment(), AlertView {
         return binding.root
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         MemoryHolder.clearMemory()
     }
 

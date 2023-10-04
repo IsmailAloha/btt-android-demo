@@ -57,6 +57,7 @@ class DemoApplication : Application() {
         configuration.isLaunchTimeEnabled = true
         configuration.isPerformanceMonitorEnabled = true
         configuration.networkSampleRate = 1.0
+        configuration.isMemoryWarningEnabled = true
         Tracker.init(this, configuration)
         Tracker.instance?.trackCrashes()
     }

@@ -41,6 +41,7 @@ import com.bluetriangle.bluetriangledemo.compose.components.NavHostContainer
 import com.bluetriangle.bluetriangledemo.compose.components.NavItem
 import com.bluetriangle.bluetriangledemo.compose.theme.BlueTriangleComposeDemoTheme
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.UUID
 
 @AndroidEntryPoint
 class ComposeStoreActivity : ComponentActivity() {
@@ -133,7 +134,9 @@ fun getNavItemsList(navController: NavHostController): List<NavItem> {
             )
         }, "cart",
             destinations = listOf(
-                NavItem.Destination("Cart", "cart/home") { CartScreen(navController) },
+                NavItem.Destination("Cart", "cart/home") { CartScreen({
+                    navController.navigate("cart/checkout/${UUID.randomUUID()}")
+                }) },
                 NavItem.Destination(
                     "Checkout",
                     "cart/checkout/{checkoutId}"

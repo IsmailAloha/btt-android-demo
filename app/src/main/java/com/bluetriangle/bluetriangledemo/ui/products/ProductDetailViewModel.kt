@@ -56,12 +56,10 @@ class ProductDetailViewModel @Inject constructor(val cartRepository: CartReposit
     fun handleProductDetailsTestCases(product: Product, addToCartClickCount: Int) {
         if(product.isPerfume) {
             MemoryHolder.allocateMemory()
-        } else if(product.isInfinixInBook) {
-            CPURunner.fiftyToEightPercentCPU()
         } else if(product.isKeyHolder) {
-            CPURunner.hundredPercentCPU()
-        } else if(product.isOppo) {
-            CPURunner.twoHundredPercentCPU()
+            CPURunner.fiftyToEightPercentCPU()
+        } else if(product.isInfinixInBook) {
+            CPURunner.fiftyPercentOfDeviceCapacity()
         } else if(addToCartClickCount > ADD_TO_CART_LIMIT) {
             throw AddToCartLimitExceededException(ADD_TO_CART_LIMIT)
         }

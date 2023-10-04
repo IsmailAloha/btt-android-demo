@@ -2,7 +2,6 @@ package com.bluetriangle.bluetriangledemo.tests
 
 import android.util.Log
 import com.bluetriangle.android.demo.tests.BTTTestCase
-import java.math.BigInteger
 
 class MidCPUUsageTest(private val interval: Long):BTTTestCase {
     override val title: String
@@ -12,14 +11,14 @@ class MidCPUUsageTest(private val interval: Long):BTTTestCase {
 
     override fun run(): String? {
         val startTime = System.currentTimeMillis()
-        var counter = 0u
+        var counter = 0
         while(System.currentTimeMillis() - startTime <= (interval * 1000)) {
             // Doing Nothing
             counter++
             // 8% AVG for 8 cores == 60-70% for 1 core
-            Log.d("BlueTriangle", "Counter: $counter")
-            if(counter % 200u == 0u) {
-                Thread.sleep(1)
+            println(Math.random())
+            if(counter % 150 == 0) {
+                Thread.sleep(5)
             }
 //            12% AVG
 //            Log.d("BlueTriangle", "CPU Usage : Counter: $counter")

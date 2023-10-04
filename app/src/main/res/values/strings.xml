@@ -19,4 +19,5 @@
     <string name="memory_warning_title">Memory Warning</string>
     <string name="memory_warning_message">Memory warning received. Your app is using too much memory than expected.</string>
     <string name="memory_warning_ok">OK</string>
+    <string name="ip_address">192.168.0.106</string>
 </resources>

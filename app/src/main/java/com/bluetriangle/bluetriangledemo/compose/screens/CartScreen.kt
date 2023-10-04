@@ -35,7 +35,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.asFlow
-import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.bluetriangle.analytics.compose.BttTimerEffect
 import com.bluetriangle.bluetriangledemo.R
@@ -46,10 +45,9 @@ import com.bluetriangle.bluetriangledemo.ui.cart.CartViewModel
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.UUID.randomUUID
 
 @Composable
-fun CartScreen(navController: NavHostController, viewModel: CartViewModel = hiltViewModel()) {
+fun CartScreen(navigateToCart: ()->Unit, viewModel: CartViewModel = hiltViewModel()) {
     BttTimerEffect(screenName = "Cart_Screen")
     val scope = rememberCoroutineScope()
     val cart = viewModel.cart.asFlow().collectAsState(null)
@@ -79,7 +77,7 @@ fun CartScreen(navController: NavHostController, viewModel: CartViewModel = hilt
                     viewModel.cartRepository.checkout(cartValue!!)
                     viewModel.refreshCart()
                     withContext(Main) {
-                        navController.navigate("cart/checkout/${randomUUID()}")
+                        navigateToCart()
                     }
                 } catch (e: Exception) {
                     viewModel.errorHandler.showError(e)

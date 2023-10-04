@@ -8,7 +8,7 @@ object MemoryHolder {
     private var memoryBank:LinkedList<MemoryBlock>? = null
 
     class MemoryBlock {
-        private val memory = ByteArray((Runtime.getRuntime().maxMemory() * 0.20).toInt())
+        private val memory = ByteArray(30 * 1024 * 1024)
         init {
             Log.d("MemoryBlock","Allocated Memory Block of Size: ${memory.size} * 4 bytes")
         }
@@ -19,7 +19,6 @@ object MemoryHolder {
             memoryBank = LinkedList()
         }
         memoryBank?.add(MemoryBlock())
-        Log.d("CartRepoMemoryAllocTag", "${this} : allocateMemory : ${memoryBank?.size}")
     }
 
     fun deallocateMemory() {
@@ -27,7 +26,6 @@ object MemoryHolder {
         if(!memoryBank.isNullOrEmpty()) {
             memoryBank?.removeFirst()
         }
-        Log.d("CartRepoMemoryAllocTag", "${this} : deallocateMemory : ${memoryBank?.size}")
     }
 
     fun clearMemory():Boolean {
@@ -35,7 +33,6 @@ object MemoryHolder {
         memoryBank?.clear()
         memoryBank = null
         Runtime.getRuntime().gc()
-        Log.d("CartRepoMemoryAllocTag", "$this : clearedMemory")
         return true
     }
 }

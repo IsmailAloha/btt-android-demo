@@ -1,10 +1,7 @@
 package com.bluetriangle.bluetriangledemo.compose.screens
 
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_NEW_DOCUMENT
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,7 +23,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -35,12 +31,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.asFlow
-import coil.compose.AsyncImage
 import com.bluetriangle.analytics.compose.BttTimerEffect
 import com.bluetriangle.bluetriangledemo.compose.components.ErrorAlertDialog
 import com.bluetriangle.bluetriangledemo.compose.theme.outline
 import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.ui.products.ProductsViewModel
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 
 @Composable
 fun ProductsScreen(productsViewModel: ProductsViewModel = hiltViewModel()) {
@@ -59,7 +56,7 @@ fun ProductsScreen(productsViewModel: ProductsViewModel = hiltViewModel()) {
     ErrorAlertDialog(errorHandler = productsViewModel.errorHandler)
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalGlideComposeApi::class)
 @Composable
 fun ProductItem(item: Product) {
     val context = LocalContext.current
@@ -77,7 +74,7 @@ fun ProductItem(item: Product) {
         },
         content = {
             Row(Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                AsyncImage(
+                GlideImage(
                     model = item.image, contentDescription = item.description, modifier = Modifier
                         .height(80.dp)
                         .width(80.dp)

@@ -84,7 +84,7 @@ fun ProductItem(item: Product) {
                 Spacer(modifier = Modifier.width(10.dp))
                 Column(verticalArrangement = Arrangement.Center) {
                     Text(
-                        text = item.name,
+                        text = String.format("%d : %s", item.id, item.name),
                         style = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
                     )
                     Spacer(modifier = Modifier.padding(2.dp))

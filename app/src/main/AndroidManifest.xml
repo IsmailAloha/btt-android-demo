@@ -11,8 +11,16 @@
         android:label="@string/app_name"
         android:roundIcon="${appIconRound}"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.BlueTriangleDemo">
+        android:theme="@style/Theme.BlueTriangleDemo"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".AboutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".compose.screens.ComposeAboutActivity"
+            android:exported="false"
+            android:label="@string/title_activity_compose_about"
+            android:theme="@style/Theme.BlueTriangleDemo" />
         <activity
             android:name=".LauncherActivity"
             android:exported="true">
@@ -25,14 +33,14 @@
         <activity
             android:name=".StoreActivity"
             android:exported="true"
-            android:label="@string/title_activity_store"/>
+            android:label="@string/title_activity_store" />
         <activity
             android:name=".ConfigActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="Timer"/>
+            android:label="Timer" />
         <activity android:name=".compose.screens.ComposeStoreActivity" />
         <activity android:name=".compose.screens.ProductDetailsActivity" />
 

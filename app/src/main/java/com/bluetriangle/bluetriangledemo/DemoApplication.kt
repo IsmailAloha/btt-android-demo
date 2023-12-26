@@ -14,15 +14,19 @@ import java.util.Locale
 class DemoApplication : Application() {
     companion object {
         lateinit var tinyDB: TinyDB
-
-        fun checkAndRunLaunchScenario(scenario:Int) {
+        const val WEBSITE_URL = "WEBSITE_URL"
+        const val DEFAULT_WEBSITE_URL = "https://bluetriangle.com/about"
+        fun checkAndRunLaunchScenario(scenario: Int) {
             val launchTest = tinyDB.getBoolean(KEY_LAUNCH_TEST)
             val launchTestScenario = tinyDB.getInt(KEY_LAUNCH_SCENARIO, 1)
-            Log.d("DemoApplication", "checkAndRunLaunchScenario: isLaunchTest: $launchTest, Scenario: $launchTestScenario")
-            if(launchTest && launchTestScenario == scenario) {
+            Log.d(
+                "DemoApplication",
+                "checkAndRunLaunchScenario: isLaunchTest: $launchTest, Scenario: $launchTestScenario"
+            )
+            if (launchTest && launchTestScenario == scenario) {
                 tinyDB.remove(KEY_LAUNCH_TEST)
                 tinyDB.remove(KEY_LAUNCH_SCENARIO)
-                if(scenario == SCENARIO_APP_CREATE) {
+                if (scenario == SCENARIO_APP_CREATE) {
                     tinyDB.setBoolean(KEY_SHOULD_NOT_SHOW_CONFIGURATION, true)
                 }
                 HeavyLoopTest(3L).run()
@@ -57,5 +61,13 @@ class DemoApplication : Application() {
         configuration.networkSampleRate = 1.0
         Tracker.init(this, configuration)
         Tracker.instance?.trackCrashes()
+    }
+
+    fun getWebsiteUrl(): String {
+        return tinyDB.getString(WEBSITE_URL, DEFAULT_WEBSITE_URL) ?: DEFAULT_WEBSITE_URL
+    }
+
+    fun setWebsiteUrl(url: String) {
+        tinyDB.setString(WEBSITE_URL, url)
     }
 }

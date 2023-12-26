@@ -12,14 +12,12 @@ import com.bumptech.glide.integration.okhttp3.OkHttpLibraryGlideModule
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
 import com.bumptech.glide.load.Key
 import com.bumptech.glide.load.engine.cache.DiskCache
-import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory
-import com.bumptech.glide.load.engine.cache.MemoryCache
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
-import com.bumptech.glide.request.RequestOptions
 import okhttp3.OkHttpClient
 import java.io.File
 import java.io.InputStream
+import java.util.concurrent.TimeUnit
 
 @GlideModule
 @Excludes(OkHttpLibraryGlideModule::class)
@@ -50,6 +48,7 @@ class MyGlideModule : AppGlideModule() {
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
         Log.d("GlideOkHttpSetup", "Registering OkHttp in Glide...")
         val okHttpClient = OkHttpClient.Builder()
+            .callTimeout(10, TimeUnit.SECONDS)
             .bttTrack()
             .addInterceptor {
                 Log.d(

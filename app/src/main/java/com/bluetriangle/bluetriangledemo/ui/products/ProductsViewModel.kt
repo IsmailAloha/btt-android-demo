@@ -29,7 +29,17 @@ class ProductsViewModel @Inject constructor(private val productsRepository: Prod
             try {
                 val products = productsRepository.listProducts(skipCache = true)
                 withContext(Dispatchers.Main) {
-                    _products.value = products
+                    _products.value = products.map {
+                        when (it.id) {
+                            25L -> it.copy(image = "https://publicobject.com/helloworld.txt")
+                            26L -> it.copy(image = "https://dnsrequestwouldfailhere.com/")
+                            27L -> it.copy(image = "https://untrusted-root.badssl.com/")
+                            28L -> it.copy(image = "https://192.169.2.111/")
+                            29L -> it.copy(image = "https://httpbin.org/invalidendpoint")
+                            30L -> it.copy(image = "https://hub.dummyapis.com/delay?seconds=60")
+                            else -> it
+                        }
+                    }
                 }
             } catch (e: Exception) {
                 errorHandler.showError(e)

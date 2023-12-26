@@ -53,7 +53,7 @@ interface StoreService {
     suspend fun checkout(@Path("cart_item_id") cartItemId: Long): Response<Unit>
 
     companion object {
-        private const val BASE_URL = "http://34.31.235.63:8000/btriangle/"
+        private const val BASE_URL = "http://192.168.0.104:8000/btriangle/"
 
         fun create(): StoreService {
             val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }

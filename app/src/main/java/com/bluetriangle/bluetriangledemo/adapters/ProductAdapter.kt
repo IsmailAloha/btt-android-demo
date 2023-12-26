@@ -40,7 +40,7 @@ class ProductAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(product: Product) {
             binding.apply {
-                productName.text = product.name
+                productName.text = String.format("%d : %s", product.id, product.name)
                 productPrice.text = String.format("$%.2f", product.price)
                 productImage.loadImage(product.image)
             }

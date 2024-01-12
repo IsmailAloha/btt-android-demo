@@ -1,8 +1,6 @@
 package com.bluetriangle.bluetriangledemo.compose.screens
 
 import android.content.Intent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -29,21 +26,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bluetriangle.analytics.Timer
 import com.bluetriangle.analytics.compose.BttTimerEffect
 import com.bluetriangle.bluetriangledemo.AboutActivity
 import com.bluetriangle.bluetriangledemo.DemoApplication
@@ -87,7 +78,7 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
             Button(onClick = {
                 context.startActivity(Intent(context, AboutActivity::class.java))
             }) {
-                Text(text = stringResource(R.string.about_us))
+                Text(text = stringResource(R.string.hybrid_demo))
             }
 
             Icon(Icons.Filled.Settings, contentDescription = "Settings",
@@ -108,8 +99,8 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
 @Composable
 fun WebsiteDialog(onDismiss: () -> Unit) {
     val app = (LocalContext.current.applicationContext as? DemoApplication)
-    val currentUrl = app?.getWebsiteUrl()
-    var websiteUrl by rememberSaveable {
+    val currentUrl = app?.getTagUrl()
+    var tagUrl by rememberSaveable {
         mutableStateOf(currentUrl ?: "")
     }
     Dialog(onDismissRequest = onDismiss) {
@@ -119,11 +110,11 @@ fun WebsiteDialog(onDismiss: () -> Unit) {
             shape = RoundedCornerShape(16.dp),
         ) {
             Column(modifier = Modifier.padding(16.dp, 32.dp)) {
-                TextField(value = websiteUrl, modifier = Modifier.fillMaxWidth(), singleLine = true, onValueChange = {
-                    websiteUrl = it
+                TextField(value = tagUrl, modifier = Modifier.fillMaxWidth(), singleLine = true, onValueChange = {
+                    tagUrl = it
                 })
                 Button(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(0.dp, 0.dp, 4.dp, 4.dp), onClick = {
-                    app?.setWebsiteUrl(websiteUrl)
+                    app?.setTagUrl(tagUrl)
                     onDismiss()
                 }) {
                     Text(text = stringResource(id = R.string.done))

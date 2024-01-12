@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import com.bluetriangle.analytics.compose.BttTimerEffect
-import com.bluetriangle.android.demo.tests.HeavyLoopTest
+import com.bluetriangle.bluetriangledemo.tests.HeavyLoopTest
 
 @Composable
 fun CheckoutScreen(checkoutId: String) {

@@ -17,11 +17,6 @@
             android:name=".AboutActivity"
             android:exported="false" />
         <activity
-            android:name=".compose.screens.ComposeAboutActivity"
-            android:exported="false"
-            android:label="@string/title_activity_compose_about"
-            android:theme="@style/Theme.BlueTriangleDemo" />
-        <activity
             android:name=".LauncherActivity"
             android:exported="true">
             <intent-filter>

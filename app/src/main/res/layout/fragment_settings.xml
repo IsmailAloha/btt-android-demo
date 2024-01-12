@@ -208,7 +208,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/about_us"
+        android:text="@string/hybrid_demo"
         app:layout_constraintStart_toStartOf="@+id/screenTrackingEnabledValue"
         app:layout_constraintTop_toBottomOf="@+id/testManualTimer" />
 </androidx.constraintlayout.widget.ConstraintLayout>

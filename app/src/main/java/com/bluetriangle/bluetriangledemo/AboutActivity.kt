@@ -2,16 +2,20 @@ package com.bluetriangle.bluetriangledemo
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
-import com.bluetriangle.analytics.Tracker
-import com.bluetriangle.bluetriangledemo.DemoApplication.Companion.DEFAULT_WEBSITE_URL
+import com.bluetriangle.analytics.BTTWebViewTracker
+import com.bluetriangle.bluetriangledemo.DemoApplication.Companion.DEFAULT_TAG_URL
 import com.bluetriangle.bluetriangledemo.databinding.ActivityAboutBinding
-import java.security.AccessController.getContext
+import java.io.File
+import java.io.IOException
+import java.io.PrintWriter
+import java.io.StringWriter
 
 
 class AboutActivity : AppCompatActivity() {
@@ -20,7 +24,7 @@ class AboutActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityAboutBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setTitle(R.string.about_us)
+        setTitle(R.string.hybrid_demo)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
@@ -30,47 +34,45 @@ class AboutActivity : AppCompatActivity() {
                 view: WebView?,
                 request: WebResourceRequest?
             ): Boolean {
-                return loadUrl(view, request?.url?.toString())
+                return false
             }
 
-            private fun loadUrl(view: WebView?, url: String?): Boolean {
-                if (url != null) {
-                    view?.loadUrl(url)
-                    return true
-                }
-                return false
+            override fun onLoadResource(view: WebView?, url: String?) {
+                super.onLoadResource(view, url)
+                BTTWebViewTracker.onLoadResource(view, url)
             }
 
             @Deprecated("Deprecated in Java")
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                return loadUrl(view, url)
+                return false
             }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
-                Tracker.instance?.configuration?.sessionId?.let {
-                    val expiration = (System.currentTimeMillis() + 1800000).toString()
-                    val setSession = "{\"value\":\"$it\",\"expires\":\"$expiration\"}"
-                    binding.webView.evaluateJavascript(
-                        "window.localStorage.setItem('BTT_X0siD', '$setSession');"
-                    ) {
-                        Tracker.instance?.configuration?.logger?.info("Injected SessionID in WebView: $setSession, $it")
-                    }
-                    binding.webView.evaluateJavascript(
-                        "window.localStorage"
-                    ) {
-                        Tracker.instance?.configuration?.logger?.info(it)
-                    }
-                }
             }
         }
         binding.webView.settings.javaScriptEnabled = true
         WebView.setWebContentsDebuggingEnabled(true)
         binding.webView.settings.domStorageEnabled = true
-        binding.webView.settings.databaseEnabled = true
-        binding.webView.loadUrl(
-            (application as? DemoApplication)?.getWebsiteUrl() ?: DEFAULT_WEBSITE_URL
-        )
+        binding.webView.settings.allowFileAccess = true
+
+        try {
+            var webSiteContent = String(assets.open("template.html").readBytes())
+            val tagUrl = (application as? DemoApplication)?.getTagUrl() ?: DEFAULT_TAG_URL
+            webSiteContent = webSiteContent.replace("<!--- SCRIPT_TAG_GOES_HERE --->", "<script type=\"text/javascript\" id=\"\" src=\"https://$tagUrl\"></script>")
+            val file = File(filesDir, "index.html")
+            if(!file.exists()) {
+                file.createNewFile()
+            }
+            file.writeText(webSiteContent)
+            val websiteLocalURL = "file://${file.absolutePath}"
+            Log.d("AboutActivityWebContent", "URL: $websiteLocalURL")
+            binding.webView.loadUrl(websiteLocalURL)
+        } catch (e: IOException) {
+            val stackTraceWriter = StringWriter()
+            e.printStackTrace(PrintWriter(stackTraceWriter))
+            Log.d("AboutActivityWebContent", "${e::class.java.simpleName}(\"${e.message}\") : ${stackTraceWriter}")
+        }
 
         onBackPressedDispatcher.addCallback {
             binding.webView.apply {

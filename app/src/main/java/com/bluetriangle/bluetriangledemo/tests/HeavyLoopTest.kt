@@ -1,4 +1,4 @@
-package com.bluetriangle.android.demo.tests
+package com.bluetriangle.bluetriangledemo.tests
 
 import kotlin.random.Random
 

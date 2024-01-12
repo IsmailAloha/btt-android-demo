@@ -4,18 +4,16 @@ import android.app.Application
 import android.util.Log
 import com.bluetriangle.analytics.BlueTriangleConfiguration
 import com.bluetriangle.analytics.Tracker
-import com.bluetriangle.android.demo.tests.HeavyLoopTest
+import com.bluetriangle.bluetriangledemo.tests.HeavyLoopTest
 import dagger.hilt.android.HiltAndroidApp
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 @HiltAndroidApp
 class DemoApplication : Application() {
     companion object {
         lateinit var tinyDB: TinyDB
-        const val WEBSITE_URL = "WEBSITE_URL"
-        const val DEFAULT_WEBSITE_URL = "https://bluetriangle.com/about"
+        const val TAG_URL = "TAG_URL"
+        const val DEFAULT_TAG_URL = "$DEFAULT_SITE_ID.btttag.com/btt.js"
+
         fun checkAndRunLaunchScenario(scenario: Int) {
             val launchTest = tinyDB.getBoolean(KEY_LAUNCH_TEST)
             val launchTestScenario = tinyDB.getInt(KEY_LAUNCH_SCENARIO, 1)
@@ -59,15 +57,17 @@ class DemoApplication : Application() {
         configuration.isLaunchTimeEnabled = true
         configuration.isPerformanceMonitorEnabled = true
         configuration.networkSampleRate = 1.0
+//        configuration.cacheMemoryLimit = 10 * 1000L
+        configuration.cacheExpiryDuration = 120 * 1000L
         Tracker.init(this, configuration)
         Tracker.instance?.trackCrashes()
     }
 
-    fun getWebsiteUrl(): String {
-        return tinyDB.getString(WEBSITE_URL, DEFAULT_WEBSITE_URL) ?: DEFAULT_WEBSITE_URL
+    fun getTagUrl(): String {
+        return tinyDB.getString(TAG_URL, DEFAULT_TAG_URL) ?: DEFAULT_TAG_URL
     }
 
-    fun setWebsiteUrl(url: String) {
-        tinyDB.setString(WEBSITE_URL, url)
+    fun setTagUrl(url: String) {
+        tinyDB.setString(TAG_URL, url)
     }
 }

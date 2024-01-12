@@ -1,4 +1,4 @@
-package com.bluetriangle.android.demo.tests
+package com.bluetriangle.bluetriangledemo.tests
 
 interface BTTTestCase {
 

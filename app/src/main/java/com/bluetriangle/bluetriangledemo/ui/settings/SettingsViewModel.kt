@@ -1,13 +1,49 @@
 package com.bluetriangle.bluetriangledemo.ui.settings
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.os.Build
 import androidx.lifecycle.ViewModel
+import com.bluetriangle.analytics.Timer
+import com.bluetriangle.analytics.Tracker
+import com.bluetriangle.bluetriangledemo.BuildConfig
+import java.lang.reflect.Field
 
 class SettingsViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
+    val androidVersionName = getAndroidVersion()
+    val appVersion = String.format("%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
+    val sdkVersion = com.bluetriangle.analytics.BuildConfig.SDK_VERSION
+    val flavor = BuildConfig.FLAVOR.uppercase()
+    val siteId = Tracker.instance!!.configuration.siteId
+    val sessionId = Tracker.instance!!.configuration.sessionId
+    val anrEnabled = if(Tracker.instance!!.configuration.isTrackAnrEnabled) "Enabled" else "Disabled"
+    val screenTrackingEnabled = if(Tracker.instance!!.configuration.isScreenTrackingEnabled) "Enabled" else "Disabled"
+
+    fun getAndroidVersion():String {
+        val builder = StringBuilder()
+        builder.append(Build.VERSION.RELEASE)
+
+        val fields: Array<Field> = Build.VERSION_CODES::class.java.fields
+        for (field in fields) {
+            val fieldName: String = field.name
+            var fieldValue = -1
+            try {
+                fieldValue = field.getInt(Any())
+            } catch (e: IllegalArgumentException) {
+                e.printStackTrace()
+            } catch (e: IllegalAccessException) {
+                e.printStackTrace()
+            } catch (e: NullPointerException) {
+                e.printStackTrace()
+            }
+            if (fieldValue == Build.VERSION.SDK_INT) {
+                builder.append(" (").append(fieldName).append(") ")
+                builder.append("SDK ").append(fieldValue)
+            }
+        }
+        return builder.toString()
     }
-    val text: LiveData<String> = _text
+
+    fun testManualTimer() {
+        Timer("Manual Timer", "DemoApplicationTraffic").start().end().submit()
+    }
 }

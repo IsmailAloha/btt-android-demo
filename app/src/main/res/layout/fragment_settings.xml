@@ -6,16 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.settings.SettingsFragment">
 
-    <ImageView
-        android:id="@+id/urlSettingsIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        app:tint="?colorOnSurface"
-        app:layout_constraintStart_toEndOf="@+id/aboutUs"
-        app:layout_constraintTop_toTopOf="@+id/aboutUs"
-        app:srcCompat="@drawable/baseline_settings_24" />
-
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
@@ -211,4 +201,25 @@
         android:text="@string/hybrid_demo"
         app:layout_constraintStart_toStartOf="@+id/screenTrackingEnabledValue"
         app:layout_constraintTop_toBottomOf="@+id/testManualTimer" />
+
+    <Button
+        android:id="@+id/tagUrlButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/tag_url"
+        app:layout_constraintBottom_toBottomOf="@+id/aboutUs"
+        app:layout_constraintStart_toEndOf="@+id/aboutUs"
+        app:layout_constraintTop_toTopOf="@+id/aboutUs" />
+
+    <Button
+        android:id="@+id/copy_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/copy"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/sessionIDValueText"
+        app:layout_constraintStart_toEndOf="@+id/sessionIDValueText"
+        app:layout_constraintTop_toTopOf="@+id/sessionIDValueText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

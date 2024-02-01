@@ -1,7 +1,10 @@
 package com.bluetriangle.bluetriangledemo.compose.screens
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,22 +13,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Card
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -36,23 +39,25 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bluetriangle.analytics.compose.BttTimerEffect
-import com.bluetriangle.bluetriangledemo.AboutActivity
 import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.ui.settings.SettingsViewModel
+import com.bluetriangle.bluetriangledemo.utils.copyToClipboard
+
+class SettingsInfo(val label:String, val value: String, val copyAvailable:Boolean = false)
 
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
     val context = LocalContext.current
     val values = listOf(
-        context.getString(R.string.android_version) to viewModel.androidVersionName,
-        context.getString(R.string.sdk_version) to viewModel.sdkVersion,
-        context.getString(R.string.app_version) to viewModel.appVersion,
-        context.getString(R.string.app_flavor) to viewModel.flavor,
-        context.getString(R.string.site_id) to viewModel.siteId.toString(),
-        context.getString(R.string.session_id) to (viewModel.sessionId ?: ""),
-        context.getString(R.string.anr_enabled) to viewModel.anrEnabled,
-        context.getString(R.string.screen_tracking_enabled) to viewModel.screenTrackingEnabled,
+        SettingsInfo(context.getString(R.string.android_version) , viewModel.androidVersionName),
+        SettingsInfo(context.getString(R.string.sdk_version) , viewModel.sdkVersion),
+        SettingsInfo(context.getString(R.string.app_version) , viewModel.appVersion),
+        SettingsInfo(context.getString(R.string.app_flavor) , viewModel.flavor),
+        SettingsInfo(context.getString(R.string.site_id) , viewModel.siteId.toString()),
+        SettingsInfo(context.getString(R.string.session_id) , (viewModel.sessionId ?: ""), true),
+        SettingsInfo(context.getString(R.string.anr_enabled) , viewModel.anrEnabled),
+        SettingsInfo(context.getString(R.string.screen_tracking_enabled) , viewModel.screenTrackingEnabled),
     )
     val scrollState = rememberScrollState()
     var websiteUrlDialogOpen by rememberSaveable {
@@ -67,7 +72,7 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         values.map {
-            InfoItem(it.first, it.second)
+            InfoItem(it)
         }
         Button(onClick = {
             viewModel.testManualTimer()
@@ -76,17 +81,18 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
         }
         Row {
             Button(onClick = {
-                context.startActivity(Intent(context, AboutActivity::class.java))
+                context.startActivity(Intent(context, ComposeAboutActivity::class.java))
             }) {
                 Text(text = stringResource(R.string.hybrid_demo))
             }
 
-            Icon(Icons.Filled.Settings, contentDescription = "Settings",
-                Modifier
-                    .padding(top = 8.dp, start = 8.dp)
-                    .clickable {
-                        websiteUrlDialogOpen = true
-                    })
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Button(onClick = {
+                websiteUrlDialogOpen = true
+            }) {
+                Text(text = stringResource(R.string.tag_url))
+            }
         }
         if (websiteUrlDialogOpen) {
             WebsiteDialog {
@@ -125,22 +131,33 @@ fun WebsiteDialog(onDismiss: () -> Unit) {
 }
 
 @Composable
-fun InfoItem(label: String, value: String) {
+fun InfoItem(settingsInfo: SettingsInfo) {
+    val context = LocalContext.current
     Column {
         Text(
-            text = label,
+            text = settingsInfo.label,
             style = TextStyle(
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colors.onSurface
             )
         )
         Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = value,
-            style = TextStyle(
-                fontSize = 16.sp,
-                color = MaterialTheme.colors.onSurface
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = settingsInfo.value,
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colors.onSurface
+                )
             )
-        )
+            if(settingsInfo.copyAvailable) {
+                Spacer(modifier = Modifier.width(8.dp))
+                Button(onClick = {
+                    context.copyToClipboard(settingsInfo.label, settingsInfo.value)
+                }) {
+                    Text(text = stringResource(id = R.string.copy), fontSize = 12.sp)
+                }
+            }
+        }
     }
 }

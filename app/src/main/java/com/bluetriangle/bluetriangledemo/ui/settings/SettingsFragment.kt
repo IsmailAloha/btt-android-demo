@@ -11,11 +11,12 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.bluetriangle.bluetriangledemo.AboutActivity
+import com.bluetriangle.bluetriangledemo.HybridDemoLayoutActivity
 import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.DemoApplication.Companion.DEFAULT_TAG_URL
 import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.databinding.FragmentSettingsBinding
+import com.bluetriangle.bluetriangledemo.utils.copyToClipboard
 import com.google.android.material.textfield.TextInputEditText
 
 class SettingsFragment : Fragment() {
@@ -41,10 +42,13 @@ class SettingsFragment : Fragment() {
         _binding?.testManualTimer?.setOnClickListener {
             settingsViewModel.testManualTimer()
         }
-        _binding?.aboutUs?.setOnClickListener {
-            startActivity(Intent(requireContext(), AboutActivity::class.java))
+        _binding?.copyButton?.setOnClickListener {
+            requireContext().copyToClipboard(requireContext().getString(R.string.session_id), settingsViewModel.sessionId.toString())
         }
-        _binding?.urlSettingsIcon?.setOnClickListener {
+        _binding?.aboutUs?.setOnClickListener {
+            startActivity(Intent(requireContext(), HybridDemoLayoutActivity::class.java))
+        }
+        _binding?.tagUrlButton?.setOnClickListener {
             showAboutUrlDialog()
         }
         return root

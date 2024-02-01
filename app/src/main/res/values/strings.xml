@@ -19,4 +19,6 @@
     <string name="title_activity_compose_about">ComposeAboutActivity</string>
     <string name="hybrid_demo">Hybrid Demo</string>
     <string name="done">Done</string>
+    <string name="tag_url">Change Tag URL</string>
+    <string name="copy">Copy</string>
 </resources>

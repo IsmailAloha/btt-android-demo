@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.bluetriangle.android.demo.tests.HeavyLoopTest
+import com.bluetriangle.bluetriangledemo.tests.HeavyLoopTest
 import com.bluetriangle.bluetriangledemo.databinding.FragmentCheckoutBinding
 import com.bluetriangle.bluetriangledemo.utils.AlertDialogState
 import com.bluetriangle.bluetriangledemo.utils.AlertView

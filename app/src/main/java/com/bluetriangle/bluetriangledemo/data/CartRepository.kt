@@ -51,7 +51,11 @@ class CartRepository @Inject constructor(
     }
 
     suspend fun removeCartItem(cartItem: CartItem): Cart? {
-        storeService.deleteCartItem(cartItem.id)
+        try {
+            storeService.deleteCartItem(cartItem.id)
+        } catch (e: Exception) {
+            return null
+        }
         return getCart()
     }
 

@@ -1,5 +1,7 @@
 package com.bluetriangle.android.demo.tests
 
+import com.bluetriangle.bluetriangledemo.tests.BTTTestCase
+
 class DeadLockMainThreadTest : BTTTestCase {
 
     var interval = 10000L

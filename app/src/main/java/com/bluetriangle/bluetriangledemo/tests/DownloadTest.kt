@@ -1,5 +1,6 @@
 package com.bluetriangle.android.demo.tests
 
+import com.bluetriangle.bluetriangledemo.tests.BTTTestCase
 import java.net.URL
 
 class DownloadTest : BTTTestCase {

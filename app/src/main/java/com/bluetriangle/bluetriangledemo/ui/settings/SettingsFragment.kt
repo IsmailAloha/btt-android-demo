@@ -1,15 +1,23 @@
 package com.bluetriangle.bluetriangledemo.ui.settings
 
-import android.os.Build
+import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.bluetriangle.bluetriangledemo.BuildConfig
+import com.bluetriangle.bluetriangledemo.HybridDemoLayoutActivity
+import com.bluetriangle.bluetriangledemo.DemoApplication
+import com.bluetriangle.bluetriangledemo.DemoApplication.Companion.DEFAULT_TAG_URL
+import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.databinding.FragmentSettingsBinding
+import com.bluetriangle.bluetriangledemo.utils.copyToClipboard
+import com.google.android.material.textfield.TextInputEditText
 
 class SettingsFragment : Fragment() {
 
@@ -34,7 +42,32 @@ class SettingsFragment : Fragment() {
         _binding?.testManualTimer?.setOnClickListener {
             settingsViewModel.testManualTimer()
         }
+        _binding?.copyButton?.setOnClickListener {
+            requireContext().copyToClipboard(requireContext().getString(R.string.session_id), settingsViewModel.sessionId.toString())
+        }
+        _binding?.aboutUs?.setOnClickListener {
+            startActivity(Intent(requireContext(), HybridDemoLayoutActivity::class.java))
+        }
+        _binding?.tagUrlButton?.setOnClickListener {
+            showAboutUrlDialog()
+        }
         return root
+    }
+
+    private fun showAboutUrlDialog() {
+        val dialog = Dialog(requireContext(), R.style.AboutDialogWindowTheme)
+        dialog.setContentView(R.layout.about_url_dialog)
+        dialog.window?.setLayout(MATCH_PARENT, WRAP_CONTENT)
+        val doneButton = dialog.findViewById<Button>(R.id.doneButton)
+        val urlField = dialog.findViewById<TextInputEditText>(R.id.tagUrlField)
+        val app = (requireContext().applicationContext as? DemoApplication)
+        val websiteUrl = app?.getTagUrl()?:DEFAULT_TAG_URL
+        urlField.setText(websiteUrl)
+        doneButton.setOnClickListener {
+            app?.setTagUrl(urlField.text.toString())
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     override fun onDestroyView() {

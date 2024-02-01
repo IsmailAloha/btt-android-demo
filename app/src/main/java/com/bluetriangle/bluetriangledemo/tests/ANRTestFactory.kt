@@ -1,5 +1,8 @@
 package com.bluetriangle.android.demo.tests
 
+import com.bluetriangle.bluetriangledemo.tests.BTTTestCase
+import com.bluetriangle.bluetriangledemo.tests.HeavyLoopTest
+
 object ANRTestFactory {
 
     fun getANRTests(): List<BTTTestCase> {

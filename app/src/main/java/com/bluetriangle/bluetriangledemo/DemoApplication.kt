@@ -73,7 +73,7 @@ class DemoApplication : Application() {
         configuration.isLaunchTimeEnabled = true
         configuration.isPerformanceMonitorEnabled = true
         configuration.networkSampleRate = 1.0
-//        configuration.cacheMemoryLimit = 10 * 1000L
+        configuration.cacheMemoryLimit = 10 * 1000L
         configuration.cacheExpiryDuration = 120 * 1000L
         configuration.isMemoryWarningEnabled = true
         configuration.isTrackNetworkStateEnabled = true

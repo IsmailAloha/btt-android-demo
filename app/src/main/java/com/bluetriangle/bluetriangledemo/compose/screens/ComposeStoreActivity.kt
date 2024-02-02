@@ -35,25 +35,24 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bluetriangle.analytics.Tracker
-import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.R
-import com.bluetriangle.bluetriangledemo.SCENARIO_ACTIVITY_RESUME
-import com.bluetriangle.bluetriangledemo.SCENARIO_ACTIVITY_START
 import com.bluetriangle.bluetriangledemo.compose.components.AppBottomNavigationBar
 import com.bluetriangle.bluetriangledemo.compose.components.NavHostContainer
 import com.bluetriangle.bluetriangledemo.compose.components.NavItem
 import com.bluetriangle.bluetriangledemo.compose.theme.BlueTriangleComposeDemoTheme
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.UUID
 
 @AndroidEntryPoint
 class ComposeStoreActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val title = rememberSaveable {
-                mutableStateOf("")
-            }
             BlueTriangleComposeDemoTheme {
+                val title = rememberSaveable {
+                    mutableStateOf("")
+                }
                 val navController = rememberNavController()
                 val navItems = getNavItemsList(navController)
                 Scaffold(topBar = {
@@ -61,9 +60,11 @@ class ComposeStoreActivity : ComponentActivity() {
                 }, bottomBar = {
                     AppBottomNavigationBar(navController = navController, navItems = navItems)
                 }) {
-                    Column(modifier = Modifier
-                        .padding(it)
-                        .fillMaxHeight()) {
+                    Column(
+                        modifier = Modifier
+                            .padding(it)
+                            .fillMaxHeight()
+                    ) {
                         SiteIDBar()
                         NavHostContainer(
                             title,
@@ -74,6 +75,7 @@ class ComposeStoreActivity : ComponentActivity() {
                 }
             }
         }
+
     }
 
     @Composable
@@ -132,7 +134,9 @@ fun getNavItemsList(navController: NavHostController): List<NavItem> {
             )
         }, "cart",
             destinations = listOf(
-                NavItem.Destination("Cart", "cart/home") { CartScreen(navController) },
+                NavItem.Destination("Cart", "cart/home") { CartScreen({
+                    navController.navigate("cart/checkout/${UUID.randomUUID()}")
+                }) },
                 NavItem.Destination(
                     "Checkout",
                     "cart/checkout/{checkoutId}"

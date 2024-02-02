@@ -8,7 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.bluetriangle.bluetriangledemo.ADD_TO_CART_LIMIT
 import com.bluetriangle.bluetriangledemo.data.CartRepository
 import com.bluetriangle.bluetriangledemo.data.Product
+import com.bluetriangle.bluetriangledemo.utils.CPURunner
 import com.bluetriangle.bluetriangledemo.utils.ErrorHandler
+import com.bluetriangle.bluetriangledemo.utils.MemoryHolder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.Main
@@ -32,9 +34,7 @@ class ProductDetailViewModel @Inject constructor(val cartRepository: CartReposit
     fun addToCart(v: View, product: Product) {
         addToCartClickCount++
 
-        if(addToCartClickCount > ADD_TO_CART_LIMIT) {
-            throw AddToCartLimitExceededException(ADD_TO_CART_LIMIT)
-        }
+        handleProductDetailsTestCases(product, addToCartClickCount)
         _isAddingToCart.value = true
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -47,6 +47,18 @@ class ProductDetailViewModel @Inject constructor(val cartRepository: CartReposit
             withContext(Main) {
                 _isAddingToCart.value = false
             }
+        }
+    }
+
+    fun handleProductDetailsTestCases(product: Product, addToCartClickCount: Int) {
+        if(product.isPerfume) {
+            MemoryHolder.allocateMemory()
+        } else if(product.isKeyHolder) {
+            CPURunner.fiftyToEightPercentCPU()
+        } else if(product.isInfinixInBook) {
+            CPURunner.fiftyPercentOfDeviceCapacity()
+        } else if(addToCartClickCount > ADD_TO_CART_LIMIT) {
+            throw AddToCartLimitExceededException(ADD_TO_CART_LIMIT)
         }
     }
 }

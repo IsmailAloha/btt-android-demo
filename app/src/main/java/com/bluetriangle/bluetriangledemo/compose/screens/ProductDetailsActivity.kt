@@ -1,6 +1,7 @@
 package com.bluetriangle.bluetriangledemo.compose.screens
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -38,15 +39,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.IntentCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
+import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.ADD_TO_CART_LIMIT
 import com.bluetriangle.bluetriangledemo.compose.components.ErrorAlertDialog
+import com.bluetriangle.bluetriangledemo.compose.components.MemoryWarningDialog
 import com.bluetriangle.bluetriangledemo.compose.theme.BlueTriangleComposeDemoTheme
 import com.bluetriangle.bluetriangledemo.compose.theme.outline
 import com.bluetriangle.bluetriangledemo.data.Product
-import com.bluetriangle.bluetriangledemo.ui.products.AddToCartLimitExceededException
+import com.bluetriangle.bluetriangledemo.tests.MemoryMonitor
 import com.bluetriangle.bluetriangledemo.ui.products.ProductDetailViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.bluetriangle.bluetriangledemo.utils.MemoryHolder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -59,9 +64,26 @@ class ProductDetailsActivity : ComponentActivity() {
         val product = IntentCompat.getParcelableExtra(intent, "product", Product::class.java)
 
         setContent {
+            val memoryWarningDialog = rememberSaveable {
+                mutableStateOf<MemoryMonitor.MemoryWarning?>(null)
+            }
+            (application as DemoApplication).memoryMonitor.memoryWarningListener =
+                object : MemoryMonitor.MemoryWarningListener {
+                    override fun onMemoryWarning(memoryWarning: MemoryMonitor.MemoryWarning) {
+                        Log.d("MemoryMonitorLogTag", "memory warning received")
+                        runOnUiThread {
+                            memoryWarningDialog.value = memoryWarning
+                        }
+                    }
+                }
             BlueTriangleComposeDemoTheme {
                 Scaffold(topBar = { TopAppBar(title = { Text(text = "Product Details") }) }) {
                     ProductDetails(it, product!!)
+                }
+                memoryWarningDialog.value?.let {
+                    MemoryWarningDialog {
+                        memoryWarningDialog.value = null
+                    }
                 }
             }
         }
@@ -127,9 +149,7 @@ class ProductDetailsActivity : ComponentActivity() {
                                 enabled = !addingToCart.value,
                                 onClick = {
                                     addToCartCount.intValue = addToCartCount.intValue + 1
-                                    if(addToCartCount.intValue > ADD_TO_CART_LIMIT) {
-                                        throw AddToCartLimitExceededException(ADD_TO_CART_LIMIT)
-                                    }
+                                    viewModel.handleProductDetailsTestCases(product, addToCartCount.intValue)
                                     scope.launch {
                                         try {
                                             addingToCart.value = true
@@ -154,6 +174,11 @@ class ProductDetailsActivity : ComponentActivity() {
                 })
         }
         ErrorAlertDialog(errorHandler = viewModel.errorHandler)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        MemoryHolder.clearMemory()
     }
 }
 

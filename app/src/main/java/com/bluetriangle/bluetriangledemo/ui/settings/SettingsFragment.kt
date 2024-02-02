@@ -33,6 +33,7 @@ class SettingsFragment : Fragment() {
 
         _binding?.androidVersionNameValue?.text = settingsViewModel.androidVersionName
         _binding?.appVersionValue?.text = settingsViewModel.appVersion
+        _binding?.versionValue?.text = settingsViewModel.appVersion
         _binding?.flavorValue?.text = settingsViewModel.flavor
         _binding?.sdkVersionValue?.text = settingsViewModel.sdkVersion
         _binding?.siteIdValue?.text = settingsViewModel.siteId

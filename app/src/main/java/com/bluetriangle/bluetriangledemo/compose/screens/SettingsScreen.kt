@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,8 +33,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,20 +48,23 @@ import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.ui.settings.SettingsViewModel
 import com.bluetriangle.bluetriangledemo.utils.copyToClipboard
 
-class SettingsInfo(val label:String, val value: String, val copyAvailable:Boolean = false)
+class SettingsInfo(val label: String, val value: String, val copyAvailable: Boolean = false)
 
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
     val context = LocalContext.current
     val values = listOf(
-        SettingsInfo(context.getString(R.string.android_version) , viewModel.androidVersionName),
-        SettingsInfo(context.getString(R.string.sdk_version) , viewModel.sdkVersion),
-        SettingsInfo(context.getString(R.string.app_version) , viewModel.appVersion),
-        SettingsInfo(context.getString(R.string.app_flavor) , viewModel.flavor),
-        SettingsInfo(context.getString(R.string.site_id) , viewModel.siteId.toString()),
-        SettingsInfo(context.getString(R.string.session_id) , (viewModel.sessionId ?: ""), true),
-        SettingsInfo(context.getString(R.string.anr_enabled) , viewModel.anrEnabled),
-        SettingsInfo(context.getString(R.string.screen_tracking_enabled) , viewModel.screenTrackingEnabled),
+//        SettingsInfo(context.getString(R.string.android_version), viewModel.androidVersionName),
+//        SettingsInfo(context.getString(R.string.sdk_version), viewModel.sdkVersion),
+//        SettingsInfo(context.getString(R.string.app_version), viewModel.appVersion),
+//        SettingsInfo(context.getString(R.string.app_flavor), viewModel.flavor),
+        SettingsInfo(context.getString(R.string.site_id), viewModel.siteId.toString()),
+        SettingsInfo(context.getString(R.string.session_id), (viewModel.sessionId ?: ""), true),
+//        SettingsInfo(context.getString(R.string.anr_enabled), viewModel.anrEnabled),
+//        SettingsInfo(
+//            context.getString(R.string.screen_tracking_enabled),
+//            viewModel.screenTrackingEnabled
+//        ),
     )
     val scrollState = rememberScrollState()
     var websiteUrlDialogOpen by rememberSaveable {
@@ -71,6 +78,14 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
             .verticalScroll(scrollState),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.icon_compose),
+            contentDescription = "Compose Icon",
+            modifier = Modifier
+                .size(72.dp)
+                .align(Alignment.CenterHorizontally)
+        )
+        AppInfo(viewModel)
         values.map {
             InfoItem(it)
         }
@@ -103,6 +118,49 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
 }
 
 @Composable
+fun AppInfo(viewModel: SettingsViewModel) {
+    Column(Modifier.fillMaxWidth()) {
+        Text(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            style = TextStyle(
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = MaterialTheme.colors.onSurface
+            ),
+            text = stringResource(id = R.string.app_name)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            style = TextStyle(
+                fontStyle = FontStyle.Italic,
+                fontSize = 16.sp,
+                color = MaterialTheme.colors.onSurface
+            ),
+            text = "This app is built with Compose"
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            style = TextStyle(
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                color = MaterialTheme.colors.onSurface
+            ),
+            text = "Version"
+        )
+        Text(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            style = TextStyle(
+                fontSize = 16.sp,
+                color = MaterialTheme.colors.onSurface
+            ),
+            text = viewModel.appVersion
+        )
+    }
+}
+
+@Composable
 fun WebsiteDialog(onDismiss: () -> Unit) {
     val app = (LocalContext.current.applicationContext as? DemoApplication)
     val currentUrl = app?.getTagUrl()
@@ -116,13 +174,20 @@ fun WebsiteDialog(onDismiss: () -> Unit) {
             shape = RoundedCornerShape(16.dp),
         ) {
             Column(modifier = Modifier.padding(16.dp, 32.dp)) {
-                TextField(value = tagUrl, modifier = Modifier.fillMaxWidth(), singleLine = true, onValueChange = {
-                    tagUrl = it
-                })
-                Button(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(0.dp, 0.dp, 4.dp, 4.dp), onClick = {
-                    app?.setTagUrl(tagUrl)
-                    onDismiss()
-                }) {
+                TextField(
+                    value = tagUrl,
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    onValueChange = {
+                        tagUrl = it
+                    })
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(0.dp, 0.dp, 4.dp, 4.dp),
+                    onClick = {
+                        app?.setTagUrl(tagUrl)
+                        onDismiss()
+                    }) {
                     Text(text = stringResource(id = R.string.done))
                 }
             }
@@ -150,7 +215,7 @@ fun InfoItem(settingsInfo: SettingsInfo) {
                     color = MaterialTheme.colors.onSurface
                 )
             )
-            if(settingsInfo.copyAvailable) {
+            if (settingsInfo.copyAvailable) {
                 Spacer(modifier = Modifier.width(8.dp))
                 Button(onClick = {
                     context.copyToClipboard(settingsInfo.label, settingsInfo.value)

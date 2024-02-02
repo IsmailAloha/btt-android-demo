@@ -1,5 +1,5 @@
 <resources>
-    <string name="title_activity_store">Blue Triangle Demo Store</string>
+    <string name="title_activity_store">BTT e-Com</string>
     <string name="title_products">Products</string>
     <string name="title_cart">Cart</string>
     <string name="title_settings">Settings</string>
@@ -16,6 +16,10 @@
     <string name="session_id">Session ID</string>
     <string name="sessionid_accessibility">sessionid</string>
     <string name="test_manual_timer">Test Manual Timer</string>
+    <string name="memory_warning_title">Memory Warning</string>
+    <string name="memory_warning_message">Memory warning received. Your app is using too much memory than expected.</string>
+    <string name="memory_warning_ok">OK</string>
+    <string name="ip_address">192.168.0.106</string>
     <string name="title_activity_compose_about">ComposeAboutActivity</string>
     <string name="hybrid_demo">Hybrid Demo</string>
     <string name="done">Done</string>

@@ -15,8 +15,8 @@ android {
         applicationId "com.bluetriangle.bluetriangledemo"
         minSdk 21
         targetSdk 34
-        versionCode 13
-        versionName "2.10.0"
+        versionCode 12
+        versionName "2.9.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -35,7 +35,7 @@ android {
         create("compose") {
             dimension = "version"
             applicationIdSuffix = ".compose"
-            resValue "string", "app_name", "Ecommerce Demo Compose"
+            resValue "string", "app_name", "BTT e-Com"
             manifestPlaceholders = [
                     appIcon: "@mipmap/ic_launcher_compose",
                     appIconRound: "@mipmap/ic_launcher_compose_round"
@@ -44,7 +44,7 @@ android {
         create("layout") {
             dimension = "version"
             applicationIdSuffix = ".layout"
-            resValue "string", "app_name", "Ecommerce Demo Layout"
+            resValue "string", "app_name", "BTT e-Com"
             manifestPlaceholders = [
                     appIcon: "@mipmap/ic_launcher_layout",
                     appIconRound: "@mipmap/ic_launcher_layout_round"
@@ -76,19 +76,19 @@ android {
 
 dependencies {
     implementation 'com.github.IsmailAloha:btt-android-sdk:f7137398f2'
-    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
 
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-compiler:2.44"
 
-    implementation "com.squareup.okhttp3:okhttp-bom:4.9.2"
+    implementation platform("com.squareup.okhttp3:okhttp-bom:4.9.2")
     implementation "com.squareup.okhttp3:okhttp"
     implementation "com.squareup.okhttp3:logging-interceptor"
 
@@ -100,8 +100,8 @@ dependencies {
     implementation "com.github.bumptech.glide:compose:1.0.0-beta01"
     implementation "com.github.bumptech.glide:okhttp3-integration:4.11.0"
 
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.7.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.7.3'
 
     // Jetpack Compose Dependencies
 
@@ -110,15 +110,15 @@ dependencies {
     implementation 'androidx.compose.ui:ui'
     implementation 'androidx.compose.ui:ui-graphics'
     implementation 'androidx.compose.ui:ui-tooling-preview'
-    implementation 'androidx.compose.material:material-android:1.6.0-alpha03'
+    implementation 'androidx.compose.material:material-android:1.6.0-alpha06'
     implementation 'androidx.fragment:fragment-ktx:1.6.1'
-    implementation "androidx.navigation:navigation-compose:2.7.0"
+    implementation "androidx.navigation:navigation-compose:2.7.3"
     implementation("io.coil-kt:coil:2.4.0")
     implementation("io.coil-kt:coil-compose:2.4.0")
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2"
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     // Lifecycle
-    def lifecycle_version = "2.6.0-alpha05"
+    def lifecycle_version = "2.6.2"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version"

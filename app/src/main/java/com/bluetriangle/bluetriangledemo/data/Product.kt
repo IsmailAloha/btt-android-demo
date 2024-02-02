@@ -1,6 +1,7 @@
 package com.bluetriangle.bluetriangledemo.data
 
 import android.os.Parcelable
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -10,4 +11,20 @@ data class Product(
     val description: String,
     val image: String,
     val price: Double,
-) : Parcelable
+) : Parcelable{
+    @IgnoredOnParcel
+    val isKeyHolder: Boolean
+        get() = name == "Key Holder"
+
+    @IgnoredOnParcel
+    val isInfinixInBook: Boolean
+        get() = name == "Infinix INBOOK"
+
+    @IgnoredOnParcel
+    val isOppo: Boolean
+        get() = name == "OPPOF19"
+
+    @IgnoredOnParcel
+    val isPerfume: Boolean
+        get() = name.contains("Perfume", true)
+}

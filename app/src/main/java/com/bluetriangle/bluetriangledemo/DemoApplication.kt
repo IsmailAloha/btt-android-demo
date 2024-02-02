@@ -5,11 +5,15 @@ import android.util.Log
 import com.bluetriangle.analytics.BlueTriangleConfiguration
 import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.bluetriangledemo.tests.HeavyLoopTest
+import com.bluetriangle.bluetriangledemo.tests.MemoryMonitor
 import com.bluetriangle.bluetriangledemo.utils.generateDemoWebsiteFromTemplate
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class DemoApplication : Application() {
+
+    var memoryMonitor = MemoryMonitor()
+
     companion object {
         lateinit var tinyDB: TinyDB
         const val TAG_URL = "TAG_URL"
@@ -55,6 +59,8 @@ class DemoApplication : Application() {
             setTagUrl(DEFAULT_TAG_URL)
         }
         checkAndRunLaunchScenario(SCENARIO_APP_CREATE)
+
+        Thread(memoryMonitor).start()
     }
 
     private fun initTracker(siteId: String?, anrDetection: Boolean, screenTracking: Boolean) {
@@ -69,6 +75,8 @@ class DemoApplication : Application() {
         configuration.networkSampleRate = 1.0
 //        configuration.cacheMemoryLimit = 10 * 1000L
         configuration.cacheExpiryDuration = 120 * 1000L
+        configuration.isMemoryWarningEnabled = true
+        configuration.isTrackNetworkStateEnabled = true
         Tracker.init(this, configuration)
         Tracker.instance?.trackCrashes()
     }

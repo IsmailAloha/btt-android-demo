@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -43,14 +44,13 @@ import com.bumptech.glide.integration.compose.GlideImage
 fun ProductsScreen(productsViewModel: ProductsViewModel = hiltViewModel()) {
     BttTimerEffect(screenName = "Product Tab")
     val products = productsViewModel.products.asFlow().collectAsState(listOf())
-    Column(
+    LazyColumn(
         Modifier
             .fillMaxSize()
             .padding(8.dp)
-            .verticalScroll(rememberScrollState())
     ) {
-        products.value.map { product ->
-            ProductItem(product)
+        items(products.value.size) {
+            ProductItem(products.value[it])
         }
     }
     ErrorAlertDialog(errorHandler = productsViewModel.errorHandler)

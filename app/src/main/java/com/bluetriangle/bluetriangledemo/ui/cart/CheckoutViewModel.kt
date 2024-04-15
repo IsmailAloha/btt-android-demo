@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bluetriangle.bluetriangledemo.data.Cart
 import com.bluetriangle.bluetriangledemo.data.CartRepository
+import com.bluetriangle.bluetriangledemo.utils.ErrorHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,16 +19,21 @@ class CheckoutViewModel @Inject constructor(private val cartRepository: CartRepo
     private val _cart = MutableLiveData<Cart?>()
 
     val cart: LiveData<Cart?> = _cart
+    val errorHandler = ErrorHandler()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            val cart = cartRepository.getCart()
-            cart?.let {
-                cartRepository.checkout(it)
-            }
+            try {
+                val cart = cartRepository.getCart()
+                cart?.let {
+                    cartRepository.checkout(it)
+                }
 
-            withContext(Dispatchers.Main) {
-                _cart.value = cart?.copy(confirmation = UUID.randomUUID().toString(), shipping = "9.99")
+                withContext(Dispatchers.Main) {
+                    _cart.value = cart?.copy(confirmation = UUID.randomUUID().toString(), shipping = "9.99")
+                }
+            } catch (e: Exception) {
+                errorHandler.showError(e)
             }
         }
     }

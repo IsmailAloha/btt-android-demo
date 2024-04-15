@@ -14,4 +14,8 @@ data class CartItem(
 ) : Parcelable {
     @IgnoredOnParcel
     val total: Double = quantity * price
+
+    @IgnoredOnParcel
+    val isPerfume: Boolean
+        get() = productReference?.name?.contains("Perfume") == true
 }

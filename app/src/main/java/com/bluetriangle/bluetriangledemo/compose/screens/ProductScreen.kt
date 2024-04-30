@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.asFlow
 import com.bluetriangle.analytics.compose.BttTimerEffect
+import com.bluetriangle.bluetriangledemo.compose.ManualTimerEffect
 import com.bluetriangle.bluetriangledemo.compose.components.ErrorAlertDialog
 import com.bluetriangle.bluetriangledemo.compose.theme.outline
 import com.bluetriangle.bluetriangledemo.data.Product
@@ -43,6 +44,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 @Composable
 fun ProductsScreen(productsViewModel: ProductsViewModel = hiltViewModel()) {
     BttTimerEffect(screenName = "Product Tab")
+    ManualTimerEffect(screenName = "ProductsTabManualTimer")
     val products = productsViewModel.products.asFlow().collectAsState(listOf())
     LazyColumn(
         Modifier

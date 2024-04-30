@@ -35,7 +35,7 @@ class ProductDetailFragment : Fragment(), AlertView {
             productDescription.text = args.product.description
             productImage.loadImage(args.product.image)
             addToCartButton.setOnClickListener { v ->
-                productDetailViewModel.addToCart(v, args.product)
+                productDetailViewModel.addToCart(args.product)
             }
         }
 

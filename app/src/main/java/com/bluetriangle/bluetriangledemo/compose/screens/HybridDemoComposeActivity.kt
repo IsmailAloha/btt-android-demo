@@ -15,6 +15,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,10 +27,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.bluetriangle.bluetriangledemo.BTTWebViewClient
+import com.bluetriangle.bluetriangledemo.utils.BTTWebViewClient
 import com.bluetriangle.bluetriangledemo.DemoApplication.Companion.DEMO_WEBSITE_URL
 import com.bluetriangle.bluetriangledemo.R
-import com.bluetriangle.bluetriangledemo.TitleChromeClient
+import com.bluetriangle.bluetriangledemo.utils.TitleChromeClient
 import com.bluetriangle.bluetriangledemo.compose.theme.BlueTriangleComposeDemoTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -51,7 +52,7 @@ class ComposeAboutActivity : ComponentActivity() {
                             onBackPressedDispatcher.onBackPressed()
                         }, modifier = Modifier.padding(8.dp)) {
                             Icon(
-                                Icons.Filled.ArrowBack,
+                                Icons.AutoMirrored.Filled.ArrowBack,
                                 "Back",
                                 tint = MaterialTheme.colors.onPrimary
                             )

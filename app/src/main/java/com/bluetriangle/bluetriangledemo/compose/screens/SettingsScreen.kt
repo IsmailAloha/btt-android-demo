@@ -109,6 +109,13 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
                 Text(text = stringResource(R.string.tag_url))
             }
         }
+
+        Button(onClick = {
+            context.startActivity(Intent(context, ConfigurationComposeActivity::class.java))
+        }) {
+            Text(text = stringResource(R.string.configuration))
+        }
+
         if (websiteUrlDialogOpen) {
             WebsiteDialog {
                 websiteUrlDialogOpen = false

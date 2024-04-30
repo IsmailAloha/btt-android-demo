@@ -1,11 +1,10 @@
 package com.bluetriangle.bluetriangledemo.ui.products
 
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bluetriangle.bluetriangledemo.ADD_TO_CART_LIMIT
+import com.bluetriangle.bluetriangledemo.utils.ADD_TO_CART_LIMIT
 import com.bluetriangle.bluetriangledemo.data.CartRepository
 import com.bluetriangle.bluetriangledemo.data.Product
 import com.bluetriangle.bluetriangledemo.utils.CPURunner
@@ -31,7 +30,7 @@ class ProductDetailViewModel @Inject constructor(val cartRepository: CartReposit
 
     val isAddingToCart: LiveData<Boolean> = _isAddingToCart
 
-    fun addToCart(v: View, product: Product) {
+    fun addToCart(product: Product) {
         addToCartClickCount++
 
         handleProductDetailsTestCases(product, addToCartClickCount)

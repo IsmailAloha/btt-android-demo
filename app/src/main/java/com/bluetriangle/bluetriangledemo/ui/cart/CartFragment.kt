@@ -10,7 +10,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bluetriangle.analytics.Timer
+import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.bluetriangledemo.R
+import com.bluetriangle.bluetriangledemo.TrackedFragment
 import com.bluetriangle.bluetriangledemo.adapters.CartItemAdapter
 import com.bluetriangle.bluetriangledemo.adapters.ProductAdapter
 import com.bluetriangle.bluetriangledemo.data.CartItem
@@ -19,13 +22,16 @@ import com.bluetriangle.bluetriangledemo.databinding.FragmentCartBinding
 import com.bluetriangle.bluetriangledemo.ui.products.ProductsFragmentDirections
 import com.bluetriangle.bluetriangledemo.utils.AlertDialogState
 import com.bluetriangle.bluetriangledemo.utils.AlertView
+import com.bluetriangle.bluetriangledemo.utils.MANUAL_TIMER_SEGMENT
 import com.bluetriangle.bluetriangledemo.utils.showAlert
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CartFragment : Fragment(), AlertView {
+class CartFragment : TrackedFragment(), AlertView {
 
     private var _binding: FragmentCartBinding? = null
+
+    override fun getPageName() = "CartFragmentManualTimer"
 
     private val binding get() = _binding!!
 

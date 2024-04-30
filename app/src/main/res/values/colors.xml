@@ -4,6 +4,7 @@
     <color name="colorSecondary">#f19327</color>
 
     <color name="black">#FF000000</color>
+    <color name="lightGrey">#FF999999</color>
     <color name="white">#FFFFFFFF</color>
     <color name="text_color">#FF000000</color>
 

@@ -37,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.asFlow
 import com.bluetriangle.analytics.compose.BttTimerEffect
 import com.bluetriangle.bluetriangledemo.R
+import com.bluetriangle.bluetriangledemo.compose.ManualTimerEffect
 import com.bluetriangle.bluetriangledemo.compose.components.ErrorAlertDialog
 import com.bluetriangle.bluetriangledemo.compose.theme.outline
 import com.bluetriangle.bluetriangledemo.data.CartItem
@@ -50,6 +51,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun CartScreen(navigateToCart: ()->Unit, viewModel: CartViewModel = hiltViewModel()) {
     BttTimerEffect(screenName = "Cart_Screen")
+    ManualTimerEffect(screenName = "CartScreenManualTimer")
     val scope = rememberCoroutineScope()
     val cart = viewModel.cart.asFlow().collectAsState(null)
     val cartItems = cart.value?.items ?: listOf()

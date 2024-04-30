@@ -1,4 +1,4 @@
-package com.bluetriangle.bluetriangledemo
+package com.bluetriangle.bluetriangledemo.utils
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -8,7 +8,7 @@ class TinyDB(context: Context) {
         context.getSharedPreferences("BlueTriangleDemo", Context.MODE_PRIVATE)
 
     fun getString(key: String): String? {
-        return sharedPref.getString(key, "")
+        return sharedPref.getString(key, null)
     }
 
     fun getString(key: String, default: String?): String? {

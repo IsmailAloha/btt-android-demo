@@ -1,4 +1,4 @@
-package com.bluetriangle.bluetriangledemo
+package com.bluetriangle.bluetriangledemo.layout
 
 import android.os.Bundle
 import android.view.Menu
@@ -6,6 +6,10 @@ import android.view.MenuItem
 import android.webkit.WebView
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
+import com.bluetriangle.bluetriangledemo.utils.BTTWebViewClient
+import com.bluetriangle.bluetriangledemo.DemoApplication
+import com.bluetriangle.bluetriangledemo.R
+import com.bluetriangle.bluetriangledemo.utils.TitleChromeClient
 import com.bluetriangle.bluetriangledemo.databinding.ActivityHybridDemoLayoutBinding
 
 

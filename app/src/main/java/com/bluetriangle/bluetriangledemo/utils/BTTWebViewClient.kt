@@ -1,4 +1,4 @@
-package com.bluetriangle.bluetriangledemo
+package com.bluetriangle.bluetriangledemo.utils
 
 import android.graphics.Bitmap
 import android.webkit.WebView

@@ -1,4 +1,4 @@
-package com.bluetriangle.bluetriangledemo
+package com.bluetriangle.bluetriangledemo.layout
 
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
@@ -9,6 +9,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bluetriangle.analytics.Tracker
+import com.bluetriangle.bluetriangledemo.DemoApplication
+import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.databinding.ActivityStoreBinding
 import com.bluetriangle.bluetriangledemo.tests.MemoryMonitor
 import dagger.hilt.android.AndroidEntryPoint

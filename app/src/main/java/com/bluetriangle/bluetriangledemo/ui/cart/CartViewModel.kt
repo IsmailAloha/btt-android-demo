@@ -1,13 +1,12 @@
 package com.bluetriangle.bluetriangledemo.ui.cart
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bluetriangle.bluetriangledemo.DemoApplication
-import com.bluetriangle.bluetriangledemo.KEY_LAUNCH_SCENARIO
-import com.bluetriangle.bluetriangledemo.KEY_LAUNCH_TEST
+import com.bluetriangle.bluetriangledemo.utils.KEY_LAUNCH_SCENARIO
+import com.bluetriangle.bluetriangledemo.utils.KEY_LAUNCH_TEST
 import com.bluetriangle.bluetriangledemo.data.Cart
 import com.bluetriangle.bluetriangledemo.data.CartItem
 import com.bluetriangle.bluetriangledemo.data.CartRepository
@@ -17,8 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.contract
 
 @HiltViewModel
 class CartViewModel @Inject constructor(val cartRepository: CartRepository) : ViewModel() {

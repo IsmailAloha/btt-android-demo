@@ -1,8 +1,14 @@
-package com.bluetriangle.bluetriangledemo
+package com.bluetriangle.bluetriangledemo.layout
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.bluetriangle.bluetriangledemo.BuildConfig
+import com.bluetriangle.bluetriangledemo.DemoApplication
+import com.bluetriangle.bluetriangledemo.R
+import com.bluetriangle.bluetriangledemo.utils.SCENARIO_ACTIVITY_CREATE
+import com.bluetriangle.bluetriangledemo.utils.SCENARIO_ACTIVITY_RESUME
+import com.bluetriangle.bluetriangledemo.utils.SCENARIO_ACTIVITY_START
 import com.bluetriangle.bluetriangledemo.compose.screens.ComposeStoreActivity
 
 class LauncherActivity : AppCompatActivity() {

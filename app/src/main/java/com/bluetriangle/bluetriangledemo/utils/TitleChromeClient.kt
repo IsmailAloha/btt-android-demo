@@ -1,4 +1,4 @@
-package com.bluetriangle.bluetriangledemo
+package com.bluetriangle.bluetriangledemo.utils
 
 import android.webkit.WebChromeClient
 import android.webkit.WebView

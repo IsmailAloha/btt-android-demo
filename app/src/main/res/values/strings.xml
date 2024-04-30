@@ -25,4 +25,15 @@
     <string name="done">Done</string>
     <string name="tag_url">Change Tag URL</string>
     <string name="copy">Copy</string>
+    <string name="configuration">Configuration</string>
+    <string name="keep_default_configurations">Keep Default Configurations</string>
+    <string name="launch_time">Launch Time</string>
+    <string name="screen_tracking">Screen Tracking</string>
+    <string name="crash_tracking">Crash Tracking</string>
+    <string name="anr_tracking">ANR Tracking</string>
+    <string name="memory_warning">Memory Warning</string>
+    <string name="network_state_tracking">Network State Tracking</string>
+    <string name="network_capturing">Network Capturing</string>
+    <string name="performance_monitoring">Performance Monitoring</string>
+    <string name="apply">Apply</string>
 </resources>

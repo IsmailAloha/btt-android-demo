@@ -1,13 +1,27 @@
 package com.bluetriangle.bluetriangledemo
 
+import android.app.AlarmManager
 import android.app.Application
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.util.Log
+import androidx.core.app.AlarmManagerCompat
 import com.bluetriangle.analytics.BlueTriangleConfiguration
 import com.bluetriangle.analytics.Tracker
+import com.bluetriangle.bluetriangledemo.layout.LauncherActivity
 import com.bluetriangle.bluetriangledemo.tests.HeavyLoopTest
 import com.bluetriangle.bluetriangledemo.tests.MemoryMonitor
+import com.bluetriangle.bluetriangledemo.utils.DEFAULT_SITE_ID
+import com.bluetriangle.bluetriangledemo.utils.KEY_LAUNCH_SCENARIO
+import com.bluetriangle.bluetriangledemo.utils.KEY_LAUNCH_TEST
+import com.bluetriangle.bluetriangledemo.utils.KEY_SHOULD_NOT_SHOW_CONFIGURATION
+import com.bluetriangle.bluetriangledemo.utils.KEY_SITE_ID
+import com.bluetriangle.bluetriangledemo.utils.SCENARIO_APP_CREATE
+import com.bluetriangle.bluetriangledemo.utils.TinyDB
 import com.bluetriangle.bluetriangledemo.utils.generateDemoWebsiteFromTemplate
 import dagger.hilt.android.HiltAndroidApp
+import kotlin.system.exitProcess
 
 @HiltAndroidApp
 class DemoApplication : Application() {
@@ -18,6 +32,8 @@ class DemoApplication : Application() {
         lateinit var tinyDB: TinyDB
         const val TAG_URL = "TAG_URL"
         const val DEFAULT_TAG_URL = "$DEFAULT_SITE_ID.btttag.com/btt.js"
+
+        private lateinit var instance: DemoApplication
 
         private var demoWebsiteUrl = ""
         val DEMO_WEBSITE_URL
@@ -39,19 +55,33 @@ class DemoApplication : Application() {
                 HeavyLoopTest(3L).run()
             }
         }
+
+        fun restart() {
+            val mStartActivity = Intent(instance, LauncherActivity::class.java)
+            val pendingIntentId = 123456
+            val pendingIntent = PendingIntent.getActivity(
+                instance,
+                pendingIntentId,
+                mStartActivity,
+                PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            (instance.getSystemService(Context.ALARM_SERVICE) as AlarmManager)[AlarmManager.RTC, System.currentTimeMillis() + 100] =
+                pendingIntent
+            exitProcess(0)
+        }
     }
 
     override fun onCreate() {
         super.onCreate()
         tinyDB = TinyDB(applicationContext)
 
+        instance = this
+
         val launchTest = tinyDB.getBoolean(KEY_LAUNCH_TEST)
         Log.d("DemoApplication", "Application.onCreate: Launch Test: $launchTest")
         val siteId = tinyDB.getString(KEY_SITE_ID, DEFAULT_SITE_ID)
-        val anrDetection = tinyDB.getBoolean(KEY_ANR_ENABLED, true)
-        val screenTracking = tinyDB.getBoolean(KEY_SCREEN_TRACKING_ENABLED, true)
 
-        initTracker(siteId, anrDetection, screenTracking)
+        initTracker(siteId)
 
         demoWebsiteUrl = "file://${filesDir.absolutePath}/index.html"
 
@@ -63,22 +93,28 @@ class DemoApplication : Application() {
         Thread(memoryMonitor).start()
     }
 
-    private fun initTracker(siteId: String?, anrDetection: Boolean, screenTracking: Boolean) {
+    private fun initTracker(siteId: String?) {
         if (siteId.isNullOrBlank()) return
 
+        val config = ConfigurationManager.getConfig()
         val configuration = BlueTriangleConfiguration()
         configuration.siteId = siteId
-        configuration.isTrackAnrEnabled = anrDetection
-        configuration.isScreenTrackingEnabled = screenTracking
-        configuration.isLaunchTimeEnabled = true
-        configuration.isPerformanceMonitorEnabled = true
-        configuration.networkSampleRate = 1.0
         configuration.cacheMemoryLimit = 10 * 1000L
         configuration.cacheExpiryDuration = 120 * 1000L
-        configuration.isMemoryWarningEnabled = true
-        configuration.isTrackNetworkStateEnabled = true
+        configuration.isDebug = true
+        Log.d("BlueTriangle", "BTTConfigurationTag received: ${config}")
+
+        if(!config.isDefault) {
+            configuration.isTrackAnrEnabled = config.isANRTrackingEnabled
+            configuration.isScreenTrackingEnabled = config.isScreenTrackingEnabled
+            configuration.isLaunchTimeEnabled = config.isLaunchTimeEnabled
+            configuration.isPerformanceMonitorEnabled = config.isPerformanceMonitoringEnabled
+            configuration.isTrackCrashesEnabled = config.isCrashTrackingEnabled
+            configuration.networkSampleRate = if(config.isNetworkCapturingEnabled) 1.0 else 0.0
+            configuration.isMemoryWarningEnabled = config.isMemoryWarningEnabled
+            configuration.isTrackNetworkStateEnabled = config.isNetworkStateTrackingEnabled
+        }
         Tracker.init(this, configuration)
-        Tracker.instance?.trackCrashes()
     }
 
     fun hasTagUrl(): Boolean {

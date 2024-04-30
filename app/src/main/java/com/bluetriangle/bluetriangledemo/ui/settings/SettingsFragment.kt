@@ -11,11 +11,12 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.bluetriangle.bluetriangledemo.HybridDemoLayoutActivity
+import com.bluetriangle.bluetriangledemo.layout.HybridDemoLayoutActivity
 import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.DemoApplication.Companion.DEFAULT_TAG_URL
 import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.databinding.FragmentSettingsBinding
+import com.bluetriangle.bluetriangledemo.layout.ConfigurationLayoutActivity
 import com.bluetriangle.bluetriangledemo.utils.copyToClipboard
 import com.google.android.material.textfield.TextInputEditText
 
@@ -51,6 +52,9 @@ class SettingsFragment : Fragment() {
         }
         _binding?.tagUrlButton?.setOnClickListener {
             showAboutUrlDialog()
+        }
+        _binding?.configuration?.setOnClickListener {
+            startActivity(Intent(requireContext(), ConfigurationLayoutActivity::class.java))
         }
         return root
     }

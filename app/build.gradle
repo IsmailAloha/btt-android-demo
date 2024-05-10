@@ -16,7 +16,7 @@ android {
         minSdk 21
         targetSdk 34
         versionCode 14
-        versionName "2.9.1"
+        versionName "2.10.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -76,7 +76,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.github.IsmailAloha:btt-android-sdk:e98193e006'
+    implementation 'com.github.blue-triangle-tech:btt-android-sdk:2.10.0'
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'

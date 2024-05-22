@@ -1,5 +1,6 @@
 package com.bluetriangle.bluetriangledemo.api
 
+import android.util.Log
 import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.analytics.okhttp.BlueTriangleOkHttpInterceptor
 import com.bluetriangle.bluetriangledemo.data.Cart
@@ -56,16 +57,19 @@ interface StoreService {
         private const val BASE_URL = "http://34.31.235.63:8000/btriangle/"
 
         fun create(): StoreService {
+            Log.d("StoreServiceLog", "Initailizing...")
             val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
 
-            val client = OkHttpClient.Builder()
+            val clientBuilder = OkHttpClient.Builder()
                 .addInterceptor(logger)
-                .addInterceptor(BlueTriangleOkHttpInterceptor(Tracker.instance!!.configuration))
-                .build()
+
+            if(Tracker.instance != null) {
+                clientBuilder.addInterceptor(BlueTriangleOkHttpInterceptor(Tracker.instance!!.configuration))
+            }
 
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .client(client)
+                .client(clientBuilder.build())
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build()
                 .create(StoreService::class.java)

@@ -4,9 +4,14 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.util.Log
+import android.util.TypedValue
 import android.webkit.WebView
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.DemoApplication.Companion.DEMO_WEBSITE_URL
 import com.bumptech.glide.Glide

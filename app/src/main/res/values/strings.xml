@@ -36,4 +36,8 @@
     <string name="network_capturing">Network Capturing</string>
     <string name="performance_monitoring">Performance Monitoring</string>
     <string name="apply">Apply</string>
+    <string name="configuration_settings">Configuration Settings</string>
+    <string name="configure_on_launch">Configure on Launch</string>
+    <string name="add_delay">Add Delay</string>
+    <string name="launch_configuration">Launch Configuration</string>
 </resources>

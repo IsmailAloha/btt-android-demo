@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -10,189 +10,330 @@
             type="com.bluetriangle.bluetriangledemo.ConfigurationViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".layout.ConfigurationLayoutActivity">
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/keep_default"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:onCheckedChanged="@{(switch, checked)-> viewModel.onKeepDefaultChanged(checked)}"
-            android:checked="@{viewModel.isDefault()}"
-            android:text="@string/keep_default_configurations"
-            android:textColor="@color/text_color"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toTopOf="@+id/guideline4" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/launch_time"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:enabled="@{!viewModel.isDefault()}"
-            android:checked="@{viewModel.isDefault() || viewModel.isLaunchTimeEnabled()}"
-            android:onCheckedChanged="@{(switch, checked)-> viewModel.onLaunchTimeChanged(checked)}"
-            android:text="@string/launch_time"
-            android:textColor="@{viewModel.isDefault() ? @color/lightGrey: @color/text_color}"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/screen_tracking" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/screen_tracking"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="16dp"
-            android:enabled="@{!viewModel.isDefault()}"
-            android:checked="@{viewModel.isDefault() || viewModel.isScreenTrackingEnabled()}"
-            android:onCheckedChanged="@{(switch, checked)-> viewModel.onScreenTrackingChanged(checked)}"
-            android:text="@string/screen_tracking"
-            android:textColor="@{viewModel.isDefault() ? @color/lightGrey: @color/text_color}"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/view" />
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:strokeColor="?colorOutlineVariant"
+                    app:strokeWidth="1dp">
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/crash_tracking"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:enabled="@{!viewModel.isDefault()}"
-            android:checked="@{viewModel.isDefault() || viewModel.isCrashTrackingEnabled()}"
-            android:onCheckedChanged="@{(switch, checked)-> viewModel.onCrashTrackingChanged(checked)}"
-            android:text="@string/crash_tracking"
-            android:textColor="@{viewModel.isDefault() ? @color/lightGrey: @color/text_color}"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/performance_monitoring" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/anr_tracking"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:enabled="@{!viewModel.isDefault()}"
-            android:checked="@{viewModel.isDefault() || viewModel.isANRTrackingEnabled()}"
-            android:onCheckedChanged="@{(switch, checked)-> viewModel.onANRTrackingChanged(checked)}"
-            android:text="@string/anr_tracking"
-            android:textColor="@{viewModel.isDefault() ? @color/lightGrey: @color/text_color}"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/crash_tracking" />
+                        <TextView
+                            android:id="@+id/textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/configuration_settings"
+                            android:textColor="@color/text_color"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                            app:layout_constraintStart_toStartOf="@+id/guideline3"
+                            app:layout_constraintTop_toTopOf="@+id/guideline4" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/keep_default"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:checked="@{viewModel.isDefault()}"
+                            android:onCheckedChanged="@{(switch, checked)-> viewModel.onKeepDefaultChanged(checked)}"
+                            android:text="@string/keep_default_configurations"
+                            android:textColor="@color/text_color"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                            app:layout_constraintStart_toStartOf="@+id/guideline3"
+                            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/launch_time"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:checked="@{viewModel.isDefault() || viewModel.isLaunchTimeEnabled()}"
+                            android:enabled="@{!viewModel.isDefault()}"
+                            android:onCheckedChanged="@{(switch, checked)-> viewModel.onLaunchTimeChanged(checked)}"
+                            android:text="@string/launch_time"
+                            android:textColor="@{viewModel.isDefault() ? @color/lightGrey: @color/text_color}"
+                            android:textSize="16sp"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                            app:layout_constraintStart_toStartOf="@+id/guideline3"
+                            app:layout_constraintTop_toBottomOf="@+id/screen_tracking" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/screen_tracking"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="16dp"
+                            android:checked="@{viewModel.isDefault() || viewModel.isScreenTrackingEnabled()}"
+                            android:enabled="@{!viewModel.isDefault()}"
+                            android:onCheckedChanged="@{(switch, checked)-> viewModel.onScreenTrackingChanged(checked)}"
+                            android:text="@string/screen_tracking"
+                            android:textColor="@{viewModel.isDefault() ? @color/lightGrey: @color/text_color}"
+                            android:textSize="16sp"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                            app:layout_constraintStart_toStartOf="@+id/guideline3"
+                            app:layout_constraintTop_toBottomOf="@+id/view" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/crash_tracking"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:checked="@{viewModel.isDefault() || viewModel.isCrashTrackingEnabled()}"
+                            android:enabled="@{!viewModel.isDefault()}"
+                            android:onCheckedChanged="@{(switch, checked)-> viewModel.onCrashTrackingChanged(checked)}"
+                            android:text="@string/crash_tracking"
+                            android:textColor="@{viewModel.isDefault() ? @color/lightGrey: @color/text_color}"
+                            android:textSize="16sp"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                            app:layout_constraintStart_toStartOf="@+id/guideline3"
+                            app:layout_constraintTop_toBottomOf="@+id/performance_monitoring" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/anr_tracking"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:checked="@{viewModel.isDefault() || viewModel.isANRTrackingEnabled()}"
+                            android:enabled="@{!viewModel.isDefault()}"
+                            android:onCheckedChanged="@{(switch, checked)-> viewModel.onANRTrackingChanged(checked)}"
+                            android:text="@string/anr_tracking"
+                            android:textColor="@{viewModel.isDefault() ? @color/lightGrey: @color/text_color}"
+                            android:textSize="16sp"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                            app:layout_constraintStart_toStartOf="@+id/guideline3"
+                            app:layout_constraintTop_toBottomOf="@+id/crash_tracking" />
 
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/memory_warning"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:enabled="@{!viewModel.isDefault()}"
-            android:checked="@{viewModel.isDefault() || viewModel.isMemoryWarningEnabled()}"
-            android:onCheckedChanged="@{(switch, checked)-> viewModel.onMemoryWarningChanged(checked)}"
-            android:text="@string/memory_warning"
-            android:textColor="@{viewModel.isDefault() ? @color/lightGrey: @color/text_color}"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/anr_tracking" />
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/memory_warning"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:checked="@{viewModel.isDefault() || viewModel.isMemoryWarningEnabled()}"
+                            android:enabled="@{!viewModel.isDefault()}"
+                            android:onCheckedChanged="@{(switch, checked)-> viewModel.onMemoryWarningChanged(checked)}"
+                            android:text="@string/memory_warning"
+                            android:textColor="@{viewModel.isDefault() ? @color/lightGrey: @color/text_color}"
+                            android:textSize="16sp"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                            app:layout_constraintStart_toStartOf="@+id/guideline3"
+                            app:layout_constraintTop_toBottomOf="@+id/anr_tracking" />
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/performance_monitoring"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:enabled="@{!viewModel.isDefault()}"
-            android:checked="@{viewModel.isDefault() || viewModel.isPerformanceMonitoringEnabled()}"
-            android:onCheckedChanged="@{(switch, checked)-> viewModel.onPerformanceMonitoringChanged(checked)}"
-            android:text="@string/performance_monitoring"
-            android:textColor="@{viewModel.isDefault() ? @color/lightGrey: @color/text_color}"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/launch_time" />
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/performance_monitoring"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:checked="@{viewModel.isDefault() || viewModel.isPerformanceMonitoringEnabled()}"
+                            android:enabled="@{!viewModel.isDefault()}"
+                            android:onCheckedChanged="@{(switch, checked)-> viewModel.onPerformanceMonitoringChanged(checked)}"
+                            android:text="@string/performance_monitoring"
+                            android:textColor="@{viewModel.isDefault() ? @color/lightGrey: @color/text_color}"
+                            android:textSize="16sp"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                            app:layout_constraintStart_toStartOf="@+id/guideline3"
+                            app:layout_constraintTop_toBottomOf="@+id/launch_time" />
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/network_capturing"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:enabled="@{!viewModel.isDefault()}"
-            android:checked="@{viewModel.isDefault() || viewModel.isNetworkCapturingEnabled()}"
-            android:onCheckedChanged="@{(switch, checked)-> viewModel.onNetworkCapturingChanged(checked)}"
-            android:text="@string/network_capturing"
-            android:textColor="@{viewModel.isDefault() ? @color/lightGrey: @color/text_color}"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/memory_warning" />
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/network_capturing"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:checked="@{viewModel.isDefault() || viewModel.isNetworkCapturingEnabled()}"
+                            android:enabled="@{!viewModel.isDefault()}"
+                            android:onCheckedChanged="@{(switch, checked)-> viewModel.onNetworkCapturingChanged(checked)}"
+                            android:text="@string/network_capturing"
+                            android:textColor="@{viewModel.isDefault() ? @color/lightGrey: @color/text_color}"
+                            android:textSize="16sp"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                            app:layout_constraintStart_toStartOf="@+id/guideline3"
+                            app:layout_constraintTop_toBottomOf="@+id/memory_warning" />
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/netstate_tracking"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:enabled="@{!viewModel.isDefault()}"
-            android:checked="@{viewModel.isDefault() || viewModel.isNetworkStateTrackingEnabled()}"
-            android:onCheckedChanged="@{(switch, checked)-> viewModel.onNetworkStateTrackingChanged(checked)}"
-            android:text="@string/network_state_tracking"
-            android:textColor="@{viewModel.isDefault() ? @color/lightGrey: @color/text_color}"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/network_capturing" />
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/netstate_tracking"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:checked="@{viewModel.isDefault() || viewModel.isNetworkStateTrackingEnabled()}"
+                            android:enabled="@{!viewModel.isDefault()}"
+                            android:onCheckedChanged="@{(switch, checked)-> viewModel.onNetworkStateTrackingChanged(checked)}"
+                            android:text="@string/network_state_tracking"
+                            android:textColor="@{viewModel.isDefault() ? @color/lightGrey: @color/text_color}"
+                            android:textSize="16sp"
+                            app:layout_constraintBottom_toTopOf="@+id/guideline5"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                            app:layout_constraintStart_toStartOf="@+id/guideline3"
+                            app:layout_constraintTop_toBottomOf="@+id/network_capturing" />
 
-        <View
-            android:id="@+id/view"
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/lightGrey"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/keep_default" />
+                        <View
+                            android:id="@+id/view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="16dp"
+                            android:background="@color/lightGrey"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/keep_default" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="16dp" />
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_end="16dp" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="16dp" />
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_begin="16dp" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="16dp" />
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_begin="16dp" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_end="16dp" />
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_end="16dp" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="80dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView"
+                    app:strokeColor="?colorOutlineVariant"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/launch_configuration"
+                            android:textColor="@color/text_color"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline7"
+                            app:layout_constraintStart_toStartOf="@+id/guideline8"
+                            app:layout_constraintTop_toTopOf="@+id/guideline9" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/configure_on_launch"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:checked="@{viewModel.isConfigureOnLaunch()}"
+                            android:onCheckedChanged="@{(switch, checked)-> viewModel.onConfigureOnLaunchChanged(checked)}"
+                            android:text="@string/configure_on_launch"
+                            android:textColor="@color/text_color"
+                            android:textSize="16sp"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline7"
+                            app:layout_constraintStart_toStartOf="@+id/guideline8"
+                            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/add_delay"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="16dp"
+                            android:checked="@{viewModel.isAddDelay()}"
+                            android:onCheckedChanged="@{(switch, checked)-> viewModel.onAddDelayChanged(checked)}"
+                            android:text="@string/add_delay"
+                            android:textColor="@color/text_color"
+                            android:textSize="16sp"
+                            app:layout_constraintBottom_toBottomOf="@id/guideline10"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline7"
+                            app:layout_constraintStart_toStartOf="@+id/guideline8"
+                            app:layout_constraintTop_toBottomOf="@+id/configure_on_launch" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_end="16dp" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_begin="16dp" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_begin="16dp" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_end="16dp" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </ScrollView>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/floatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:clickable="true"
             android:focusable="true"
-            android:text="@string/apply"
-            app:icon="@drawable/baseline_done_24"
             android:onClick="@{()->viewModel.onApplyClicked()}"
-            app:layout_constraintBottom_toTopOf="@+id/guideline5"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2" />
+            android:text="@string/apply"
+            app:icon="@drawable/baseline_done_24" />
+    </FrameLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

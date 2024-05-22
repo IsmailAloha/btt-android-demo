@@ -1,23 +1,14 @@
 package com.bluetriangle.bluetriangledemo
 
-import android.app.AlarmManager
+import android.app.ActivityManager
 import android.app.Application
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.util.Log
-import androidx.core.app.AlarmManagerCompat
 import com.bluetriangle.analytics.BlueTriangleConfiguration
 import com.bluetriangle.analytics.Tracker
-import com.bluetriangle.bluetriangledemo.layout.LauncherActivity
 import com.bluetriangle.bluetriangledemo.tests.HeavyLoopTest
 import com.bluetriangle.bluetriangledemo.tests.MemoryMonitor
 import com.bluetriangle.bluetriangledemo.utils.DEFAULT_SITE_ID
-import com.bluetriangle.bluetriangledemo.utils.KEY_LAUNCH_SCENARIO
-import com.bluetriangle.bluetriangledemo.utils.KEY_LAUNCH_TEST
-import com.bluetriangle.bluetriangledemo.utils.KEY_SHOULD_NOT_SHOW_CONFIGURATION
-import com.bluetriangle.bluetriangledemo.utils.KEY_SITE_ID
-import com.bluetriangle.bluetriangledemo.utils.SCENARIO_APP_CREATE
 import com.bluetriangle.bluetriangledemo.utils.TinyDB
 import com.bluetriangle.bluetriangledemo.utils.generateDemoWebsiteFromTemplate
 import dagger.hilt.android.HiltAndroidApp
@@ -39,36 +30,17 @@ class DemoApplication : Application() {
         val DEMO_WEBSITE_URL
             get() = demoWebsiteUrl
 
-        fun checkAndRunLaunchScenario(scenario: Int) {
-            val launchTest = tinyDB.getBoolean(KEY_LAUNCH_TEST)
-            val launchTestScenario = tinyDB.getInt(KEY_LAUNCH_SCENARIO, 1)
-            Log.d(
-                "DemoApplication",
-                "checkAndRunLaunchScenario: isLaunchTest: $launchTest, Scenario: $launchTestScenario"
-            )
-            if (launchTest && launchTestScenario == scenario) {
-                tinyDB.remove(KEY_LAUNCH_TEST)
-                tinyDB.remove(KEY_LAUNCH_SCENARIO)
-                if (scenario == SCENARIO_APP_CREATE) {
-                    tinyDB.setBoolean(KEY_SHOULD_NOT_SHOW_CONFIGURATION, true)
-                }
-                HeavyLoopTest(3L).run()
+        fun checkAndAddDelay() {
+            if(ConfigurationManager.shouldAddDelay()) {
+                HeavyLoopTest(1L).run()
             }
         }
 
         fun restart() {
-            val mStartActivity = Intent(instance, LauncherActivity::class.java)
-            val pendingIntentId = 123456
-            val pendingIntent = PendingIntent.getActivity(
-                instance,
-                pendingIntentId,
-                mStartActivity,
-                PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-            (instance.getSystemService(Context.ALARM_SERVICE) as AlarmManager)[AlarmManager.RTC, System.currentTimeMillis() + 100] =
-                pendingIntent
+            (instance.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).appTasks.forEach { it.finishAndRemoveTask() }
             exitProcess(0)
         }
+
     }
 
     override fun onCreate() {
@@ -77,31 +49,28 @@ class DemoApplication : Application() {
 
         instance = this
 
-        val launchTest = tinyDB.getBoolean(KEY_LAUNCH_TEST)
-        Log.d("DemoApplication", "Application.onCreate: Launch Test: $launchTest")
-        val siteId = tinyDB.getString(KEY_SITE_ID, DEFAULT_SITE_ID)
-
-        initTracker(siteId)
+        if(ConfigurationManager.shouldConfigureOnLaunch()) {
+            initTracker()
+        }
 
         demoWebsiteUrl = "file://${filesDir.absolutePath}/index.html"
 
         if(!hasTagUrl()) {
             setTagUrl(DEFAULT_TAG_URL)
         }
-        checkAndRunLaunchScenario(SCENARIO_APP_CREATE)
+        checkAndAddDelay()
 
         Thread(memoryMonitor).start()
     }
 
-    private fun initTracker(siteId: String?) {
-        if (siteId.isNullOrBlank()) return
-
+    fun initTracker() {
         val config = ConfigurationManager.getConfig()
         val configuration = BlueTriangleConfiguration()
-        configuration.siteId = siteId
+        configuration.siteId = DEFAULT_SITE_ID
         configuration.cacheMemoryLimit = 10 * 1000L
         configuration.cacheExpiryDuration = 120 * 1000L
         configuration.isDebug = true
+        configuration.debugLevel = Log.VERBOSE
         Log.d("BlueTriangle", "BTTConfigurationTag received: ${config}")
 
         if(!config.isDefault) {

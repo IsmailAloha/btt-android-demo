@@ -28,7 +28,12 @@ private val LightColorScheme = lightColors(
 val Colors.outline:Color
     @Composable
     @ReadOnlyComposable
-    get() = if(isLight) Color(0xFFEEEEEE) else Color(0xFF333333)
+    get() = if(isLight) Color(0xFFEEEEEE) else Color(0xFF444444)
+
+val Colors.outlineVariant:Color
+    @Composable
+    @ReadOnlyComposable
+    get() = if(isLight) Color(0xFFBBBBBB) else Color(0xFF777777)
 
 private val DarkColorScheme = darkColors(
     primary = Color(0xFF5DC8F5),

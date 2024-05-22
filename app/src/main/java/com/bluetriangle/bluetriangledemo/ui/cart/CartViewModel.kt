@@ -4,9 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bluetriangle.bluetriangledemo.DemoApplication
-import com.bluetriangle.bluetriangledemo.utils.KEY_LAUNCH_SCENARIO
-import com.bluetriangle.bluetriangledemo.utils.KEY_LAUNCH_TEST
 import com.bluetriangle.bluetriangledemo.data.Cart
 import com.bluetriangle.bluetriangledemo.data.CartItem
 import com.bluetriangle.bluetriangledemo.data.CartRepository
@@ -85,13 +82,5 @@ class CartViewModel @Inject constructor(val cartRepository: CartRepository) : Vi
     fun handleLaunchScenario() {
         val cartItems = cart.value?.items
         if(cartItems.isNullOrEmpty()) return
-
-        if(cartItems.size == 1) {
-            val quantity = cartItems[0].quantity
-            if(quantity in 8..11) {
-                DemoApplication.tinyDB.setBoolean(KEY_LAUNCH_TEST, true)
-                DemoApplication.tinyDB.setInt(KEY_LAUNCH_SCENARIO, (quantity - 7).toInt())
-            }
-        }
     }
 }

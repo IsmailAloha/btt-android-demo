@@ -75,7 +75,6 @@ fun CartScreen(navigateToCart: ()->Unit, viewModel: CartViewModel = hiltViewMode
             scope.launch {
                 val cartValue = cart.value
                 viewModel.handleCheckoutCrash()
-                viewModel.handleLaunchScenario()
                 try {
                     viewModel.cartRepository.checkout(cartValue!!)
                     viewModel.refreshCart()

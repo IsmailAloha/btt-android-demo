@@ -1,11 +1,12 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.daggerHiltAndroid)
+    alias(libs.plugins.safeargs.kotlin)
     id 'kotlin-android'
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
-    id 'com.google.dagger.hilt.android'
-    id 'androidx.navigation.safeargs.kotlin'
+    id "com.google.devtools.ksp"
 }
 
 android {
@@ -15,13 +16,14 @@ android {
         applicationId "com.bluetriangle.bluetriangledemo"
         minSdk 21
         targetSdk 34
-        versionCode 14
-        versionName "2.10.0"
+        versionCode 15
+        versionName "2.11.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
         }
+
     }
 
     buildTypes {
@@ -52,86 +54,87 @@ android {
         }
     }
     buildFeatures {
-        buildConfig true
         viewBinding true
         dataBinding true
         compose true
+        buildConfig true
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
     kotlinOptions {
         jvmTarget = '18'
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "1.4.7"
+        kotlinCompilerExtensionVersion = "1.5.0"
     }
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
-    namespace 'com.bluetriangle.bluetriangledemo'
+    namespace = 'com.bluetriangle.bluetriangledemo'
 }
 
 dependencies {
-    implementation 'com.github.blue-triangle-tech:btt-android-sdk:2.10.0'
-    implementation 'androidx.core:core-ktx:1.12.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation(libs.btt.android.sdk) {
+        exclude group: "com.squareup.okhttp3", module: "okhttp-bom"
+    }
+    implementation libs.core.ktx
+    implementation libs.appcompat
+    implementation libs.material
+    implementation libs.constraintlayout
 
-    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation libs.gson
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
+    implementation libs.kotlinx.coroutines.core
+    implementation libs.lifecycle.livedata.ktx
+    implementation libs.lifecycle.runtime.ktx
 
-    implementation "com.google.dagger:hilt-android:2.44"
-    implementation 'androidx.activity:activity:1.8.0'
-    kapt "com.google.dagger:hilt-compiler:2.44"
+    implementation libs.hilt.android
+    implementation libs.activity.ktx
+    kapt libs.hilt.compiler
 
-    implementation platform("com.squareup.okhttp3:okhttp-bom:4.9.2")
-    implementation "com.squareup.okhttp3:okhttp"
-    implementation "com.squareup.okhttp3:logging-interceptor"
+    implementation platform(libs.okhttp.bom)
+    implementation libs.okhttp
+    implementation libs.logging.interceptor
 
-    implementation "com.squareup.retrofit2:retrofit:2.9.0"
-    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
+    implementation libs.retrofit2.retrofit
+    implementation libs.converter.moshi
 
-    implementation "com.github.bumptech.glide:glide:4.14.2"
-    kapt "com.github.bumptech.glide:compiler:4.14.2"
-    implementation "com.github.bumptech.glide:compose:1.0.0-beta01"
-    implementation "com.github.bumptech.glide:okhttp3-integration:4.11.0"
+    implementation libs.glide
+    ksp libs.glide.ksp
+    implementation libs.glide.compose
+    implementation libs.okhttp3.integration
 
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.3'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.7.3'
+    implementation libs.navigation.fragment.ktx
+    implementation libs.navigation.ui.ktx
 
     // Jetpack Compose Dependencies
 
-    implementation platform('androidx.compose:compose-bom:2024.04.00')
-    implementation 'androidx.activity:activity-compose:1.8.2'
-    implementation("androidx.compose.runtime:runtime-livedata:1.6.5")
+    implementation platform(libs.compose.bom)
+    implementation libs.activity.compose
+    implementation libs.runtime.livedata
 
-    implementation 'androidx.compose.ui:ui'
-    implementation 'androidx.compose.ui:ui-graphics'
-    implementation 'androidx.compose.ui:ui-tooling-preview'
-    implementation 'androidx.compose.material:material-android:1.6.5'
-    implementation 'androidx.fragment:fragment-ktx:1.6.2'
-    implementation "androidx.navigation:navigation-compose:2.7.7"
-    implementation("io.coil-kt:coil:2.4.0")
-    implementation("io.coil-kt:coil-compose:2.4.0")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-    // Lifecycle
-    def lifecycle_version = "2.7.0"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version"
+    implementation libs.ui
+    implementation libs.ui.graphics
+    implementation libs.ui.tooling.preview
+    implementation libs.material.android
+    implementation libs.fragment.ktx
+    implementation libs.navigation.compose
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
+    implementation(libs.hilt.navigation.compose)
+
+    implementation libs.lifecycle.viewmodel.compose
+    implementation libs.lifecycle.viewmodel.ktx
+    implementation libs.androidx.lifecycle.runtime.compose
 
 
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
 }
 
 // Allow references to generated code

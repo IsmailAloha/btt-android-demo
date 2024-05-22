@@ -13,6 +13,7 @@ import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.databinding.ActivityStoreBinding
 import com.bluetriangle.bluetriangledemo.tests.MemoryMonitor
+import com.bluetriangle.bluetriangledemo.utils.copyToClipboard
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,6 +44,9 @@ class StoreActivity : AppCompatActivity() {
         }
 
         binding.sessionid.text = Tracker.instance!!.configuration.sessionId
+        binding.sessionid.setOnClickListener {
+            it.context.copyToClipboard("Session ID", Tracker.instance!!.configuration.sessionId ?: "")
+        }
 
         val navController = findNavController(R.id.nav_host_fragment_activity_store)
         // Passing each menu ID as a set of Ids because each

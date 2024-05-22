@@ -316,7 +316,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/configuration"
+        android:text="@string/configuration_settings"
         app:layout_constraintStart_toStartOf="@+id/aboutUs"
         app:layout_constraintTop_toBottomOf="@+id/aboutUs" />
 </androidx.constraintlayout.widget.ConstraintLayout>

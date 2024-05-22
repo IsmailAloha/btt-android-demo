@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.IntentCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.compose.components.ErrorAlertDialog
 import com.bluetriangle.bluetriangledemo.compose.components.MemoryWarningDialog
@@ -61,6 +62,9 @@ class ProductDetailsActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val product = IntentCompat.getParcelableExtra(intent, "product", Product::class.java)
 
+        if(Tracker.instance == null) {
+            (application as? DemoApplication)?.initTracker()
+        }
         setContent {
             val memoryWarningDialog = rememberSaveable {
                 mutableStateOf<MemoryMonitor.MemoryWarning?>(null)
@@ -172,6 +176,16 @@ class ProductDetailsActivity : ComponentActivity() {
                 })
         }
         ErrorAlertDialog(errorHandler = viewModel.errorHandler)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        DemoApplication.checkAndAddDelay()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        DemoApplication.checkAndAddDelay()
     }
 
     override fun onPause() {

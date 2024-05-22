@@ -54,17 +54,8 @@ class SettingsInfo(val label: String, val value: String, val copyAvailable: Bool
 fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
     val context = LocalContext.current
     val values = listOf(
-//        SettingsInfo(context.getString(R.string.android_version), viewModel.androidVersionName),
-//        SettingsInfo(context.getString(R.string.sdk_version), viewModel.sdkVersion),
-//        SettingsInfo(context.getString(R.string.app_version), viewModel.appVersion),
-//        SettingsInfo(context.getString(R.string.app_flavor), viewModel.flavor),
         SettingsInfo(context.getString(R.string.site_id), viewModel.siteId.toString()),
         SettingsInfo(context.getString(R.string.session_id), (viewModel.sessionId ?: ""), true),
-//        SettingsInfo(context.getString(R.string.anr_enabled), viewModel.anrEnabled),
-//        SettingsInfo(
-//            context.getString(R.string.screen_tracking_enabled),
-//            viewModel.screenTrackingEnabled
-//        ),
     )
     val scrollState = rememberScrollState()
     var websiteUrlDialogOpen by rememberSaveable {
@@ -113,7 +104,7 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
         Button(onClick = {
             context.startActivity(Intent(context, ConfigurationComposeActivity::class.java))
         }) {
-            Text(text = stringResource(R.string.configuration))
+            Text(text = stringResource(R.string.configuration_settings))
         }
 
         if (websiteUrlDialogOpen) {

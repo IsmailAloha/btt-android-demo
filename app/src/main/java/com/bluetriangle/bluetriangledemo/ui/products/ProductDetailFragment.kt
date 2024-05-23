@@ -45,7 +45,7 @@ class ProductDetailFragment : Fragment(), AlertView {
             productPrice.text = String.format(Locale.ENGLISH, "%.2f", args.product.price)
             productDescription.text = args.product.description
             productImage.loadImage(args.product.image)
-            addToCartButton.setOnClickListener { v ->
+            addToCartButton.setOnClickListener {
                 productDetailViewModel.addToCart(args.product)
             }
         }

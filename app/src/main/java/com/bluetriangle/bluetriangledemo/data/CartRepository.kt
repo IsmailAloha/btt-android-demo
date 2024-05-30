@@ -51,8 +51,20 @@ class CartRepository @Inject constructor(
     }
 
     suspend fun removeCartItem(cartItem: CartItem): Cart? {
-        storeService.deleteCartItem(cartItem.id)
+        try {
+            storeService.deleteCartItem(cartItem.id)
+        } catch (e: Exception) {
+            return null
+        }
         return getCart()
+    }
+
+    suspend fun reduceQuantity(cartItem:CartItem) {
+        storeService.updateQuantity(cartItem.id, cartItem.quantity - 1)
+    }
+
+    suspend fun increaseQuantity(cartItem:CartItem) {
+        storeService.updateQuantity(cartItem.id, cartItem.quantity + 1)
     }
 
     companion object {

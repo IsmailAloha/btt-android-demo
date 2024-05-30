@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -7,15 +8,28 @@
     <application
         android:name=".DemoApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="${appIcon}"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="${appIconRound}"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BlueTriangleDemo">
+        android:theme="@style/Theme.BlueTriangleDemo"
+        android:usesCleartextTraffic="true"
+        tools:ignore="UnusedAttribute" >
         <activity
-            android:name=".StoreActivity"
-            android:exported="true"
-            android:label="@string/title_activity_store">
+            android:name=".layout.ConfigurationLayoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".compose.screens.ConfigurationComposeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".layout.HybridDemoLayoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".compose.screens.ComposeAboutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".layout.LauncherActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,24 +37,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".layout.StoreActivity"
             android:exported="true"
-            android:label="Timer">
-
-        </activity>
-
-        <meta-data
-            android:name="com.blue-triangle.site-id"
-            android:value="mobelux3271241z" />
-        <meta-data
-            android:name="com.blue-triangle.debug"
-            android:value="true" />
-        <meta-data
-            android:name="com.blue-triangle.track-crashes.enable"
-            android:value="true" />
-        <meta-data
-            android:name="com.blue-triangle.sample-rate.network"
-            android:value="1.0" />
+            android:label="@string/title_activity_store" />
+        <activity android:name=".compose.screens.ComposeStoreActivity" />
+        <activity android:name=".compose.screens.ProductDetailsActivity" />
     </application>
 
 </manifest>

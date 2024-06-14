@@ -107,6 +107,12 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
             Text(text = stringResource(R.string.configuration_settings))
         }
 
+        Button(onClick = {
+            viewModel.sendBrandValueTimer()
+        }) {
+            Text(text = stringResource(R.string.test_brand_value))
+        }
+
         if (websiteUrlDialogOpen) {
             WebsiteDialog {
                 websiteUrlDialogOpen = false

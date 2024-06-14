@@ -315,8 +315,18 @@
         android:id="@+id/configuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/configuration_settings"
         app:layout_constraintStart_toStartOf="@+id/aboutUs"
         app:layout_constraintTop_toBottomOf="@+id/aboutUs" />
+
+
+    <Button
+        android:id="@+id/testBrandValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/test_brand_value"
+        app:layout_constraintStart_toStartOf="@+id/aboutUs"
+        app:layout_constraintTop_toBottomOf="@+id/configuration" />
 </androidx.constraintlayout.widget.ConstraintLayout>

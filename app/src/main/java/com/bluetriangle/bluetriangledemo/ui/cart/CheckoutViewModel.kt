@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.bluetriangle.bluetriangledemo.data.Cart
 import com.bluetriangle.bluetriangledemo.data.CartRepository
 import com.bluetriangle.bluetriangledemo.utils.ErrorHandler
+import com.bluetriangle.bluetriangledemo.utils.sendCheckoutTimer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,12 +26,14 @@ class CheckoutViewModel @Inject constructor(private val cartRepository: CartRepo
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val cart = cartRepository.getCart()
+                val orderId = UUID.randomUUID().toString()
                 cart?.let {
                     cartRepository.checkout(it)
+                    sendCheckoutTimer(it, orderId)
                 }
 
                 withContext(Dispatchers.Main) {
-                    _cart.value = cart?.copy(confirmation = UUID.randomUUID().toString(), shipping = "9.99")
+                    _cart.value = cart?.copy(confirmation = orderId, shipping = "9.99")
                 }
             } catch (e: Exception) {
                 errorHandler.showError(e)

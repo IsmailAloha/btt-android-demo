@@ -46,4 +46,12 @@ class SettingsViewModel : ViewModel() {
     fun testManualTimer() {
         Timer("Manual Timer", "DemoApplicationTraffic").start().end().submit()
     }
+
+    fun sendBrandValueTimer() {
+        val timer = Timer()
+        timer.start()
+        timer.setPageName("SignUp")
+        timer.setBrandValue(99.99)
+        timer.submit()
+    }
 }

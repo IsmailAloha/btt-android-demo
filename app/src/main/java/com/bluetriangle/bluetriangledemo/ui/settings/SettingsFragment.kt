@@ -44,6 +44,9 @@ class SettingsFragment : Fragment() {
         _binding?.testManualTimer?.setOnClickListener {
             settingsViewModel.testManualTimer()
         }
+        _binding?.testBrandValue?.setOnClickListener {
+            settingsViewModel.sendBrandValueTimer()
+        }
         _binding?.copyButton?.setOnClickListener {
             requireContext().copyToClipboard(requireContext().getString(R.string.session_id), settingsViewModel.sessionId.toString())
         }

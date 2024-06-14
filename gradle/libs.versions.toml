@@ -3,7 +3,8 @@ agp = "8.4.1"
 kotlin = "1.9.0"
 activityKtx = "1.9.0"
 appcompat = "1.6.1"
-btt = "2.11.0"
+btt = "2.11.1"
+bttFork = "571daf9ef9"
 coilCompose = "2.4.0"
 glideCompose = "1.0.0-beta01"
 composeBom = "2024.05.00"
@@ -38,6 +39,7 @@ androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", vers
 androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleLivedataKtx" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+fork-btt-android-sdk = { module = "com.github.IsmailAloha:btt-android-sdk", version.ref = "bttFork"}
 btt-android-sdk = { module = "com.github.blue-triangle-tech:btt-android-sdk", version.ref = "btt" }
 coil = { module = "io.coil-kt:coil", version.ref = "coilCompose" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }

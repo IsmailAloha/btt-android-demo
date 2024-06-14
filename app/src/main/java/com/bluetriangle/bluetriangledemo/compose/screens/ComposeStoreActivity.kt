@@ -148,8 +148,8 @@ fun getNavItemsList(navController: NavHostController): List<NavItem> {
             )
         }, "cart",
             destinations = listOf(
-                NavItem.Destination("Cart", "cart/home") { CartScreen({
-                    navController.navigate("cart/checkout/${UUID.randomUUID()}")
+                NavItem.Destination("Cart", "cart/home") { CartScreen({ uuid ->
+                    navController.navigate("cart/checkout/${uuid}")
                 }) },
                 NavItem.Destination(
                     "Checkout",

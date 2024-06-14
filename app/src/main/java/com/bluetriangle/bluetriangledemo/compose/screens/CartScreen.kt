@@ -35,21 +35,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.asFlow
+import com.bluetriangle.analytics.Timer
 import com.bluetriangle.analytics.compose.BttTimerEffect
 import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.compose.ManualTimerEffect
 import com.bluetriangle.bluetriangledemo.compose.components.ErrorAlertDialog
 import com.bluetriangle.bluetriangledemo.compose.theme.outline
+import com.bluetriangle.bluetriangledemo.data.Cart
 import com.bluetriangle.bluetriangledemo.data.CartItem
 import com.bluetriangle.bluetriangledemo.ui.cart.CartViewModel
+import com.bluetriangle.bluetriangledemo.utils.sendCheckoutTimer
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.UUID
 
 @Composable
-fun CartScreen(navigateToCart: ()->Unit, viewModel: CartViewModel = hiltViewModel()) {
+fun CartScreen(navigateToCart: (String)->Unit, viewModel: CartViewModel = hiltViewModel()) {
     BttTimerEffect(screenName = "Cart_Screen")
     ManualTimerEffect(screenName = "CartScreenManualTimer")
     val scope = rememberCoroutineScope()
@@ -74,12 +78,14 @@ fun CartScreen(navigateToCart: ()->Unit, viewModel: CartViewModel = hiltViewMode
         Button(modifier = Modifier.fillMaxWidth(), onClick = {
             scope.launch {
                 val cartValue = cart.value
+                val orderId = UUID.randomUUID().toString()
                 viewModel.handleCheckoutCrash()
                 try {
                     viewModel.cartRepository.checkout(cartValue!!)
+                    sendCheckoutTimer(cartValue, orderId)
                     viewModel.refreshCart()
                     withContext(Main) {
-                        navigateToCart()
+                        navigateToCart(orderId)
                     }
                 } catch (e: Exception) {
                     viewModel.errorHandler.showError(e)

@@ -4,24 +4,16 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.util.Log
-import android.util.TypedValue
-import android.webkit.WebView
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
+import com.bluetriangle.analytics.Timer
 import com.bluetriangle.bluetriangledemo.DemoApplication
-import com.bluetriangle.bluetriangledemo.DemoApplication.Companion.DEMO_WEBSITE_URL
+import com.bluetriangle.bluetriangledemo.data.Cart
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import java.io.File
-import java.io.IOException
-import java.io.PrintWriter
-import java.io.StringWriter
 
 fun Context.dp(dp: Int): Int {
     return (dp * resources.displayMetrics.density).toInt()
@@ -59,4 +51,17 @@ fun Context.copyToClipboard(label:String, value: String) {
     val clipBoardManager = (getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager)?:return
     clipBoardManager.setPrimaryClip(ClipData.newPlainText(label, value))
     Toast.makeText(this, "Copied: $value", Toast.LENGTH_SHORT).show()
+}
+
+fun sendCheckoutTimer(cart: Cart, orderId: String) {
+    val timer = Timer()
+    timer.start()
+    timer.setPageName("Confirmation")
+    timer.setCartValue(cart.total)
+    timer.setBrandValue(cart.total)
+    timer.setOrderNumber(orderId)
+    timer.setCartCount(cart.items?.size?:0)
+    timer.setCartCountCheckout(cart.items?.size?:0)
+    timer.setOrderTime(System.currentTimeMillis())
+    timer.submit()
 }

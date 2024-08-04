@@ -39,6 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="Continue Shopping"
+        android:contentDescription="@string/a11y_continue_shopping"
         app:layout_constraintEnd_toEndOf="@+id/order_number"
         app:layout_constraintStart_toStartOf="@+id/order_number"
         app:layout_constraintTop_toBottomOf="@+id/order_number" />

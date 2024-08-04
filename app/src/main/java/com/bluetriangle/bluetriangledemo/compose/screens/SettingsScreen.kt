@@ -31,10 +31,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -48,14 +53,15 @@ import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.ui.settings.SettingsViewModel
 import com.bluetriangle.bluetriangledemo.utils.copyToClipboard
 
-class SettingsInfo(val label: String, val value: String, val copyAvailable: Boolean = false)
+class SettingsInfo(val label: String, val id: String, val value: String, val copyAvailable: Boolean = false)
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
     val context = LocalContext.current
     val values = listOf(
-        SettingsInfo(context.getString(R.string.site_id), viewModel.siteId.toString()),
-        SettingsInfo(context.getString(R.string.session_id), (viewModel.sessionId ?: ""), true),
+        SettingsInfo(context.getString(R.string.site_id), "siteIDText", viewModel.siteId.toString()),
+        SettingsInfo(context.getString(R.string.session_id), context.getString(R.string.a11y_btt_session_id), (viewModel.sessionId ?: ""),  true),
     )
     val scrollState = rememberScrollState()
     var websiteUrlDialogOpen by rememberSaveable {
@@ -66,7 +72,8 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            .verticalScroll(scrollState),
+            .verticalScroll(scrollState)
+            .semantics { testTagsAsResourceId = true },
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Image(
@@ -199,6 +206,7 @@ fun WebsiteDialog(onDismiss: () -> Unit) {
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun InfoItem(settingsInfo: SettingsInfo) {
     val context = LocalContext.current
@@ -217,7 +225,8 @@ fun InfoItem(settingsInfo: SettingsInfo) {
                 style = TextStyle(
                     fontSize = 16.sp,
                     color = MaterialTheme.colors.onSurface
-                )
+                ),
+                modifier = Modifier.semantics { contentDescription = settingsInfo.id }
             )
             if (settingsInfo.copyAvailable) {
                 Spacer(modifier = Modifier.width(8.dp))

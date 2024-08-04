@@ -32,6 +32,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,6 +44,7 @@ import androidx.core.content.IntentCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.bluetriangledemo.DemoApplication
+import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.compose.components.ErrorAlertDialog
 import com.bluetriangle.bluetriangledemo.compose.components.MemoryWarningDialog
 import com.bluetriangle.bluetriangledemo.compose.theme.BlueTriangleComposeDemoTheme
@@ -102,6 +106,7 @@ class ProductDetailsActivity : ComponentActivity() {
         val addingToCart = rememberSaveable {
             mutableStateOf(false)
         }
+        val addToCartDescription = LocalContext.current.getString(R.string.a11y_add_to_cart)
         val addToCartCount = rememberSaveable {
             mutableIntStateOf(0)
         }
@@ -150,7 +155,7 @@ class ProductDetailsActivity : ComponentActivity() {
                             Button(
                                 enabled = !addingToCart.value,
                                 onClick = {
-                                    addToCartCount.intValue = addToCartCount.intValue + 1
+                                    addToCartCount.intValue += 1
                                     viewModel.handleProductDetailsTestCases(product, addToCartCount.intValue)
                                     scope.launch {
                                         try {
@@ -166,7 +171,8 @@ class ProductDetailsActivity : ComponentActivity() {
                                             addingToCart.value = false
                                         }
                                     }
-                                }) {
+                                },
+                                modifier = Modifier.semantics { contentDescription = addToCartDescription }) {
                                 Icon(Icons.Filled.Add, "Add to Cart")
                                 Spacer(modifier = Modifier.padding(10.dp))
                                 Text("Add to Cart")

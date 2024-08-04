@@ -17,7 +17,7 @@ android {
         applicationId = "com.bluetriangle.bluetriangledemo"
         minSdk = 21
         targetSdk = 34
-        versionCode = 16
+        versionCode = 17
         versionName = "2.12.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -72,7 +72,7 @@ android {
 }
 
 dependencies {
-    implementation(libs.fork.btt.android.sdk) {
+    implementation(libs.btt.android.sdk) {
         exclude("com.squareup.okhttp3", "okhttp-bom")
     }
     implementation(libs.core.ktx)

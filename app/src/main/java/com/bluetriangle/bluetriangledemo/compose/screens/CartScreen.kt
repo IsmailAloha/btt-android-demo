@@ -31,7 +31,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.asFlow
@@ -59,6 +62,7 @@ fun CartScreen(navigateToCart: (String)->Unit, viewModel: CartViewModel = hiltVi
     val scope = rememberCoroutineScope()
     val cart = viewModel.cart.asFlow().collectAsState(null)
     val cartItems = cart.value?.items ?: listOf()
+    val checkoutDescription = LocalContext.current.getString(R.string.a11y_checkout)
 
     Column(
         Modifier
@@ -75,7 +79,7 @@ fun CartScreen(navigateToCart: (String)->Unit, viewModel: CartViewModel = hiltVi
                 CartListItem(viewModel = viewModel, cartItem = cartItems[item])
             }
         }
-        Button(modifier = Modifier.fillMaxWidth(), onClick = {
+        Button(modifier = Modifier.fillMaxWidth().semantics { contentDescription = checkoutDescription }, onClick = {
             scope.launch {
                 val cartValue = cart.value
                 val orderId = UUID.randomUUID().toString()

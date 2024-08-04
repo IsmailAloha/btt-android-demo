@@ -194,6 +194,7 @@
         android:text="TextView"
         android:textColor="?colorOnSurface"
         android:textSize="16sp"
+        android:contentDescription="@string/a11y_btt_session_id"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/textView13" />
 

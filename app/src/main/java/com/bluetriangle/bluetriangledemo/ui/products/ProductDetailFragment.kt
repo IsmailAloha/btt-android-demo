@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.bluetriangle.analytics.Tracker
+import com.bluetriangle.bluetriangledemo.ConfigurationManager
 import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.databinding.FragmentProductDetailBinding
 import com.bluetriangle.bluetriangledemo.utils.AlertDialogState

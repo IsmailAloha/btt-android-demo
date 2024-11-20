@@ -318,6 +318,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/configuration_settings"
+        android:contentDescription="@string/a11y_configuration_settings"
         app:layout_constraintStart_toStartOf="@+id/aboutUs"
         app:layout_constraintTop_toBottomOf="@+id/aboutUs" />
 

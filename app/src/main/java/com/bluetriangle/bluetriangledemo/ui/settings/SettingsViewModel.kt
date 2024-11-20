@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.bluetriangle.analytics.Timer
 import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.bluetriangledemo.BuildConfig
+import com.bluetriangle.bluetriangledemo.ConfigurationManager
 import java.lang.reflect.Field
 
 class SettingsViewModel : ViewModel() {
@@ -14,7 +15,6 @@ class SettingsViewModel : ViewModel() {
     val sdkVersion = com.bluetriangle.analytics.BuildConfig.SDK_VERSION
     val flavor = BuildConfig.FLAVOR.uppercase()
     val siteId = Tracker.instance!!.configuration.siteId
-    val sessionId = Tracker.instance!!.configuration.sessionId
     val anrEnabled = if(Tracker.instance!!.configuration.isTrackAnrEnabled) "Enabled" else "Disabled"
     val screenTrackingEnabled = if(Tracker.instance!!.configuration.isScreenTrackingEnabled) "Enabled" else "Disabled"
 

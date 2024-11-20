@@ -1,7 +1,7 @@
 package com.bluetriangle.bluetriangledemo.compose.screens
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -9,7 +9,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -22,6 +24,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -30,12 +34,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.bluetriangle.analytics.Tracker
+import com.bluetriangle.bluetriangledemo.ConfigurationManager
 import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.compose.components.AppBottomNavigationBar
@@ -44,36 +50,62 @@ import com.bluetriangle.bluetriangledemo.compose.components.NavItem
 import com.bluetriangle.bluetriangledemo.compose.theme.BlueTriangleComposeDemoTheme
 import com.bluetriangle.bluetriangledemo.utils.copyToClipboard
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.UUID
 
 @AndroidEntryPoint
 class ComposeStoreActivity : ComponentActivity() {
 
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             BlueTriangleComposeDemoTheme {
                 val title = rememberSaveable {
                     mutableStateOf("")
                 }
-                val navController = rememberNavController()
-                val navItems = getNavItemsList(navController)
+                val tabNavController = rememberNavController()
+                val rootNavController = rememberNavController()
+                val rootBackstackEntry by rootNavController.currentBackStackEntryAsState()
+
+                val navItems = getNavItemsList(tabNavController)
                 Scaffold(topBar = {
-                    TopAppBar(title = { Text(text = title.value) })
+                    TopAppBar(title = {
+                        Row(Modifier.padding(end = 10.dp)) {
+                            Text(text = title.value)
+                            Spacer(modifier = Modifier.weight(1f))
+                            if(title.value != "Profile") {
+                                Text(
+                                    text = "Profile",
+                                    fontSize = 14.sp,
+                                    modifier = Modifier.clickable { rootNavController.navigate("profile") }
+                                )
+                            }
+                        }
+                    })
                 }, bottomBar = {
-                    AppBottomNavigationBar(navController = navController, navItems = navItems)
-                }) {
-                    Column(
-                        modifier = Modifier
-                            .padding(it)
-                            .fillMaxHeight()
-                    ) {
-                        SiteIDBar()
-                        NavHostContainer(
-                            title,
-                            navController = navController,
-                            navItems = navItems
-                        )
+                    if(rootBackstackEntry?.destination?.route == "home") {
+                        AppBottomNavigationBar(navController = tabNavController, navItems = navItems)
+                    }
+                }) { paddingValues ->
+                    NavHost(navController = rootNavController, startDestination = "home") {
+                        composable("home") {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .padding(paddingValues)
+                            ) {
+                                SessionIDBar()
+                                NavHostContainer(
+                                    title,
+                                    navController = tabNavController,
+                                    navItems = navItems
+                                )
+                            }
+                        }
+                        composable("profile") {
+                            title.value = "Profile"
+                            ProfileScreen()
+                        }
                     }
                 }
             }
@@ -92,8 +124,9 @@ class ComposeStoreActivity : ComponentActivity() {
     }
 
     @Composable
-    fun SiteIDBar() {
-        val sessionIdAccessibility = stringResource(id = R.string.sessionid_accessibility)
+    fun SessionIDBar() {
+        val sessionIdAccessibility = stringResource(id = R.string.a11y_btt_session_id)
+        val sessionId by ConfigurationManager.sessionId.observeAsState()
         val context = LocalContext.current
         Column(modifier = Modifier.background(MaterialTheme.colors.primary)) {
             Row(
@@ -108,7 +141,7 @@ class ComposeStoreActivity : ComponentActivity() {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = Tracker.instance?.configuration?.sessionId ?: "",
+                    text = sessionId ?: "",
                     fontSize = 14.sp,
                     color = MaterialTheme.colors.onPrimary,
                     modifier = Modifier
@@ -116,7 +149,10 @@ class ComposeStoreActivity : ComponentActivity() {
                             contentDescription = sessionIdAccessibility
                         }
                         .clickable {
-                            context.copyToClipboard("Session ID", Tracker.instance?.configuration?.sessionId ?: "")
+                            context.copyToClipboard(
+                                "Session ID",
+                                sessionId ?: ""
+                            )
                         }
                 )
             }
@@ -137,7 +173,7 @@ fun getNavItemsList(navController: NavHostController): List<NavItem> {
             },
             "product",
             destinations = listOf(
-                NavItem.Destination("Product", "product/home") { ProductsScreen() }
+                NavItem.Destination("Product", "product/home") { ProductsScreen() },
             )
         ),
         NavItem("Cart", icon = {
@@ -154,7 +190,7 @@ fun getNavItemsList(navController: NavHostController): List<NavItem> {
                 NavItem.Destination(
                     "Checkout",
                     "cart/checkout/{checkoutId}"
-                ) { CheckoutScreen(it.arguments?.getString("checkoutId") ?: "") }
+                ) { CheckoutScreen(it.arguments?.getString("checkoutId") ?: "", navController) }
             )),
         NavItem("Settings", icon = {
             Icon(
@@ -167,20 +203,4 @@ fun getNavItemsList(navController: NavHostController): List<NavItem> {
                 NavItem.Destination("Settings", "settings/home") { SettingsScreen() }
             ))
     )
-}
-
-@Composable
-fun Greeting2(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview2() {
-    BlueTriangleComposeDemoTheme {
-        Greeting2("Android")
-    }
 }

@@ -43,7 +43,7 @@
             android:textSize="14sp"
             android:layout_marginLeft="8dp"
             android:textColor="?colorOnPrimary"
-            android:contentDescription="@string/sessionid_accessibility"
+            android:contentDescription="@string/a11y_btt_session_id"
             />
     </LinearLayout>
 

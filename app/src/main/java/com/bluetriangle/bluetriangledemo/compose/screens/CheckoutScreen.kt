@@ -19,15 +19,16 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bluetriangle.analytics.compose.BttTimerEffect
 import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.tests.HeavyLoopTest
 
 @Composable
-fun CheckoutScreen(checkoutId: String) {
+fun CheckoutScreen(checkoutId: String, navController: NavHostController) {
     BttTimerEffect(screenName = "Checkout_Screen")
-    val navController = rememberNavController()
     val continueShoppingDescription = LocalContext.current.getString(R.string.a11y_continue_shopping)
 
     Box(Modifier.fillMaxSize()) {
@@ -47,9 +48,13 @@ fun CheckoutScreen(checkoutId: String) {
             Text(text = "Checkout ID: $checkoutId")
             Spacer(modifier = Modifier.height(20.dp))
             Button(
-                modifier = Modifier.align(Alignment.CenterHorizontally).semantics { contentDescription = continueShoppingDescription },
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .semantics {
+                        contentDescription = continueShoppingDescription
+                    },
                 onClick = {
-                    HeavyLoopTest().run()
+                    HeavyLoopTest(6).run()
                     navController.popBackStack()
                 }) {
                 Text("Continue Shopping")

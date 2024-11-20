@@ -1,14 +1,12 @@
 package com.bluetriangle.bluetriangledemo.layout
 
 import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.bluetriangledemo.ConfigurationViewModel
-import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.databinding.ActivityConfigurationLayoutBinding
 
 class ConfigurationLayoutActivity : AppCompatActivity() {

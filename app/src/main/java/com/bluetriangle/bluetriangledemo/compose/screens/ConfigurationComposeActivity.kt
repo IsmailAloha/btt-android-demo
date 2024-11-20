@@ -3,6 +3,8 @@ package com.bluetriangle.bluetriangledemo.compose.screens
 import android.app.ActivityManager
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -37,6 +39,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -45,6 +49,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bluetriangle.bluetriangledemo.ConfigurationViewModel
 import com.bluetriangle.bluetriangledemo.R
+import com.bluetriangle.bluetriangledemo.SessionStore
 import com.bluetriangle.bluetriangledemo.compose.theme.BlueTriangleComposeDemoTheme
 import com.bluetriangle.bluetriangledemo.compose.theme.outlineVariant
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,7 +69,7 @@ class ConfigurationComposeActivity : ComponentActivity() {
                             }, modifier = Modifier.padding(8.dp)) {
                                 Icon(
                                     Icons.AutoMirrored.Filled.ArrowBack,
-                                    "Back",
+                                    getString(R.string.a11y_back),
                                     tint = MaterialTheme.colors.onPrimary
                                 )
                             }
@@ -80,7 +85,7 @@ class ConfigurationComposeActivity : ComponentActivity() {
                             tint = Color.Black,
                             contentDescription = getString(R.string.apply)
                         )
-                    }, onClick = { viewModel.onApplyClicked() })
+                    }, modifier = Modifier.semantics { contentDescription = getString(R.string.a11y_config_apply) }, onClick = { viewModel.onApplyClicked() })
                 }) {
                     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                         Card(
@@ -106,7 +111,8 @@ class ConfigurationComposeActivity : ComponentActivity() {
                                     R.string.keep_default_configurations,
                                     MutableLiveData(false),
                                     viewModel.isDefault,
-                                    viewModel::onKeepDefaultChanged
+                                    viewModel::onKeepDefaultChanged,
+                                    getString(R.string.a11y_config_default_configuration)
                                 )
                                 Spacer(modifier = Modifier.height(14.dp))
                                 Divider(color = Color.Black, thickness = 1.dp)
@@ -115,49 +121,57 @@ class ConfigurationComposeActivity : ComponentActivity() {
                                     R.string.screen_tracking,
                                     viewModel.isDefault,
                                     viewModel.isScreenTrackingEnabled,
-                                    viewModel::onScreenTrackingChanged
+                                    viewModel::onScreenTrackingChanged,
+                                    getString(R.string.a11y_config_screen_tracking)
                                 )
                                 ConfigurationSwitch(
                                     R.string.launch_time,
                                     viewModel.isDefault,
                                     viewModel.isLaunchTimeEnabled,
-                                    viewModel::onLaunchTimeChanged
+                                    viewModel::onLaunchTimeChanged,
+                                    getString(R.string.a11y_config_launch_time)
                                 )
                                 ConfigurationSwitch(
                                     R.string.performance_monitoring,
                                     viewModel.isDefault,
                                     viewModel.isPerformanceMonitoringEnabled,
-                                    viewModel::onPerformanceMonitoringChanged
+                                    viewModel::onPerformanceMonitoringChanged,
+                                    getString(R.string.a11y_config_performance_monitoring)
                                 )
                                 ConfigurationSwitch(
                                     R.string.crash_tracking,
                                     viewModel.isDefault,
                                     viewModel.isCrashTrackingEnabled,
-                                    viewModel::onCrashTrackingChanged
+                                    viewModel::onCrashTrackingChanged,
+                                    getString(R.string.a11y_config_crash_tracking)
                                 )
                                 ConfigurationSwitch(
                                     R.string.anr_tracking,
                                     viewModel.isDefault,
                                     viewModel.isANRTrackingEnabled,
-                                    viewModel::onANRTrackingChanged
+                                    viewModel::onANRTrackingChanged,
+                                    getString(R.string.a11y_config_anr_tracking)
                                 )
                                 ConfigurationSwitch(
                                     R.string.memory_warning,
                                     viewModel.isDefault,
                                     viewModel.isMemoryWarningEnabled,
-                                    viewModel::onMemoryWarningChanged
+                                    viewModel::onMemoryWarningChanged,
+                                    getString(R.string.a11y_config_memory_warning)
                                 )
                                 ConfigurationSwitch(
                                     R.string.network_capturing,
                                     viewModel.isDefault,
                                     viewModel.isNetworkCapturingEnabled,
-                                    viewModel::onNetworkCapturingChanged
+                                    viewModel::onNetworkCapturingChanged,
+                                    getString(R.string.a11y_config_network_capturing)
                                 )
                                 ConfigurationSwitch(
                                     R.string.network_state_tracking,
                                     viewModel.isDefault,
                                     viewModel.isNetworkStateTrackingEnabled,
-                                    viewModel::onNetworkStateTrackingChanged
+                                    viewModel::onNetworkStateTrackingChanged,
+                                    getString(R.string.a11y_config_network_state_tracking)
                                 )
                                 Spacer(modifier = Modifier.height(14.dp))
                             }
@@ -185,13 +199,15 @@ class ConfigurationComposeActivity : ComponentActivity() {
                                     R.string.configure_on_launch,
                                     MutableLiveData(false),
                                     viewModel.isConfigureOnLaunch,
-                                    viewModel::onConfigureOnLaunchChanged
+                                    viewModel::onConfigureOnLaunchChanged,
+                                    getString(R.string.a11y_config_configure_on_launch)
                                 )
                                 ConfigurationSwitch(
                                     R.string.add_delay,
                                     MutableLiveData(false),
                                     viewModel.isAddDelay,
-                                    viewModel::onAddDelayChanged
+                                    viewModel::onAddDelayChanged,
+                                    getString(R.string.a11y_config_add_delay)
                                 )
                                 Spacer(modifier = Modifier.height(14.dp))
                             }
@@ -208,7 +224,8 @@ class ConfigurationComposeActivity : ComponentActivity() {
         label: Int,
         defaultLiveData: LiveData<Boolean>,
         value: LiveData<Boolean>,
-        onChange: (Boolean) -> Unit
+        onChange: (Boolean) -> Unit,
+        contentDescription:String
     ) {
         val checked by value.observeAsState(false)
         val default by defaultLiveData.observeAsState(false)
@@ -228,7 +245,7 @@ class ConfigurationComposeActivity : ComponentActivity() {
             Switch(
                 checked = checked,
                 enabled = !default,
-                modifier = Modifier.padding(end = 16.dp),
+                modifier = Modifier.padding(end = 16.dp).semantics { this.contentDescription = contentDescription },
                 onCheckedChange = onChange
             )
         }

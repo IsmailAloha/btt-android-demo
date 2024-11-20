@@ -11,6 +11,8 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.bluetriangle.analytics.Tracker
+import com.bluetriangle.bluetriangledemo.ConfigurationManager
 import com.bluetriangle.bluetriangledemo.layout.HybridDemoLayoutActivity
 import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.DemoApplication.Companion.DEFAULT_TAG_URL
@@ -38,7 +40,9 @@ class SettingsFragment : Fragment() {
         _binding?.flavorValue?.text = settingsViewModel.flavor
         _binding?.sdkVersionValue?.text = settingsViewModel.sdkVersion
         _binding?.siteIdValue?.text = settingsViewModel.siteId
-        _binding?.sessionIDValueText?.text = settingsViewModel.sessionId
+        ConfigurationManager.sessionId.observe(viewLifecycleOwner) {
+            _binding?.sessionIDValueText?.text = it
+        }
         _binding?.anrEnabledValue?.text = settingsViewModel.anrEnabled
         _binding?.screenTrackingEnabledValue?.text = settingsViewModel.screenTrackingEnabled
         _binding?.testManualTimer?.setOnClickListener {
@@ -48,7 +52,7 @@ class SettingsFragment : Fragment() {
             settingsViewModel.sendBrandValueTimer()
         }
         _binding?.copyButton?.setOnClickListener {
-            requireContext().copyToClipboard(requireContext().getString(R.string.session_id), settingsViewModel.sessionId.toString())
+            requireContext().copyToClipboard(requireContext().getString(R.string.session_id), Tracker.instance?.configuration?.sessionId.toString())
         }
         _binding?.aboutUs?.setOnClickListener {
             startActivity(Intent(requireContext(), HybridDemoLayoutActivity::class.java))

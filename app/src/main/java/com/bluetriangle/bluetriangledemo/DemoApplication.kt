@@ -3,16 +3,26 @@ package com.bluetriangle.bluetriangledemo
 import android.app.ActivityManager
 import android.app.Application
 import android.content.Context
+import android.content.res.Resources
+import android.os.Handler
+import android.os.Looper
+import android.util.DisplayMetrics
 import android.util.Log
+import android.view.WindowManager
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.bluetriangle.analytics.BlueTriangleConfiguration
 import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.bluetriangledemo.tests.HeavyLoopTest
 import com.bluetriangle.bluetriangledemo.tests.MemoryMonitor
+import com.bluetriangle.bluetriangledemo.utils.BTTCustomVariables
 import com.bluetriangle.bluetriangledemo.utils.DEFAULT_SITE_ID
 import com.bluetriangle.bluetriangledemo.utils.TinyDB
 import com.bluetriangle.bluetriangledemo.utils.generateDemoWebsiteFromTemplate
 import dagger.hilt.android.HiltAndroidApp
 import kotlin.system.exitProcess
+
 
 @HiltAndroidApp
 class DemoApplication : Application() {
@@ -49,6 +59,22 @@ class DemoApplication : Application() {
 
         instance = this
 
+        ProcessLifecycleOwner.get().lifecycle.addObserver(object:DefaultLifecycleObserver {
+            override fun onResume(owner: LifecycleOwner) {
+                super.onResume(owner)
+                ConfigurationManager.refreshSessionId()
+            }
+
+            override fun onStop(owner: LifecycleOwner) {
+                super.onStop(owner)
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    // Uncomment below line to make session expiry as 2 minutes
+//                    SessionStore(this@DemoApplication).resetSessionExpiration()
+                }, 2000)
+            }
+        })
+
         if(ConfigurationManager.shouldConfigureOnLaunch()) {
             initTracker()
         }
@@ -84,6 +110,15 @@ class DemoApplication : Application() {
             configuration.isTrackNetworkStateEnabled = config.isNetworkStateTrackingEnabled
         }
         Tracker.init(this, configuration)
+
+        Resources.getSystem().displayMetrics?.apply {
+            Tracker.instance?.apply {
+                setCustomVariable(BTTCustomVariables.ScreenWidth.key, widthPixels)
+                setCustomVariable(BTTCustomVariables.ScreenHeight.key, heightPixels)
+            }
+        }
+
+        ConfigurationManager.refreshSessionId()
     }
 
     fun hasTagUrl(): Boolean {
@@ -98,4 +133,5 @@ class DemoApplication : Application() {
         tinyDB.setString(TAG_URL, url)
         generateDemoWebsiteFromTemplate()
     }
+
 }

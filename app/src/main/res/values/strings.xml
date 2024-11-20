@@ -47,4 +47,26 @@
     <string name="a11y_checkout">checkout</string>
     <string name="a11y_continue_shopping">continue shopping</string>
     <string name="a11y_back">back</string>
+    <string name="a11y_cart_item_remove">btn_remove</string>
+
+    <string name="a11y_config_default_configuration">switch_default</string>
+    <string name="a11y_config_screen_tracking">switch_screen_tracking</string>
+    <string name="a11y_config_launch_time">switch_launch_time</string>
+    <string name="a11y_config_performance_monitoring">switch_performance_monitor</string>
+    <string name="a11y_config_crash_tracking">switch_crash</string>
+    <string name="a11y_config_anr_tracking">switch_ANR</string>
+    <string name="a11y_config_memory_warning">switch_memory_warning</string>
+    <string name="a11y_config_network_capturing">switch_network_capture</string>
+    <string name="a11y_config_network_state_tracking">switch_network_state</string>
+    <string name="a11y_config_configure_on_launch">switch_config_on_launch</string>
+    <string name="a11y_config_add_delay">switch_add_delay</string>
+    <string name="a11y_config_apply">configure_apply</string>
+
+    <string name="a11y_configuration_settings">btn_configuration_settings</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="login">Login</string>
+    <string name="premium">Premium</string>
+    <string name="normal">Normal</string>
+
 </resources>

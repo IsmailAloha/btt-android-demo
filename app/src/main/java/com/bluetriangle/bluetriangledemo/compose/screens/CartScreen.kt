@@ -105,6 +105,8 @@ fun CartScreen(navigateToCart: (String)->Unit, viewModel: CartViewModel = hiltVi
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun CartListItem(viewModel: CartViewModel, cartItem: CartItem) {
+    val context = LocalContext.current
+
     Card(
         Modifier
             .fillMaxWidth()
@@ -133,7 +135,7 @@ fun CartListItem(viewModel: CartViewModel, cartItem: CartItem) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = String.format("$%.2f", cartItem.total), maxLines = 1)
             CartActionButton(Modifier.align(Alignment.CenterHorizontally), cartItem, viewModel)
-            Button(modifier = Modifier.fillMaxWidth(), onClick = {
+            Button(modifier = Modifier.fillMaxWidth().semantics { contentDescription = context.getString(R.string.a11y_cart_item_remove) }, onClick = {
                 viewModel.removeCartItem(cartItem)
             }) {
                 Text(text = "Remove")

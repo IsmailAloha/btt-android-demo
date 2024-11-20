@@ -27,6 +27,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -48,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bluetriangle.analytics.compose.BttTimerEffect
+import com.bluetriangle.bluetriangledemo.ConfigurationManager
 import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.ui.settings.SettingsViewModel
@@ -59,9 +61,10 @@ class SettingsInfo(val label: String, val id: String, val value: String, val cop
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
     val context = LocalContext.current
+    val sessionId by ConfigurationManager.sessionId.observeAsState()
     val values = listOf(
         SettingsInfo(context.getString(R.string.site_id), "siteIDText", viewModel.siteId.toString()),
-        SettingsInfo(context.getString(R.string.session_id), context.getString(R.string.a11y_btt_session_id), (viewModel.sessionId ?: ""),  true),
+        SettingsInfo(context.getString(R.string.session_id), context.getString(R.string.a11y_btt_session_id), (sessionId ?: ""),  true),
     )
     val scrollState = rememberScrollState()
     var websiteUrlDialogOpen by rememberSaveable {
@@ -110,7 +113,7 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
 
         Button(onClick = {
             context.startActivity(Intent(context, ConfigurationComposeActivity::class.java))
-        }) {
+        }, modifier = Modifier.semantics { contentDescription = context.getString(R.string.a11y_configuration_settings) }) {
             Text(text = stringResource(R.string.configuration_settings))
         }
 

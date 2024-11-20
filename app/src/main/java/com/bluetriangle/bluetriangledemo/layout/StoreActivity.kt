@@ -2,18 +2,19 @@ package com.bluetriangle.bluetriangledemo.layout
 
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bluetriangle.analytics.Tracker
+import com.bluetriangle.bluetriangledemo.ConfigurationManager
 import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.databinding.ActivityStoreBinding
 import com.bluetriangle.bluetriangledemo.tests.MemoryMonitor
 import com.bluetriangle.bluetriangledemo.utils.copyToClipboard
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,9 +44,12 @@ class StoreActivity : AppCompatActivity() {
             }
         }
 
-        binding.sessionid.text = Tracker.instance!!.configuration.sessionId
+        ConfigurationManager.sessionId.observe(this) {
+            binding.sessionid.text = it
+        }
+
         binding.sessionid.setOnClickListener {
-            it.context.copyToClipboard("Session ID", Tracker.instance!!.configuration.sessionId ?: "")
+            it.context.copyToClipboard("Session ID", Tracker.instance?.configuration?.sessionId ?: "")
         }
 
         val navController = findNavController(R.id.nav_host_fragment_activity_store)

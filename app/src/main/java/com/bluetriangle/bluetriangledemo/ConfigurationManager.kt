@@ -1,6 +1,11 @@
 package com.bluetriangle.bluetriangledemo
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.bluetriangle.analytics.Tracker
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -12,6 +17,10 @@ object ConfigurationManager {
 
     private const val CONFIG = "CONFIGURATON"
 
+    private val _sessionId = MutableLiveData<String?>()
+    val sessionId: LiveData<String?>
+        get() = _sessionId
+
     fun saveConfig(config:Config) {
         val configJson = gson.toJson(config)
         Log.d("BlueTriangle", "BTTConfigurationTag saved: ${configJson}")
@@ -22,6 +31,12 @@ object ConfigurationManager {
         val configJson = DemoApplication.tinyDB.getString(CONFIG)?:return Config(false)
         Log.d("BlueTriangle", "BTTConfigurationTag received: ${configJson}")
         return gson.fromJson(configJson, configType)
+    }
+
+    fun refreshSessionId() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            _sessionId.postValue(Tracker.instance?.configuration?.sessionId)
+        }, 1000)
     }
 
     fun reset() {

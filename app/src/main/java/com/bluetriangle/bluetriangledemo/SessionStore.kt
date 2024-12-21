@@ -2,8 +2,12 @@ package com.bluetriangle.bluetriangledemo
 
 import android.content.Context
 import android.util.Log
+import com.bluetriangle.analytics.Tracker
+import com.bluetriangle.bluetriangledemo.SessionStore.SessionData.Companion.toJsonObject
+import com.bluetriangle.bluetriangledemo.SessionStore.SessionData.Companion.toSessionData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import org.json.JSONObject
 
 class SessionStore(val context: Context) {
 
@@ -16,31 +20,72 @@ class SessionStore(val context: Context) {
 
     fun resetSessionExpiration() {
         val sessionData = retrieveSessionData()
-        Log.d("SessionStoreLog", "Resetting : $sessionData")
-        if(sessionData != null) {
+        val updatedExpiry = System.currentTimeMillis() + 2 * 60 * 1000
+        Log.d("SessionStoreLog", "Resetting Expiry for $sessionData to $updatedExpiry")
+        if (sessionData != null) {
             storeSessionData(
                 SessionData(
-                sessionData.sessionId,
-                System.currentTimeMillis() + 2 * 60 * 1000
-            ))
+                    sessionData.sessionId,
+                    sessionData.shouldSampleNetwork,
+                    sessionData.isConfigApplied,
+                    sessionData.networkSampleRate,
+                    updatedExpiry
+                )
+            )
         }
 
     }
 
-    data class SessionData(
+    internal data class SessionData(
         val sessionId: String,
-        val expiration:Long
-    )
+        val shouldSampleNetwork: Boolean,
+        val isConfigApplied: Boolean,
+        val networkSampleRate: Double,
+        val expiration: Long
+    ) {
+        companion object {
+            private const val SESSION_ID = "sessionId"
+            private const val EXPIRATION = "expiration"
+            private const val SHOULD_SAMPLE_NETWORK = "shouldSampleNetwork"
+            private const val IS_CONFIG_APPLIED = "isConfigApplied"
+            private const val NETWORK_SAMPLE_RATE = "networkSampleRate"
+
+            internal fun JSONObject.toSessionData(): SessionData? {
+                try {
+                    return SessionData(
+                        sessionId = getString(SESSION_ID),
+                        shouldSampleNetwork = getBoolean(SHOULD_SAMPLE_NETWORK),
+                        isConfigApplied = getBoolean(IS_CONFIG_APPLIED),
+                        networkSampleRate = getDouble(NETWORK_SAMPLE_RATE),
+                        expiration = getLong(EXPIRATION)
+                    )
+                } catch (e: Exception) {
+                    Tracker.instance?.configuration?.logger?.error("Error while parsing session data: ${e::class.simpleName}(\"${e.message}\")")
+                    return null
+                }
+            }
+
+            internal fun SessionData.toJsonObject() = JSONObject().apply {
+                put(SESSION_ID, sessionId)
+                put(SHOULD_SAMPLE_NETWORK, shouldSampleNetwork)
+                put(IS_CONFIG_APPLIED, isConfigApplied)
+                put(NETWORK_SAMPLE_RATE, networkSampleRate)
+                put(EXPIRATION, expiration)
+            }
+        }
+    }
 
     private fun storeSessionData(sessionData: SessionData) {
         storePrefs.edit()
-            .putString(SESSION_DATA, Gson().toJson(sessionData))
+            .putString("${SESSION_DATA}_${Tracker.instance?.configuration?.siteId}", sessionData.toJsonObject().toString())
             .apply()
     }
 
     private fun retrieveSessionData(): SessionData? {
-        val sessionDataJSON = storePrefs.getString(SESSION_DATA, null)?:return null
-        return Gson().fromJson(sessionDataJSON, object: TypeToken<SessionData>() {}.type)
+        val sessionDataJSON =
+            storePrefs.getString("${SESSION_DATA}_${Tracker.instance?.configuration?.siteId}", null)
+                ?: return null
+        return JSONObject(sessionDataJSON).toSessionData()
     }
 
 }

@@ -5,4 +5,6 @@ plugins {
     alias(libs.plugins.safeargs.kotlin) apply(false)
     alias(libs.plugins.daggerHiltAndroid) apply(false)
     id("com.google.devtools.ksp") version "1.9.0-1.0.13" apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.benchmark) apply false
 }

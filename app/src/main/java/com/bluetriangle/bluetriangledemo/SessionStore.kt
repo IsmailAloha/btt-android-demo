@@ -5,8 +5,6 @@ import android.util.Log
 import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.bluetriangledemo.SessionStore.SessionData.Companion.toJsonObject
 import com.bluetriangle.bluetriangledemo.SessionStore.SessionData.Companion.toSessionData
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import org.json.JSONObject
 
 class SessionStore(val context: Context) {

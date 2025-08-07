@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.IntentCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bluetriangle.analytics.Tracker
+import com.bluetriangle.analytics.compose.BttTimerEffect
 import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.compose.components.ErrorAlertDialog
@@ -106,6 +107,7 @@ class ProductDetailsActivity : ComponentActivity() {
         val addingToCart = rememberSaveable {
             mutableStateOf(false)
         }
+        BttTimerEffect("ProductDetail")
         val addToCartDescription = LocalContext.current.getString(R.string.a11y_add_to_cart)
         val addToCartCount = rememberSaveable {
             mutableIntStateOf(0)

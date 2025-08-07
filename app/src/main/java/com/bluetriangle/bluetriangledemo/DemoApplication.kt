@@ -6,9 +6,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.os.Handler
 import android.os.Looper
-import android.util.DisplayMetrics
 import android.util.Log
-import android.view.WindowManager
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -20,6 +18,9 @@ import com.bluetriangle.bluetriangledemo.utils.BTTCustomVariables
 import com.bluetriangle.bluetriangledemo.utils.DEFAULT_SITE_ID
 import com.bluetriangle.bluetriangledemo.utils.TinyDB
 import com.bluetriangle.bluetriangledemo.utils.generateDemoWebsiteFromTemplate
+import com.microsoft.clarity.Clarity
+import com.microsoft.clarity.ClarityConfig
+import com.microsoft.clarity.models.LogLevel
 import dagger.hilt.android.HiltAndroidApp
 import kotlin.system.exitProcess
 
@@ -110,6 +111,8 @@ class DemoApplication : Application() {
             configuration.isTrackNetworkStateEnabled = config.isNetworkStateTrackingEnabled
         }
         Tracker.init(this, configuration)
+
+        Clarity.initialize(this, ClarityConfig("jtjobmhr3i", logLevel = LogLevel.Debug))
 
         Resources.getSystem().displayMetrics?.apply {
             Tracker.instance?.apply {

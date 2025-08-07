@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -9,6 +12,13 @@ plugins {
     id("com.google.devtools.ksp")
 }
 
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties().apply {
+    if(keystorePropertiesFile.exists()) {
+        load(FileInputStream(keystorePropertiesFile))
+    }
+}
+
 android {
     namespace = "com.bluetriangle.bluetriangledemo"
     compileSdk = 34
@@ -17,8 +27,8 @@ android {
         applicationId = "com.bluetriangle.bluetriangledemo"
         minSdk = 21
         targetSdk = 34
-        versionCode = 22
-        versionName = "2.15.0"
+        versionCode = 25
+        versionName = "2.18.0-beta-2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -27,8 +37,24 @@ android {
 
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file(keystoreProperties["storeFile"] as String)
+            storePassword = keystoreProperties["storePassword"] as String
+            keyAlias = keystoreProperties["keyAlias"] as String
+            keyPassword = keystoreProperties["keyPassword"] as String
+        }
+    }
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+        debug {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -60,11 +86,11 @@ android {
         buildConfig = true
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "18"
+        jvmTarget = "17"
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.0"
@@ -75,6 +101,7 @@ dependencies {
     implementation(libs.fork.btt.android.sdk) {
         exclude("com.squareup.okhttp3", "okhttp-bom")
     }
+    implementation("com.microsoft.clarity:clarity:3.1.3")
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)

@@ -1,6 +1,6 @@
 # Add project specific ProGuard rules here.
 # You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.kts.
+# proguardFiles setting in build.gradle.
 #
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
@@ -20,21 +20,18 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-# Keep all fragments (needed for Navigation XML reflection)
--keep public class * extends androidx.fragment.app.Fragment {
-    public <init>();
-}
+-dontobfuscate
 
-# Keep navigation destinations (used by Safe Args + nav graph XML)
--keepclassmembers class * {
-    @androidx.navigation.NavArgs <fields>;
-}
+-ignorewarnings
 
-# Keep Safe Args generated classes (e.g., XxxFragmentArgs, XxxDirections)
--keep class **NavDirections
--keep class **Args
+-keepattributes *Annotation*
 
-# Optional: Keep generated classes for navigation transitions
--keepclassmembers class * {
-    public static <fields>;
-}
+-dontnote junit.framework.**
+-dontnote junit.runner.**
+
+-dontwarn androidx.test.**
+-dontwarn org.junit.**
+-dontwarn org.hamcrest.**
+-dontwarn com.squareup.javawriter.JavaWriter
+
+-keepclasseswithmembers @org.junit.runner.RunWith public class *

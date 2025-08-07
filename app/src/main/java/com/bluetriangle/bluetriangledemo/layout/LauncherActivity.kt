@@ -9,6 +9,8 @@ import com.bluetriangle.bluetriangledemo.BuildConfig
 import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.compose.screens.ComposeStoreActivity
+import com.bluetriangle.bluetriangledemo.ui.tutorial.AboutAppFragment
+import com.bluetriangle.bluetriangledemo.utils.INTRO_SHOWN
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -34,10 +36,18 @@ class LauncherActivity : AppCompatActivity() {
         super.onResume()
         DemoApplication.checkAndAddDelay()
 
-        if(BuildConfig.FLAVOR.contains("compose")) {
-            startActivity(Intent(this, ComposeStoreActivity::class.java))
+        if(DemoApplication.tinyDB.getBoolean(INTRO_SHOWN, false)) {
+            if (BuildConfig.FLAVOR.contains("compose")) {
+                startActivity(Intent(this, ComposeStoreActivity::class.java))
+            } else {
+                startActivity(Intent(this, StoreActivity::class.java))
+            }
         } else {
-            startActivity(Intent(this, StoreActivity::class.java))
+            if (BuildConfig.FLAVOR.contains("compose")) {
+                startActivity(Intent(this, ComposeStoreActivity::class.java))
+            } else {
+                startActivity(Intent(this, AppIntroActivity::class.java))
+            }
         }
         finish()
     }

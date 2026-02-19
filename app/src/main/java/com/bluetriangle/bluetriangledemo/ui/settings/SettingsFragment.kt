@@ -18,6 +18,7 @@ import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.DemoApplication.Companion.DEFAULT_TAG_URL
 import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.databinding.FragmentSettingsBinding
+import com.bluetriangle.bluetriangledemo.layout.AppIntroActivity
 import com.bluetriangle.bluetriangledemo.layout.ConfigurationLayoutActivity
 import com.bluetriangle.bluetriangledemo.utils.copyToClipboard
 import com.google.android.material.textfield.TextInputEditText
@@ -63,6 +64,9 @@ class SettingsFragment : Fragment() {
         _binding?.configuration?.setOnClickListener {
             startActivity(Intent(requireContext(), ConfigurationLayoutActivity::class.java))
         }
+        _binding?.aboutApp?.setOnClickListener {
+            startActivity(Intent(requireContext(), AppIntroActivity::class.java))
+        }
         return root
     }
 
@@ -82,6 +86,10 @@ class SettingsFragment : Fragment() {
         dialog.show()
     }
 
+    override fun onResume() {
+        super.onResume()
+        Tracker.instance?.setGroupName("Settińgs")
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.bluetriangledemo.TrackedFragment
 import com.bluetriangle.bluetriangledemo.adapters.ProductAdapter
 import com.bluetriangle.bluetriangledemo.data.Product
@@ -44,6 +45,11 @@ class ProductsFragment : TrackedFragment(), AlertView {
         }
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Tracker.instance?.setGroupName("Products")
     }
 
     override fun onDestroyView() {

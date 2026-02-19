@@ -30,4 +30,14 @@
         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tools:listitem="@layout/list_item_cart_item" />
 
+    <ImageView
+        android:id="@+id/info_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:padding="12dp"
+        android:src="@drawable/baseline_info_24"
+        app:layout_constraintBottom_toTopOf="@+id/checkout_button"
+        app:layout_constraintEnd_toEndOf="@+id/checkout_button" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -42,6 +42,10 @@
     <string name="launch_configuration">Launch Configuration</string>
     <string name="test_brand_value">Test Brand Value</string>
 
+    <string name="a11y_intro_prev">intro prev</string>
+    <string name="a11y_intro_next">intro next</string>
+    <string name="a11y_intro_done">intro done</string>
+
     <string name="a11y_btt_session_id">btt session id</string>
     <string name="a11y_add_to_cart">add to cart</string>
     <string name="a11y_checkout">checkout</string>
@@ -63,13 +67,33 @@
     <string name="a11y_config_apply">configure_apply</string>
 
     <string name="a11y_configuration_settings">btn_configuration_settings</string>
+    <string name="a11y_username_field">fld_user_name</string>
+    <string name="a11y_password_field">fld_password</string>
+    <string name="a11y_email_field">fld_email</string>
+    <string name="a11y_login_button">btn_login</string>
+    <string name="a11y_signup_button">btn_signup</string>
+    <string name="a11y_tab_signup">tab_sign_up</string>
+    <string name="a11y_tab_login">tab_login</string>
+    <string name="a11y_chip_normal">chip_normal</string>
+    <string name="a11y_chip_premium">chip_premium</string>
+
+
     <string name="password">Password</string>
     <string name="username">Username</string>
     <string name="login">Login</string>
     <string name="premium">Premium</string>
     <string name="normal">Normal</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="welcome_to_ecom_demo_app">Welcome to \nEcom Demo App</string>
+    <string name="prev">prev</string>
+    <string name="next">next</string>
+    <string name="skip">skip</string>
+    <string name="title_activity_app_intro_compose">AppIntroComposeActivity</string>
+    <string name="about_app">About App</string>
+    <string name="ok">Ok</string>
+    <string name="close">close</string>
+    <string name="profile">Profile</string>
+    <string name="email">Email</string>
+    <string name="signup">Sign Up</string>
 
 </resources>

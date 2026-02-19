@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.ChipDefaults
@@ -21,10 +22,13 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FilterChip
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -33,6 +37,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,7 +70,7 @@ fun ProfileScreen(
 
         if (loggedInUser == null) {
             Card(modifier = Modifier.fillMaxWidth()) {
-                LoginForm(profileViewModel)
+                OnBoardingScreen(profileViewModel)
             }
         } else {
             Card(
@@ -77,6 +83,32 @@ fun ProfileScreen(
         }
     }
 
+}
+
+@Composable
+fun OnBoardingScreen(profileViewModel: ProfileViewModel) {
+    val context = LocalContext.current
+    var selected by rememberSaveable { mutableIntStateOf(0) }
+    val tabs = listOf(R.string.signup to R.string.a11y_tab_signup, R.string.login to R.string.a11y_tab_login)
+
+    Column(
+        modifier = Modifier.padding(20.dp, 24.dp)
+            .fillMaxWidth()
+    ) {
+        TabRow(selected, backgroundColor = MaterialTheme.colors.surface, contentColor = MaterialTheme.colors.primary) {
+            tabs.forEachIndexed { i, tab ->
+                Tab(selected = selected == i, onClick = {selected = i}) {
+                    Text(context.getString(tab.first), modifier = Modifier.padding(8.dp).semantics { contentDescription = context.getString(tab.second)})
+                }
+            }
+        }
+
+        if(selected == 0) {
+            OnBoardingForm(profileViewModel, false)
+        } else {
+            OnBoardingForm(profileViewModel, true)
+        }
+    }
 }
 
 @Composable
@@ -108,29 +140,32 @@ fun UserInfoScreen(loggedInUser: String, profileViewModel: ProfileViewModel) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun LoginForm(viewModel: ProfileViewModel) {
+fun OnBoardingForm(viewModel: ProfileViewModel, isLogin: Boolean = false) {
+    val context = LocalContext.current
     var username by rememberSaveable {
         mutableStateOf("")
     }
     var password by rememberSaveable {
         mutableStateOf("")
     }
+    var email by rememberSaveable {
+        mutableStateOf("")
+    }
     var isPremium by rememberSaveable {
         mutableStateOf(false)
     }
     val chipColors = ChipDefaults.filterChipColors(
-        selectedBackgroundColor = MaterialTheme.colors.primary,
-        selectedContentColor = MaterialTheme.colors.onPrimary
+        selectedBackgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.3f),
+        selectedContentColor = MaterialTheme.colors.primary
     )
     Column(Modifier.padding(16.dp)) {
         Row {
             FilterChip(
                 modifier = Modifier
-                    .weight(1f)
-                    .height(40.dp),
+                    .semantics { contentDescription = context.getString(R.string.a11y_chip_premium)},
                 selected = !isPremium,
                 colors = chipColors,
-                shape = MaterialTheme.shapes.small,
+                shape = MaterialTheme.shapes.small.copy(CornerSize(100f)),
                 onClick = { isPremium = !isPremium }
             ) {
                 Text(
@@ -142,11 +177,10 @@ fun LoginForm(viewModel: ProfileViewModel) {
             Spacer(modifier = Modifier.width(4.dp))
             FilterChip(
                 modifier = Modifier
-                    .weight(1f)
-                    .height(40.dp),
+                    .semantics { contentDescription = context.getString(R.string.a11y_chip_premium)},
                 selected = isPremium,
                 colors = chipColors,
-                shape = MaterialTheme.shapes.small,
+                shape = MaterialTheme.shapes.small.copy(CornerSize(100f)),
                 onClick = { isPremium = !isPremium }
             ) {
                 Text(
@@ -156,17 +190,30 @@ fun LoginForm(viewModel: ProfileViewModel) {
                 )
             }
         }
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(32.dp))
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .semantics { contentDescription = context.getString(R.string.a11y_username_field) },
             value = username,
             label = { Text(text = stringResource(R.string.username)) },
             onValueChange = {
                 username = it
             })
+        if(!isLogin) {
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth()
+                    .semantics { contentDescription = context.getString(R.string.a11y_email_field) },
+                value = email,
+                label = { Text(text = stringResource(R.string.email)) },
+                onValueChange = {
+                    email = it
+                })
+        }
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .semantics { contentDescription = context.getString(R.string.a11y_password_field) },
             value = password,
             label = { Text(text = stringResource(R.string.password)) },
             onValueChange = {
@@ -175,10 +222,10 @@ fun LoginForm(viewModel: ProfileViewModel) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = {
+        Button(modifier = Modifier.semantics { contentDescription = context.getString(if(isLogin)R.string.a11y_login_button else R.string.a11y_signup_button)}, onClick = {
             viewModel.login(username, isPremium)
         }) {
-            Text(text = stringResource(R.string.login))
+            Text(text = stringResource(if(isLogin) R.string.login else R.string.signup))
         }
     }
 }

@@ -5,6 +5,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <!-- Android 13+ -->
+    <uses-permission
+        android:name="android.permission.POST_NOTIFICATIONS"
+        android:required="false" />
+
     <application
         android:name=".DemoApplication"
         android:allowBackup="true"
@@ -16,6 +21,15 @@
         android:theme="@style/Theme.BlueTriangleDemo"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
+        <profileable
+            android:shell="true"
+            tools:targetApi="29" />
+
+        <activity
+            android:name=".compose.screens.AppIntroComposeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_app_intro_compose"
+            android:theme="@style/Theme.BlueTriangleDemo" />
         <activity
             android:name=".layout.AppIntroActivity"
             android:exported="false" />
@@ -50,6 +64,13 @@
             android:name=".compose.screens.ComposeStoreActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".compose.screens.ProductDetailsActivity" />
+        <service
+            android:name=".PushNotificationService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

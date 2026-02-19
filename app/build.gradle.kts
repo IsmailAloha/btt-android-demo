@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.androidTestImplementation
 import org.jetbrains.kotlin.konan.properties.Properties
 import java.io.FileInputStream
 
@@ -8,10 +9,19 @@ plugins {
     alias(libs.plugins.safeargs.kotlin)
     id("kotlin-android")
     id("kotlin-parcelize")
-    id("kotlin-kapt")
     id("com.google.devtools.ksp")
+    id("fullstory")
+    id("com.google.gms.google-services")
+    alias(libs.plugins.kotlin.compose)
+    id("com.google.firebase.crashlytics")
 }
 
+fullstory {
+    org = "o-23ZG0X-na1"
+    enabledVariants = "all"
+    logLevel = "debug"
+    logcatLevel = "debug"
+}
 val keystorePropertiesFile = rootProject.file("keystore.properties")
 val keystoreProperties = Properties().apply {
     if(keystorePropertiesFile.exists()) {
@@ -21,20 +31,29 @@ val keystoreProperties = Properties().apply {
 
 android {
     namespace = "com.bluetriangle.bluetriangledemo"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.bluetriangle.bluetriangledemo"
-        minSdk = 21
-        targetSdk = 34
-        versionCode = 25
-        versionName = "2.18.0-beta-2"
+        minSdk = 23
+        targetSdk = 35
+        versionCode = 32
+        versionName = "2.19.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
 
+    }
+
+    androidComponents {
+        beforeVariants { variant ->
+            if (variant.buildType?.contains("Debug", ignoreCase = true) == true) {
+                println(variant.name)
+                variant.enableAndroidTest = false
+            }
+        }
     }
 
     signingConfigs {
@@ -47,7 +66,7 @@ android {
     }
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("release")
+            signingConfig = signingConfigs.getByName("debug")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -61,24 +80,42 @@ android {
                 "proguard-rules.pro"
             )
         }
+
+        create("benchmark") {
+            initWith(buildTypes.getByName("release"))
+            matchingFallbacks += listOf("release")
+            isDebuggable = false
+        }
     }
-    flavorDimensions += "version"
+    flavorDimensions += listOf("framework", "site")
     productFlavors {
+        // framework dimension
         create("compose") {
-            dimension = "version"
+            dimension = "framework"
             applicationIdSuffix = ".compose"
-            resValue("string", "app_name", "BTT e-Com")
+            resValue("string", "app_name", "eCom Compose")
             manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_compose"
             manifestPlaceholders["appIconRound"] = "@mipmap/ic_launcher_compose_round"
         }
         create("layout") {
-            dimension = "version"
+            dimension = "framework"
             applicationIdSuffix = ".layout"
-            resValue("string", "app_name", "BTT e-Com")
+            resValue("string", "app_name", "eCom Layout")
             manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_layout"
             manifestPlaceholders["appIconRound"] = "@mipmap/ic_launcher_layout_round"
         }
+        // Site dimension
+        create("demo") {
+            dimension = "site"
+            buildConfigField("String", "SITE_ID", "\"sdkdemo26621z\"")
+        }
+
+        create("devTest") {
+            dimension = "site"
+            buildConfigField("String", "SITE_ID", "\"sdkdevtest500z\"")
+        }
     }
+
     buildFeatures {
         viewBinding = true
         dataBinding = true
@@ -107,6 +144,15 @@ dependencies {
     implementation(libs.material)
     implementation(libs.constraintlayout)
 
+    implementation(platform(libs.firebase.bom))
+
+    // Add the dependencies for the Crashlytics and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.messaging)
+
+
     implementation(libs.gson)
 
     implementation(libs.kotlinx.coroutines.core)
@@ -116,7 +162,7 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.activity.ktx)
     implementation(libs.androidx.activity)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp)
@@ -134,7 +180,6 @@ dependencies {
     implementation(libs.navigation.ui.ktx)
 
     // Jetpack Compose Dependencies
-
     implementation(platform(libs.compose.bom))
     implementation(libs.activity.compose)
     implementation(libs.runtime.livedata)
@@ -153,12 +198,11 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
 
+    implementation(libs.speed.dial)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-}
+    androidTestImplementation(libs.androidx.core)
 
-// Allow references to generated code
-kapt {
-    correctErrorTypes = true
 }

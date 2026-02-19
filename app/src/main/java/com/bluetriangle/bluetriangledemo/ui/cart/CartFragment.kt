@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bluetriangle.analytics.Timer
 import com.bluetriangle.analytics.Tracker
+import com.bluetriangle.bluetriangledemo.InfoPopupDialog
 import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.TrackedFragment
 import com.bluetriangle.bluetriangledemo.adapters.CartItemAdapter
@@ -67,12 +69,20 @@ class CartFragment : TrackedFragment(), AlertView {
             findNavController().navigate(R.id.action_cart_to_checkout)
         }
 
+        binding.infoButton.isVisible = false
+        binding.infoButton.setOnClickListener {
+            InfoPopupDialog(it.context, "Cart Scenarios", """
+                - Checkout while the cart is empty results in a crash
+                - Checkout while there are more than 5 items in cart will result in a crash
+            """.trimIndent()).show()
+        }
         return root
     }
 
     override fun onResume() {
         super.onResume()
         cartViewModel.refreshCart()
+        Tracker.instance?.setGroupName("The Home Depot México")
     }
 
     override fun onDestroyView() {

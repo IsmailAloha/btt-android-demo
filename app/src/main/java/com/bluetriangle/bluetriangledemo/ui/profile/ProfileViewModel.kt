@@ -9,6 +9,8 @@ import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.bluetriangledemo.utils.BTTCustomVariables
+import com.bluetriangle.bluetriangledemo.utils.LoginProvider
+import com.bluetriangle.bluetriangledemo.utils.UserType
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class ProfileViewModel(application: Application) : AndroidViewModel(application) {
@@ -19,11 +21,11 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         const val IS_PREMIUM = "IS_PREMIUM"
     }
 
-    private val sharedPreferences = application.getSharedPreferences(LOGIN_PREFS, Context.MODE_PRIVATE)
+    val loginProvider = LoginProvider(application)
 
-    var loggedInUser = MutableStateFlow(sharedPreferences.getString(USERNAME, null))
+    var loggedInUser = MutableStateFlow(loginProvider.userName)
 
-    var isPremium = MutableStateFlow(sharedPreferences.getBoolean(IS_PREMIUM, false))
+    var isPremium = MutableStateFlow(loginProvider.isPremium)
 
     fun login(username: String, isPremium: Boolean) {
         Tracker.instance?.apply {
@@ -31,12 +33,13 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             setCustomVariable(BTTCustomVariables.Premium.key, isPremium)
         }
 
-        sharedPreferences.edit {
-            putString(USERNAME, username)
-            putBoolean(IS_PREMIUM, isPremium)
-            this@ProfileViewModel.isPremium.value = isPremium
-            this@ProfileViewModel.loggedInUser.value = username
-        }
+        loginProvider.userName = username
+        loginProvider.isPremium = isPremium
+
+        Tracker.instance?.setCustomCategory1(if(isPremium) UserType.Premium.type else UserType.Standard.type)
+
+        this@ProfileViewModel.isPremium.value = isPremium
+        this@ProfileViewModel.loggedInUser.value = username
     }
 
     fun logout() {
@@ -45,11 +48,12 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             clearCustomVariable(BTTCustomVariables.Premium.key)
         }
 
-        sharedPreferences.edit {
-            remove(USERNAME)
-            remove(IS_PREMIUM)
-            this@ProfileViewModel.loggedInUser.value = null
-        }
+        loginProvider.userName = null
+        loginProvider.isPremium = false
+
+        Tracker.instance?.setCustomCategory1(UserType.Guest.type)
+
+        this@ProfileViewModel.loggedInUser.value = null
     }
 
 }

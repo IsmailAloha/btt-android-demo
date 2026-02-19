@@ -47,6 +47,18 @@
             />
     </LinearLayout>
 
+    <com.leinardi.android.speeddial.SpeedDialView
+        android:id="@+id/scenario_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        app:layout_anchorGravity="bottom|end"
+        android:visibility="gone"
+        app:sdMainFabClosedSrc="@drawable/baseline_hive_24"
+        app:sdMainFabOpenedSrc="@drawable/outline_close_24"
+        app:layout_constraintBottom_toTopOf="@+id/sessionIdLayout"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <fragment
         android:id="@+id/nav_host_fragment_activity_store"
         android:name="androidx.navigation.fragment.NavHostFragment"

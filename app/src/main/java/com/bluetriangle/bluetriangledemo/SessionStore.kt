@@ -31,7 +31,6 @@ class SessionStore(val context: Context) {
                 )
             )
         }
-
     }
 
     internal data class SessionData(

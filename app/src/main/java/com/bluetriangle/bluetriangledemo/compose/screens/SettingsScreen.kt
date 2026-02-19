@@ -87,6 +87,13 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
                 .align(Alignment.CenterHorizontally)
         )
         AppInfo(viewModel)
+        TextButton(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            onClick = {
+            context.startActivity(Intent(context, AppIntroComposeActivity::class.java))
+        }) {
+            Text(text = stringResource(R.string.about_app))
+        }
         values.map {
             InfoItem(it)
         }

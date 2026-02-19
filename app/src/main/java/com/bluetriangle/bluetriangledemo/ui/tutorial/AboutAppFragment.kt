@@ -10,11 +10,14 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.R
 import com.bluetriangle.bluetriangledemo.layout.StoreActivity
+import com.bluetriangle.bluetriangledemo.utils.INTRO_SHOWN
 import com.bluetriangle.bluetriangledemo.utils.introSlides
 
 class AboutAppFragment : Fragment() {
@@ -32,23 +35,37 @@ class AboutAppFragment : Fragment() {
         val viewPager = view.findViewById<ViewPager2>(R.id.viewPager)
 
         val slides = introSlides.map {
-            IntroSlideFragment(it.title, it.description)
+            IntroSlideFragment(it.imageRes, it.title, it.spannedDescription)
         }
 
         viewPager.adapter = SlideAdapter(requireActivity(), slides)
 
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                view.updateDots(position)
-            }
-        })
-
         view.setupIndicatorDots(slides.size)
         val doneButton = view.findViewById<Button>(R.id.done_button)
         doneButton.setOnClickListener {
+            DemoApplication.tinyDB.setBoolean(INTRO_SHOWN, true)
             startActivity(Intent(context, StoreActivity::class.java))
             activity?.finish()
         }
+
+        val nextButton = view.findViewById<Button>(R.id.next_button)
+        nextButton.setOnClickListener {
+            viewPager.setCurrentItem(viewPager.currentItem + 1, true)
+        }
+
+        val prevButton = view.findViewById<Button>(R.id.prev_button)
+        prevButton.setOnClickListener {
+            viewPager.setCurrentItem(viewPager.currentItem - 1, true)
+        }
+
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                nextButton.isVisible = position < slides.size - 1
+                prevButton.isVisible = position > 0
+                doneButton.isVisible = position == slides.size - 1
+                view.updateDots(position)
+            }
+        })
     }
 
     private lateinit var dots: Array<ImageView?>

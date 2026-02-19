@@ -11,17 +11,23 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.bluetriangle.analytics.BlueTriangleConfiguration
+import com.bluetriangle.analytics.Constants
 import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.bluetriangledemo.tests.HeavyLoopTest
 import com.bluetriangle.bluetriangledemo.tests.MemoryMonitor
 import com.bluetriangle.bluetriangledemo.utils.BTTCustomVariables
 import com.bluetriangle.bluetriangledemo.utils.DEFAULT_SITE_ID
+import com.bluetriangle.bluetriangledemo.utils.LoginProvider
 import com.bluetriangle.bluetriangledemo.utils.TinyDB
+import com.bluetriangle.bluetriangledemo.utils.UserType
 import com.bluetriangle.bluetriangledemo.utils.generateDemoWebsiteFromTemplate
+import com.fullstory.FS
+import com.google.firebase.messaging.FirebaseMessaging
 import com.microsoft.clarity.Clarity
 import com.microsoft.clarity.ClarityConfig
 import com.microsoft.clarity.models.LogLevel
 import dagger.hilt.android.HiltAndroidApp
+import kotlin.math.log
 import kotlin.system.exitProcess
 
 
@@ -33,7 +39,7 @@ class DemoApplication : Application() {
     companion object {
         lateinit var tinyDB: TinyDB
         const val TAG_URL = "TAG_URL"
-        const val DEFAULT_TAG_URL = "$DEFAULT_SITE_ID.btttag.com/btt.js"
+        val DEFAULT_TAG_URL = "$DEFAULT_SITE_ID.btttag.com/btt.js"
 
         private lateinit var instance: DemoApplication
 
@@ -91,11 +97,12 @@ class DemoApplication : Application() {
     }
 
     fun initTracker() {
+        val sharedPreferences = getSharedPreferences("BTT_SHARED_PREFERENCES", MODE_PRIVATE)
+        sharedPreferences.edit().putString("ip_address", "192.168.1.110:9992").apply()
+
         val config = ConfigurationManager.getConfig()
         val configuration = BlueTriangleConfiguration()
         configuration.siteId = DEFAULT_SITE_ID
-        configuration.cacheMemoryLimit = 10 * 1000L
-        configuration.cacheExpiryDuration = 120 * 1000L
         configuration.isDebug = true
         configuration.debugLevel = Log.VERBOSE
         Log.d("BlueTriangle", "BTTConfigurationTag received: ${config}")
@@ -112,13 +119,44 @@ class DemoApplication : Application() {
         }
         Tracker.init(this, configuration)
 
+        if(BuildConfig.FLAVOR == "compose") {
+            Tracker.instance?.setSessionTrafficSegmentName("Android-Compose EcomDemoApp")
+            Tracker.instance?.setSessionCampaignName("Android")
+            Tracker.instance?.setSessionCampaignSource("Compose")
+            Tracker.instance?.setSessionCampaignMedium("Mobile")
+            Tracker.instance?.setSessionDataCenter("NorthWest-1")
+        } else {
+            Tracker.instance?.setSessionTrafficSegmentName("Android-Layout EcomDemoApp")
+            Tracker.instance?.setSessionCampaignName("Android")
+            Tracker.instance?.setSessionCampaignSource("Layout")
+            Tracker.instance?.setSessionCampaignMedium("Mobile")
+            Tracker.instance?.setSessionDataCenter("NorthEast-1")
+        }
+
+        val loginProvider = LoginProvider(this)
+
+        if(loginProvider.userName == null) {
+            Tracker.instance?.setCustomCategory1(UserType.Guest.type)
+        }
+
         Clarity.initialize(this, ClarityConfig("jtjobmhr3i", logLevel = LogLevel.Debug))
 
+        FS.consent(true)
         Resources.getSystem().displayMetrics?.apply {
             Tracker.instance?.apply {
                 setCustomVariable(BTTCustomVariables.ScreenWidth.key, widthPixels)
                 setCustomVariable(BTTCustomVariables.ScreenHeight.key, heightPixels)
             }
+        }
+
+        FirebaseMessaging.getInstance().token
+            .addOnSuccessListener { token ->
+                Log.d("FCM", "Token: $token")
+            }
+
+        FS.setReadyListener {
+            Log.d("BlueTriangle", "FS.setOnReadyListener: Thread: ${Thread.currentThread().name} ${Tracker.instance} : ${it.currentSessionURL}")
+            Tracker.instance?.setCustomVariable("FullStorySessionURL", it.currentSessionURL)
         }
 
         ConfigurationManager.refreshSessionId()

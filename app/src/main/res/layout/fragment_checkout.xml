@@ -8,6 +8,23 @@
     android:paddingVertical="20dp"
     tools:context=".ui.cart.CheckoutFragment">
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/checkoutStepsContainer"
+        android:name="com.bluetriangle.bluetriangledemo.ui.cart.PaymentConfirmationFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/checkout_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="thanks,order_number,continue_shopping" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/thanks"
         android:layout_width="0dp"
@@ -38,8 +55,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Continue Shopping"
         android:contentDescription="@string/a11y_continue_shopping"
+        android:text="Continue Shopping"
         app:layout_constraintEnd_toEndOf="@+id/order_number"
         app:layout_constraintStart_toStartOf="@+id/order_number"
         app:layout_constraintTop_toBottomOf="@+id/order_number" />

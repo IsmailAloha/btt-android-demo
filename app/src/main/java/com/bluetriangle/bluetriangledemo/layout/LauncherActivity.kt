@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bluetriangle.bluetriangledemo.BuildConfig
 import com.bluetriangle.bluetriangledemo.DemoApplication
 import com.bluetriangle.bluetriangledemo.R
+import com.bluetriangle.bluetriangledemo.compose.screens.AppIntroComposeActivity
 import com.bluetriangle.bluetriangledemo.compose.screens.ComposeStoreActivity
 import com.bluetriangle.bluetriangledemo.ui.tutorial.AboutAppFragment
 import com.bluetriangle.bluetriangledemo.utils.INTRO_SHOWN
@@ -44,7 +45,7 @@ class LauncherActivity : AppCompatActivity() {
             }
         } else {
             if (BuildConfig.FLAVOR.contains("compose")) {
-                startActivity(Intent(this, ComposeStoreActivity::class.java))
+                startActivity(Intent(this, AppIntroComposeActivity::class.java))
             } else {
                 startActivity(Intent(this, AppIntroActivity::class.java))
             }

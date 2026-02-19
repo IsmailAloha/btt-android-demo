@@ -1,5 +1,8 @@
 import java.net.URI
 
+include(":macrobenchmark")
+
+
 include(":benchmark")
 
 
@@ -15,6 +18,7 @@ pluginManagement {
 
         mavenCentral()
         gradlePluginPortal()
+        maven { url = java.net.URI("https://maven.fullstory.com") }
     }
 }
 dependencyResolutionManagement {
@@ -23,6 +27,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { url = URI("https://jitpack.io") }
+        maven { url = URI("https://maven.fullstory.com") }
     }
 }
 

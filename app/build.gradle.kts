@@ -31,12 +31,12 @@ val keystoreProperties = Properties().apply {
 
 android {
     namespace = "com.bluetriangle.bluetriangledemo"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.bluetriangle.bluetriangledemo"
         minSdk = 23
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 32
         versionName = "2.19.3"
 
@@ -135,7 +135,7 @@ android {
 }
 
 dependencies {
-    implementation(libs.fork.btt.android.sdk) {
+    implementation(libs.btt.android.sdk) {
         exclude("com.squareup.okhttp3", "okhttp-bom")
     }
     implementation("com.microsoft.clarity:clarity:3.1.3")

@@ -82,7 +82,6 @@ class CartFragment : TrackedFragment(), AlertView {
     override fun onResume() {
         super.onResume()
         cartViewModel.refreshCart()
-        Tracker.instance?.setGroupName("The Home Depot México")
     }
 
     override fun onDestroyView() {

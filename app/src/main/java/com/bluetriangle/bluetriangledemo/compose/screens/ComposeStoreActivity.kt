@@ -3,17 +3,22 @@ package com.bluetriangle.bluetriangledemo.compose.screens
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.displayCutoutPadding
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsIgnoringVisibility
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -54,9 +59,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ComposeStoreActivity : ComponentActivity() {
 
-    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         setContent {
             BlueTriangleComposeDemoTheme {
@@ -64,12 +69,14 @@ class ComposeStoreActivity : ComponentActivity() {
                     mutableStateOf("")
                 }
                 val tabNavController = rememberNavController()
+
                 val rootNavController = rememberNavController()
                 val rootBackstackEntry by rootNavController.currentBackStackEntryAsState()
 
+                val insets = WindowInsets.statusBars.add(WindowInsets.navigationBars)
                 val navItems = getNavItemsList(tabNavController)
                 Scaffold(topBar = {
-                    TopAppBar(title = {
+                    TopAppBar(windowInsets = insets, title = {
                         Row(Modifier.padding(end = 10.dp)) {
                             Text(text = title.value)
                             Spacer(modifier = Modifier.weight(1f))
@@ -104,7 +111,7 @@ class ComposeStoreActivity : ComponentActivity() {
                         }
                         composable("profile") {
                             title.value = "Profile"
-                            ProfileScreen()
+                            ProfileScreen(paddingValues)
                         }
                     }
                 }

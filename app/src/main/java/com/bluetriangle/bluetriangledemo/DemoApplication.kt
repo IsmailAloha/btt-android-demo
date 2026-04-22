@@ -11,7 +11,6 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.bluetriangle.analytics.BlueTriangleConfiguration
-import com.bluetriangle.analytics.Constants
 import com.bluetriangle.analytics.Tracker
 import com.bluetriangle.bluetriangledemo.tests.HeavyLoopTest
 import com.bluetriangle.bluetriangledemo.tests.MemoryMonitor
@@ -27,7 +26,6 @@ import com.microsoft.clarity.Clarity
 import com.microsoft.clarity.ClarityConfig
 import com.microsoft.clarity.models.LogLevel
 import dagger.hilt.android.HiltAndroidApp
-import kotlin.math.log
 import kotlin.system.exitProcess
 
 

@@ -1,5 +1,6 @@
 package com.bluetriangle.bluetriangledemo.compose.screens
 
+import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,7 +29,6 @@ import com.bluetriangle.bluetriangledemo.tests.HeavyLoopTest
 
 @Composable
 fun CheckoutScreen(checkoutId: String, navController: NavHostController) {
-    BttTimerEffect(screenName = "Checkout_Screen")
     val continueShoppingDescription = LocalContext.current.getString(R.string.a11y_continue_shopping)
 
     Box(Modifier.fillMaxSize()) {

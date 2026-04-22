@@ -1,4 +1,4 @@
-import org.gradle.kotlin.dsl.androidTestImplementation
+import io.sentry.android.gradle.extensions.InstrumentationFeature
 import org.jetbrains.kotlin.konan.properties.Properties
 import java.io.FileInputStream
 
@@ -14,6 +14,9 @@ plugins {
     id("com.google.gms.google-services")
     alias(libs.plugins.kotlin.compose)
     id("com.google.firebase.crashlytics")
+    id("com.github.blue-triangle-tech.btt-gradle-plugin")
+
+    id("io.sentry.android.gradle") version "6.1.0"
 }
 
 fullstory {
@@ -38,7 +41,7 @@ android {
         minSdk = 23
         targetSdk = 36
         versionCode = 32
-        versionName = "2.19.3"
+        versionName = "2.19.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -204,5 +207,18 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.core)
+}
 
+
+sentry {
+    org.set("bluetriangle")
+    projectName.set("android")
+
+    // this will upload your source code to Sentry to show it as part of the stack traces
+    // disable if you don't want to expose your sources
+    includeSourceContext.set(true)
+    tracingInstrumentation {
+        enabled = true
+        features.set(setOf(InstrumentationFeature.OKHTTP, InstrumentationFeature.COMPOSE))
+    }
 }

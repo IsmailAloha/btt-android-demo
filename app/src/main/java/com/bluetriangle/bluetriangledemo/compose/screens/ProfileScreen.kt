@@ -5,6 +5,7 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.displayCutoutPadding
@@ -52,9 +53,9 @@ import com.bluetriangle.bluetriangledemo.ui.profile.ProfileViewModel
 
 @Composable
 fun ProfileScreen(
+    paddingValues: PaddingValues,
     profileViewModel: ProfileViewModel = viewModel()
 ) {
-    BttTimerEffect("ProfileScreen")
     val scrollState = rememberScrollState()
     val loggedInUser by profileViewModel.loggedInUser.collectAsState()
 
@@ -62,6 +63,7 @@ fun ProfileScreen(
         Modifier
             .fillMaxSize()
             .displayCutoutPadding()
+            .padding(paddingValues)
             .padding(16.dp)
             .scrollable(scrollState, Orientation.Vertical),
         horizontalAlignment = Alignment.End,
@@ -89,21 +91,33 @@ fun ProfileScreen(
 fun OnBoardingScreen(profileViewModel: ProfileViewModel) {
     val context = LocalContext.current
     var selected by rememberSaveable { mutableIntStateOf(0) }
-    val tabs = listOf(R.string.signup to R.string.a11y_tab_signup, R.string.login to R.string.a11y_tab_login)
+    val tabs = listOf(
+        R.string.signup to R.string.a11y_tab_signup,
+        R.string.login to R.string.a11y_tab_login
+    )
 
     Column(
-        modifier = Modifier.padding(20.dp, 24.dp)
+        modifier = Modifier
+            .padding(20.dp, 24.dp)
             .fillMaxWidth()
     ) {
-        TabRow(selected, backgroundColor = MaterialTheme.colors.surface, contentColor = MaterialTheme.colors.primary) {
+        TabRow(
+            selected,
+            backgroundColor = MaterialTheme.colors.surface,
+            contentColor = MaterialTheme.colors.primary
+        ) {
             tabs.forEachIndexed { i, tab ->
-                Tab(selected = selected == i, onClick = {selected = i}) {
-                    Text(context.getString(tab.first), modifier = Modifier.padding(8.dp).semantics { contentDescription = context.getString(tab.second)})
+                Tab(selected = selected == i, onClick = { selected = i }) {
+                    Text(
+                        context.getString(tab.first),
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .semantics { contentDescription = context.getString(tab.second) })
                 }
             }
         }
 
-        if(selected == 0) {
+        if (selected == 0) {
             OnBoardingForm(profileViewModel, false)
         } else {
             OnBoardingForm(profileViewModel, true)
@@ -115,9 +129,11 @@ fun OnBoardingScreen(profileViewModel: ProfileViewModel) {
 fun UserInfoScreen(loggedInUser: String, profileViewModel: ProfileViewModel) {
     val isPremium by profileViewModel.isPremium.collectAsState(false)
 
-    Column(modifier = Modifier
-        .padding(20.dp, 24.dp)
-        .fillMaxWidth()) {
+    Column(
+        modifier = Modifier
+            .padding(20.dp, 24.dp)
+            .fillMaxWidth()
+    ) {
         Text(
             text = loggedInUser,
             fontSize = 32.sp
@@ -199,11 +215,14 @@ fun OnBoardingForm(viewModel: ProfileViewModel, isLogin: Boolean = false) {
             onValueChange = {
                 username = it
             })
-        if(!isLogin) {
+        if (!isLogin) {
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
-                modifier = Modifier.fillMaxWidth()
-                    .semantics { contentDescription = context.getString(R.string.a11y_email_field) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .semantics {
+                        contentDescription = context.getString(R.string.a11y_email_field)
+                    },
                 value = email,
                 label = { Text(text = stringResource(R.string.email)) },
                 onValueChange = {
@@ -212,7 +231,8 @@ fun OnBoardingForm(viewModel: ProfileViewModel, isLogin: Boolean = false) {
         }
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .semantics { contentDescription = context.getString(R.string.a11y_password_field) },
             value = password,
             label = { Text(text = stringResource(R.string.password)) },

@@ -10,6 +10,7 @@ plugins {
     id("com.google.gms.google-services") version "4.4.4" apply false
     id("com.google.firebase.crashlytics") version "3.0.6" apply false
     alias(libs.plugins.android.test) apply false
+    id("com.github.blue-triangle-tech.btt-gradle-plugin") version "1.0.6" apply false
 }
 
 buildscript {

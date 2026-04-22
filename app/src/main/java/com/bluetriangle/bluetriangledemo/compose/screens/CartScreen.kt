@@ -57,7 +57,6 @@ import java.util.UUID
 
 @Composable
 fun CartScreen(navigateToCart: (String)->Unit, viewModel: CartViewModel = hiltViewModel()) {
-    BttTimerEffect(screenName = "Cart_Screen")
     ManualTimerEffect(screenName = "CartScreenManualTimer")
     val scope = rememberCoroutineScope()
     val cart = viewModel.cart.asFlow().collectAsState(null)

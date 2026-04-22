@@ -43,7 +43,6 @@ import com.bumptech.glide.integration.compose.GlideImage
 
 @Composable
 fun ProductsScreen(productsViewModel: ProductsViewModel = hiltViewModel()) {
-    BttTimerEffect(screenName = "Product Tab")
     ManualTimerEffect(screenName = "ProductsTabManualTimer")
     val products = productsViewModel.products.asFlow().collectAsState(listOf())
     LazyColumn(

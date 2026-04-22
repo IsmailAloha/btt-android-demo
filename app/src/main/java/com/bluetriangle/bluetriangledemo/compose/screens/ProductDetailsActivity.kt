@@ -107,7 +107,6 @@ class ProductDetailsActivity : ComponentActivity() {
         val addingToCart = rememberSaveable {
             mutableStateOf(false)
         }
-        BttTimerEffect("ProductDetail")
         val addToCartDescription = LocalContext.current.getString(R.string.a11y_add_to_cart)
         val addToCartCount = rememberSaveable {
             mutableIntStateOf(0)

@@ -15,6 +15,7 @@ pluginManagement {
                 includeGroupByRegex("androidx.*")
             }
         }
+        maven("https://jitpack.io")   // 👈 required
 
         mavenCentral()
         gradlePluginPortal()
